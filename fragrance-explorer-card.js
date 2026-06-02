@@ -1,4 +1,5 @@
-import { LitElement, html, css } from 'https://unpkg.com/lit-element@2.4.0/lit-element.js?module';
+// fragrance-explorer-card.js
+// No external dependencies — pure custom element with Shadow DOM
 
 // ─── Database ────────────────────────────────────────────────────────────────
 const DATABASE = [
@@ -9,9 +10,9 @@ const DATABASE = [
     synergy: "Perfect interlocking of blue ambroxan and spice notes.",
     fragrances: ["Immortal", "Milestone", "Turathi"],
     steps: [
-      { f: "Immortal",   v: "2 sprays", z: "Chest" },
-      { f: "Milestone",  v: "1 spray",  z: "Neck"  },
-      { f: "Turathi",    v: "1 spray",  z: "Wrists"}
+      { f: "Immortal",  v: "2 sprays", z: "Chest"  },
+      { f: "Milestone", v: "1 spray",  z: "Neck"   },
+      { f: "Turathi",   v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -21,9 +22,9 @@ const DATABASE = [
     synergy: "Caprice's cardamom softens the sharp edges.",
     fragrances: ["Caprice", "Heaven", "National I"],
     steps: [
-      { f: "Caprice",    v: "2 sprays", z: "Neck"  },
-      { f: "Heaven",     v: "1 spray",  z: "Chest" },
-      { f: "National I", v: "1 spray",  z: "Wrists"}
+      { f: "Caprice",    v: "2 sprays", z: "Neck"   },
+      { f: "Heaven",     v: "1 spray",  z: "Chest"  },
+      { f: "National I", v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -44,8 +45,8 @@ const DATABASE = [
     synergy: "Milestone adds crisp marine salt notes.",
     fragrances: ["Milestone", "Turathi"],
     steps: [
-      { f: "Milestone", v: "2 sprays", z: "Neck"  },
-      { f: "Turathi",   v: "1 spray",  z: "Wrists"}
+      { f: "Milestone", v: "2 sprays", z: "Neck"   },
+      { f: "Turathi",   v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -88,8 +89,8 @@ const DATABASE = [
     synergy: "Liam Grey's milky tea accord perfects balance.",
     fragrances: ["Liam Grey", "Heaven"],
     steps: [
-      { f: "Liam Grey", v: "2 sprays", z: "Neck"  },
-      { f: "Heaven",    v: "1 spray",  z: "Wrists"}
+      { f: "Liam Grey", v: "2 sprays", z: "Neck"   },
+      { f: "Heaven",    v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -110,8 +111,8 @@ const DATABASE = [
     synergy: "Ghost's rich vanilla gourmand sweetness.",
     fragrances: ["Ghost", "Immortal"],
     steps: [
-      { f: "Ghost",   v: "2 sprays", z: "Neck"  },
-      { f: "Immortal",v: "1 spray",  z: "Wrists"}
+      { f: "Ghost",    v: "2 sprays", z: "Neck"   },
+      { f: "Immortal", v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -187,8 +188,8 @@ const DATABASE = [
     synergy: "SNOI's intense smoky performance.",
     fragrances: ["SNOI", "Encre Noire"],
     steps: [
-      { f: "SNOI",       v: "2 sprays", z: "Neck"  },
-      { f: "Encre Noire",v: "1 spray",  z: "Chest" }
+      { f: "SNOI",        v: "2 sprays", z: "Neck"  },
+      { f: "Encre Noire", v: "1 spray",  z: "Chest" }
     ]
   },
   {
@@ -209,8 +210,8 @@ const DATABASE = [
     synergy: "Caprice introduces clean smooth edges.",
     fragrances: ["Caprice", "Hercules"],
     steps: [
-      { f: "Caprice",  v: "1 spray",  z: "Wrists"},
-      { f: "Hercules", v: "2 sprays", z: "Neck"  }
+      { f: "Caprice",  v: "1 spray",  z: "Wrists" },
+      { f: "Hercules", v: "2 sprays", z: "Neck"   }
     ]
   },
   {
@@ -264,8 +265,8 @@ const DATABASE = [
     synergy: "Heaven provides clean fresh air.",
     fragrances: ["Heaven", "Encre Noire"],
     steps: [
-      { f: "Heaven",     v: "1 spray",  z: "Wrists"},
-      { f: "Encre Noire",v: "2 sprays", z: "Neck"  }
+      { f: "Heaven",      v: "1 spray",  z: "Wrists" },
+      { f: "Encre Noire", v: "2 sprays", z: "Neck"   }
     ]
   },
   {
@@ -275,9 +276,9 @@ const DATABASE = [
     synergy: "Flawless interweaving of notes.",
     fragrances: ["Caprice", "Immortal", "Milestone"],
     steps: [
-      { f: "Caprice",   v: "1 spray", z: "Neck"  },
-      { f: "Immortal",  v: "1 spray", z: "Chest" },
-      { f: "Milestone", v: "1 spray", z: "Wrists"}
+      { f: "Caprice",   v: "1 spray", z: "Neck"   },
+      { f: "Immortal",  v: "1 spray", z: "Chest"  },
+      { f: "Milestone", v: "1 spray", z: "Wrists" }
     ]
   },
   {
@@ -298,8 +299,8 @@ const DATABASE = [
     synergy: "Immortal's ginger introduces brightness.",
     fragrances: ["Immortal", "Turathi"],
     steps: [
-      { f: "Immortal", v: "1 spray", z: "Neck"  },
-      { f: "Turathi",  v: "1 spray", z: "Wrists"}
+      { f: "Immortal", v: "1 spray", z: "Neck"   },
+      { f: "Turathi",  v: "1 spray", z: "Wrists" }
     ]
   },
   {
@@ -320,9 +321,9 @@ const DATABASE = [
     synergy: "SNOI anchors the composition perfectly.",
     fragrances: ["SNOI", "Divin Asylum", "Caprice"],
     steps: [
-      { f: "SNOI",        v: "1 spray", z: "Neck"  },
-      { f: "Divin Asylum",v: "1 spray", z: "Chest" },
-      { f: "Caprice",     v: "1 spray", z: "Wrists"}
+      { f: "SNOI",         v: "1 spray", z: "Neck"   },
+      { f: "Divin Asylum", v: "1 spray", z: "Chest"  },
+      { f: "Caprice",      v: "1 spray", z: "Wrists" }
     ]
   },
   {
@@ -332,9 +333,9 @@ const DATABASE = [
     synergy: "Encre Noire adds rich dark framework.",
     fragrances: ["Encre Noire", "Ghost", "Hercules"],
     steps: [
-      { f: "Encre Noire", v: "1 spray", z: "Neck"  },
-      { f: "Ghost",       v: "1 spray", z: "Chest" },
-      { f: "Hercules",    v: "1 spray", z: "Wrists"}
+      { f: "Encre Noire", v: "1 spray", z: "Neck"   },
+      { f: "Ghost",       v: "1 spray", z: "Chest"  },
+      { f: "Hercules",    v: "1 spray", z: "Wrists" }
     ]
   },
   {
@@ -344,9 +345,9 @@ const DATABASE = [
     synergy: "SNOI bridges the oud and ambroxan layers.",
     fragrances: ["SNOI", "National I", "Ghost"],
     steps: [
-      { f: "SNOI",      v: "2 sprays", z: "Neck"  },
-      { f: "National I",v: "1 spray",  z: "Chest" },
-      { f: "Ghost",     v: "1 spray",  z: "Wrists"}
+      { f: "SNOI",       v: "2 sprays", z: "Neck"   },
+      { f: "National I", v: "1 spray",  z: "Chest"  },
+      { f: "Ghost",      v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -356,9 +357,9 @@ const DATABASE = [
     synergy: "Heaven's vetiver grounds the earthy top notes.",
     fragrances: ["Heaven", "Liam Grey", "Turathi"],
     steps: [
-      { f: "Heaven",    v: "2 sprays", z: "Chest" },
-      { f: "Liam Grey", v: "1 spray",  z: "Neck"  },
-      { f: "Turathi",   v: "1 spray",  z: "Wrists"}
+      { f: "Heaven",    v: "2 sprays", z: "Chest"  },
+      { f: "Liam Grey", v: "1 spray",  z: "Neck"   },
+      { f: "Turathi",   v: "1 spray",  z: "Wrists" }
     ]
   },
   {
@@ -379,180 +380,187 @@ const DATABASE = [
     synergy: "Heavy, dense base elements shifting smoothly into sweet gourmand top.",
     fragrances: ["Encre Noire l'Extreme", "Costume National I", "Lattafa Liam Grey", "Spectre Ghost"],
     steps: [
-      { f: "Encre Noire l'Extreme",  v: "1 spray",  z: "Skin / Lower Back" },
-      { f: "Costume National I",     v: "2 sprays", z: "Skin / Chest"      },
-      { f: "Lattafa Liam Grey",      v: "1 spray",  z: "Skin / Neck"       },
-      { f: "Spectre Ghost",          v: "1 spray",  z: "Hair / Shoulders"  }
+      { f: "Encre Noire l'Extreme", v: "1 spray",  z: "Skin / Lower Back" },
+      { f: "Costume National I",    v: "2 sprays", z: "Skin / Chest"      },
+      { f: "Lattafa Liam Grey",     v: "1 spray",  z: "Skin / Neck"       },
+      { f: "Spectre Ghost",         v: "1 spray",  z: "Hair / Shoulders"  }
     ]
   }
 ];
 
-// ─── Filter Definitions ───────────────────────────────────────────────────────
 const SEASONS   = [
   { label: "Spring",      icon: "🌸" },
   { label: "Summer",      icon: "☀️" },
   { label: "Autumn",      icon: "🍂" },
   { label: "Winter",      icon: "❄️" },
-  { label: "All Seasons", icon: "🌍" },
+  { label: "All Seasons", icon: "🌍" }
 ];
 const TIMES     = [
   { label: "Day",   icon: "🌤️" },
   { label: "Night", icon: "🌙" },
-  { label: "All",   icon: "🕐" },
+  { label: "All",   icon: "🕐" }
 ];
 const OCCASIONS = [
   { label: "Casual",  icon: "👟" },
   { label: "Office",  icon: "💼" },
   { label: "Evening", icon: "🍷" },
-  { label: "Formal",  icon: "🎩" },
+  { label: "Formal",  icon: "🎩" }
 ];
 
-// ─── Half-Star Helper ─────────────────────────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 function renderStars(rating) {
-  const full = Math.floor(rating);
-  const half = rating % 1 >= 0.5 ? 1 : 0;
+  const full  = Math.floor(rating);
+  const half  = (rating % 1) >= 0.5 ? 1 : 0;
   const empty = 5 - full - half;
   return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-class FragranceExplorerCard extends LitElement {
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
-  static get properties() {
-    return {
-      hass:             { type: Object },
-      config:           { type: Object },
-      _view:            { type: String  },   // 'dashboard' | 'list' | 'detail'
-      _searchQuery:     { type: String  },
-      _filterSeason:    { type: String  },
-      _filterTime:      { type: String  },
-      _filterOccasion:  { type: String  },
-      _selectedItem:    { type: Object  },
-      _showExitWarning: { type: Boolean },
-    };
+// ─── Styles string ────────────────────────────────────────────────────────────
+const STYLES = `
+  :host { display: block; }
+
+  .shell {
+    display: flex;
+    flex-direction: column;
+    height: var(--frag-height, 25dvh);
+    max-height: var(--frag-height, 25dvh);
+    background: var(--ha-card-background, #1c1c1e);
+    border-radius: var(--ha-card-border-radius, 12px);
+    overflow: hidden;
+    position: relative;
+    font-family: var(--paper-font-body1_-_font-family, 'Segoe UI', sans-serif);
+    font-size: 14px;
+    color: var(--primary-text-color, #e0e0e0);
   }
 
-  // ─── Styles ─────────────────────────────────────────────────────────────────
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-        font-family: var(--paper-font-body1_-_font-family, 'Segoe UI', sans-serif);
-      }
+  /* Search */
+  .search-bar {
+    flex-shrink: 0;
+    padding: 10px 12px 8px;
+    background: var(--sidebar-background-color, #111);
+    border-bottom: 1px solid var(--divider-color, rgba(255,255,255,0.08));
+  }
+  .search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--divider-color, rgba(255,255,255,0.15));
+    background: var(--secondary-background-color, #2c2c2e);
+    color: var(--primary-text-color, #fff);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .search-input:focus { border-color: var(--accent-color, #e07b54); }
+  .search-input::placeholder { color: var(--secondary-text-color, #888); }
 
-      /* ── Card shell ── */
-      .card-shell {
-        display: flex;
-        flex-direction: column;
-        height: var(--fragrance-card-height, 400px);
-        max-height: var(--fragrance-card-height, 400px);
-        background: var(--ha-card-background, #1c1c1e);
-        border-radius: var(--ha-card-border-radius, 12px);
-        overflow: hidden;
-        position: relative;
-      }
+  /* Content scroll area */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+  }
 
-      /* ── Search bar ── */
-      .search-bar {
-        flex-shrink: 0;
-        padding: 10px 12px 8px;
-        background: var(--sidebar-background-color, #111);
-        border-bottom: 1px solid var(--divider-color, rgba(255,255,255,0.08));
-      }
-      .search-input {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 8px 12px;
-        border-radius: 8px;
-        border: 1.5px solid var(--divider-color, rgba(255,255,255,0.15));
-        background: var(--secondary-background-color, #2c2c2e);
-        color: var(--primary-text-color, #fff);
-        font-size: 13px;
-        font-family: inherit;
-        outline: none;
-        transition: border-color .2s;
-      }
-      .search-input:focus { border-color: var(--accent-color, #e07b54); }
-      .search-input::placeholder { color: var(--secondary-text-color, #888); }
+  /* Bottom nav */
+  .bottom-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--sidebar-background-color, #111);
+    border-top: 1px solid var(--divider-color, rgba(255,255,255,0.08));
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+  .nav-info { font-size: 12px; color: var(--secondary-text-color, #888); font-weight: 500; }
+  .nav-btns  { display: flex; gap: 8px; }
+  .nav-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn-back { background: var(--secondary-background-color, #2c2c2e); color: var(--primary-text-color, #fff); }
+  .nav-btn-home { background: var(--accent-color, #e07b54); color: #fff; }
 
-      /* ── Scrollable content ── */
-      .content {
-        flex: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 12px;
-        -webkit-overflow-scrolling: touch;
-      }
+  /* Section label */
+  .sec-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--accent-color, #e07b54);
+    margin: 0 0 8px;
+  }
+  .sec-block { margin-bottom: 14px; }
 
-      /* ── Bottom nav ── */
-      .bottom-nav {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 8px 12px;
-        background: var(--sidebar-background-color, #111);
-        border-top: 1px solid var(--divider-color, rgba(255,255,255,0.08));
-        min-height: 44px;
-      }
-      .nav-info {
-        font-size: 12px;
-        color: var(--secondary-text-color, #888);
-        font-weight: 500;
-      }
-      .nav-btns { display: flex; gap: 8px; }
-      .nav-btn {
-        padding: 6px 14px;
-        border-radius: 6px;
-        border: none;
-        font-size: 12px;
-        font-weight: 600;
-        font-family: inherit;
-        cursor: pointer;
-        transition: opacity .15s, transform .15s;
-      }
-      .nav-btn:active { transform: scale(.96); opacity: .8; }
-      .nav-btn-back {
-        background: var(--secondary-background-color, #2c2c2e);
-        color: var(--primary-text-color, #fff);
-      }
-      .nav-btn-home {
-        background: var(--accent-color, #e07b54);
-        color: #fff;
-      }
+  /* Filter chips */
+  .filter-row { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    border: 1.5px solid var(--divider-color, rgba(255,255,255,0.15));
+    background: var(--secondary-background-color, #2c2c2e);
+    color: var(--primary-text-color, #e0e0e0);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .chip.active {
+    background: var(--accent-color, #e07b54);
+    border-color: var(--accent-color, #e07b54);
+    color: #fff;
+  }
 
-      /* ── Section label ── */
-      .section-label {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        color: var(--accent-color, #e07b54);
-        margin: 0 0 8px;
-      }
-      .section-block { margin-bottom: 14px; }
-
-      /* ── Filter rows ── */
-      .filter-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-      }
-      .filter-chip {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 6px 11px;
-        border-radius: 20px;
-        border: 1.5px solid var(--divider-color, rgba(255,255,255,0.15));
-        background: var(--secondary-background-color, #2c2c2e);
-        color: var(--primary-text-color, #e0e0e0);
-        font-size: 12px;
-        font-weight: 600;
-        font-family: inherit;
-        cursor: pointer;
-        transition: all .2s;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .filter-chip:active { transf
+  /* Fragrance list */
+  .frag-list { display: flex; flex-direction: column; gap: 9px; }
+  .frag-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    background: var(--secondary-background-color, #2c2c2e);
+    border: 1px solid var(--divider-color, rgba(255,255,255,0.07));
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+  .frag-emoji { font-size: 24px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+  .frag-body  { flex: 1; min-width: 0; }
+  .frag-name  {
+    font-size: 13px; font-weight: 700;
+    color: var(--primary-text-color, #fff);
+    margin-bottom: 5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .frag-tags  { display: flex; flex-wrap: wrap; gap: 4px; }
+  .frag-tag   {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 4px;
+    background: rgba(224,123,84,0.15);
+    color: var(--acce
