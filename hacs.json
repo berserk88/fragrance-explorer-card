@@ -1,0 +1,6 @@
+{
+  "name": "Fragrance Layering Explorer Card",
+  "content_type": "plugin",
+  "filename": "fragrance-explorer-card.js",
+  "render_readme": true
+}
