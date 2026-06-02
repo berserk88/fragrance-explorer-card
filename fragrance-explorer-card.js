@@ -8,6 +8,8 @@ class FragranceExplorerCard extends LitElement {
       currentView: { type: String },
       searchQuery: { type: String },
       selectedSeason: { type: String },
+      selectedTime: { type: String },
+      selectedFragranceName: { type: String },
       selectedFragrance: { type: Object },
       filteredItems: { type: Array },
     };
@@ -43,17 +45,17 @@ class FragranceExplorerCard extends LitElement {
       .search-container {
         padding: 16px;
         border-bottom: 1px solid var(--border-color);
-        background: var(--sidebar-background-color);
+        background: linear-gradient(135deg, var(--sidebar-background-color) 0%, rgba(255, 107, 107, 0.05) 100%);
         flex-shrink: 0;
       }
 
       .search-input {
         width: 100%;
-        padding: 10px 12px;
+        padding: 12px 16px;
         background: var(--ha-card-background);
         color: var(--text-primary);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
         font-size: 14px;
         outline: none;
         transition: all 0.2s ease;
@@ -63,7 +65,7 @@ class FragranceExplorerCard extends LitElement {
 
       .search-input:focus {
         border-color: var(--accent-color);
-        box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
       }
 
       .search-input::placeholder {
@@ -77,10 +79,27 @@ class FragranceExplorerCard extends LitElement {
         padding: 16px;
       }
 
+      /* Dashboard Grid Styles */
+      .dashboard-section {
+        margin-bottom: 24px;
+      }
+
+      .dashboard-label {
+        font-weight: 700;
+        color: var(--accent-color);
+        font-size: 13px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 10px;
       }
 
       .filter-btn {
@@ -90,23 +109,35 @@ class FragranceExplorerCard extends LitElement {
         border: 2px solid var(--border-color);
         border-radius: 8px;
         cursor: pointer;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 13px;
         transition: all 0.3s ease;
         font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 50px;
       }
 
       .filter-btn:hover {
         border-color: var(--accent-color);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
       }
 
       .filter-btn.active {
-        background: var(--accent-color);
+        background: linear-gradient(135deg, var(--accent-color) 0%, rgba(255, 107, 107, 0.8) 100%);
         border-color: var(--accent-color);
-        color: #000;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(255, 107, 107, 0.4);
       }
 
+      .filter-icon {
+        font-size: 16px;
+      }
+
+      /* Fragrance List Styles */
       .fragrance-list {
         display: flex;
         flex-direction: column;
@@ -114,68 +145,102 @@ class FragranceExplorerCard extends LitElement {
       }
 
       .fragrance-item {
-        padding: 12px;
-        background: var(--sidebar-background-color);
+        padding: 14px;
+        background: linear-gradient(135deg, var(--sidebar-background-color) 0%, rgba(255, 107, 107, 0.03) 100%);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.2s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
       }
 
       .fragrance-item:hover {
-        background: var(--ha-card-background);
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
         border-color: var(--accent-color);
         transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+      }
+
+      .fragrance-item-left {
+        flex: 1;
       }
 
       .fragrance-header {
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
+        gap: 10px;
         margin-bottom: 8px;
       }
 
-      .fragrance-name {
-        font-weight: 600;
-        color: var(--text-primary);
-        font-size: 14px;
+      .fragrance-icon {
+        font-size: 20px;
       }
 
-      .rating {
-        display: inline-block;
-        background: var(--accent-color);
-        color: #000;
-        padding: 2px 8px;
-        border-radius: 4px;
-        font-weight: bold;
-        font-size: 12px;
+      .fragrance-name {
+        font-weight: 700;
+        color: var(--accent-color);
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: underline;
+        transition: all 0.2s ease;
+      }
+
+      .fragrance-name:hover {
+        color: #ff9a9f;
       }
 
       .fragrance-meta {
         display: flex;
         gap: 8px;
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-secondary);
         flex-wrap: wrap;
+        margin-top: 6px;
       }
 
       .meta-tag {
-        background: rgba(255, 107, 107, 0.1);
-        padding: 2px 6px;
-        border-radius: 3px;
+        background: rgba(255, 107, 107, 0.15);
+        padding: 3px 8px;
+        border-radius: 4px;
+        border-left: 2px solid var(--accent-color);
+        font-weight: 500;
       }
 
+      .rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--accent-color);
+        color: #000;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      /* Detail View Styles */
       .detail-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 12px;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 16px;
+      }
+
+      .detail-title-section {
+        flex: 1;
+      }
+
+      .detail-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
       }
 
       .detail-title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 700;
         color: var(--text-primary);
       }
@@ -183,22 +248,25 @@ class FragranceExplorerCard extends LitElement {
       .detail-rating {
         background: var(--accent-color);
         color: #000;
-        padding: 4px 12px;
+        padding: 6px 12px;
         border-radius: 6px;
         font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
       }
 
       .detail-section {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .detail-label {
-        font-weight: 600;
+        font-weight: 700;
         color: var(--accent-color);
         font-size: 12px;
         text-transform: uppercase;
-        margin-bottom: 8px;
-        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
       }
 
       .detail-text {
@@ -208,40 +276,40 @@ class FragranceExplorerCard extends LitElement {
       }
 
       .profile-box {
-        background: rgba(255, 107, 107, 0.05);
-        padding: 12px;
-        border-radius: 6px;
-        border-left: 3px solid var(--accent-color);
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+        padding: 14px;
+        border-radius: 8px;
+        border-left: 4px solid var(--accent-color);
         color: var(--text-primary);
         font-size: 14px;
-        line-height: 1.5;
+        line-height: 1.6;
       }
 
       .synergy-box {
-        background: rgba(255, 107, 107, 0.05);
-        padding: 12px;
-        border-radius: 6px;
-        border-left: 3px solid var(--accent-color);
+        background: linear-gradient(135deg, rgba(100, 200, 255, 0.1) 0%, rgba(100, 200, 255, 0.05) 100%);
+        padding: 14px;
+        border-radius: 8px;
+        border-left: 4px solid #64c8ff;
         color: var(--text-primary);
         font-size: 14px;
-        line-height: 1.5;
+        line-height: 1.6;
       }
 
-      .fragrances-list {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
+      .fragrances-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
       }
 
       .fragrance-tag {
-        display: inline-block;
         background: var(--sidebar-background-color);
-        padding: 6px 10px;
-        border-radius: 4px;
+        padding: 8px 12px;
+        border-radius: 6px;
         font-size: 12px;
-        color: var(--text-primary);
-        border: 1px solid var(--border-color);
-        width: fit-content;
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+        font-weight: 600;
+        text-align: center;
       }
 
       .steps-timeline {
@@ -257,44 +325,44 @@ class FragranceExplorerCard extends LitElement {
         left: 19px;
         top: 0;
         bottom: 0;
-        width: 2px;
-        background: var(--border-color);
+        width: 3px;
+        background: linear-gradient(180deg, var(--accent-color) 0%, rgba(255, 107, 107, 0.3) 100%);
       }
 
       .step-node {
         display: flex;
         gap: 16px;
         position: relative;
-        margin-left: 0;
       }
 
       .step-circle {
         flex-shrink: 0;
         width: 40px;
         height: 40px;
-        background: var(--accent-color);
+        background: linear-gradient(135deg, var(--accent-color) 0%, rgba(255, 107, 107, 0.8) 100%);
         border: 2px solid var(--sidebar-background-color);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: bold;
-        color: #000;
+        color: #fff;
         z-index: 1;
         font-size: 16px;
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
       }
 
       .step-content {
         flex: 1;
         padding: 12px;
         background: var(--sidebar-background-color);
-        border-radius: 6px;
+        border-radius: 8px;
         border: 1px solid var(--border-color);
       }
 
       .step-fragrance {
         font-weight: 600;
-        color: var(--text-primary);
+        color: var(--accent-color);
         margin-bottom: 6px;
         font-size: 14px;
       }
@@ -310,7 +378,7 @@ class FragranceExplorerCard extends LitElement {
       .bottom-nav {
         padding: 12px 16px;
         border-top: 1px solid var(--border-color);
-        background: var(--sidebar-background-color);
+        background: linear-gradient(135deg, var(--sidebar-background-color) 0%, rgba(255, 107, 107, 0.05) 100%);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -320,6 +388,13 @@ class FragranceExplorerCard extends LitElement {
       .nav-info {
         font-size: 13px;
         color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
       }
 
       .nav-btn {
@@ -332,7 +407,6 @@ class FragranceExplorerCard extends LitElement {
         font-weight: 600;
         font-size: 12px;
         transition: all 0.2s ease;
-        margin-left: 8px;
         font-family: inherit;
       }
 
@@ -343,26 +417,27 @@ class FragranceExplorerCard extends LitElement {
 
       .no-results {
         text-align: center;
-        padding: 32px 16px;
+        padding: 48px 16px;
         color: var(--text-secondary);
       }
 
       .no-results-icon {
-        font-size: 48px;
-        margin-bottom: 12px;
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.7;
       }
 
       .clear-btn {
-        padding: 4px 8px;
+        padding: 6px 12px;
         background: rgba(255, 107, 107, 0.2);
         color: var(--accent-color);
         border: 1px solid var(--accent-color);
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
         font-size: 12px;
         transition: all 0.2s ease;
-        margin-right: 8px;
         font-family: inherit;
+        font-weight: 600;
       }
 
       .clear-btn:hover {
@@ -377,11 +452,17 @@ class FragranceExplorerCard extends LitElement {
 
         .dashboard-grid {
           grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+        }
+
+        .filter-btn {
+          font-size: 12px;
+          padding: 10px 12px;
+          min-height: 45px;
         }
 
         .detail-header {
           flex-direction: column;
-          align-items: flex-start;
           gap: 12px;
         }
 
@@ -400,7 +481,9 @@ class FragranceExplorerCard extends LitElement {
     this.hass = undefined;
     this.currentView = 'dashboard';
     this.searchQuery = '';
-    this.selectedSeason = 'All Seasons';
+    this.selectedSeason = null;
+    this.selectedTime = null;
+    this.selectedFragranceName = null;
     this.selectedFragrance = null;
     this.filteredItems = [];
 
@@ -442,7 +525,8 @@ class FragranceExplorerCard extends LitElement {
       { id: 35, name: "High-Heat Overlord", rating: 5.0, season: "Summer", time: "Day", occasion: "Casual", profile: "[4-LAYER] Blockbuster summer shield of ambroxan, spice, marine salt, ginger.", synergy: "Absolute armor against sweat. Designed to sequentially boil off over an 8-hour period.", fragrances: ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Jean Lowe Immortal"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "Al Nashama Caprice", v: "1 spray", z: "Skin / Chest" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Left Shoulder" }, { f: "Jean Lowe Immortal", v: "2 sprays", z: "Clothes / Right Shoulder" }] }
     ];
 
-    this.seasons = ['All Seasons', 'Spring', 'Summer', 'Autumn', 'Winter'];
+    this.seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
+    this.times = ['Day', 'Night'];
     this.applyFilters();
   }
 
@@ -460,9 +544,21 @@ class FragranceExplorerCard extends LitElement {
   applyFilters() {
     let filtered = this.database;
 
-    if (this.selectedSeason && this.selectedSeason !== 'All Seasons') {
+    if (this.selectedSeason) {
       filtered = filtered.filter(item => 
         item.season === this.selectedSeason || item.season === 'All Seasons'
+      );
+    }
+
+    if (this.selectedTime && this.selectedTime !== 'All') {
+      filtered = filtered.filter(item =>
+        item.time === this.selectedTime || item.time === 'All'
+      );
+    }
+
+    if (this.selectedFragranceName) {
+      filtered = filtered.filter(item =>
+        item.fragrances.includes(this.selectedFragranceName)
       );
     }
 
@@ -477,7 +573,7 @@ class FragranceExplorerCard extends LitElement {
 
     this.filteredItems = filtered;
 
-    if (this.searchQuery.trim() && this.currentView === 'dashboard') {
+    if ((this.searchQuery.trim() || this.selectedFragranceName) && this.currentView === 'dashboard') {
       this.currentView = 'list';
     }
   }
@@ -487,8 +583,18 @@ class FragranceExplorerCard extends LitElement {
     this.applyFilters();
   }
 
-  handleSeasonFilter(season) {
-    this.selectedSeason = season;
+  toggleSeasonFilter(season) {
+    this.selectedSeason = this.selectedSeason === season ? null : season;
+    this.applyFilters();
+  }
+
+  toggleTimeFilter(time) {
+    this.selectedTime = this.selectedTime === time ? null : time;
+    this.applyFilters();
+  }
+
+  handleFragranceNameClick(fragranceName) {
+    this.selectedFragranceName = this.selectedFragranceName === fragranceName ? null : fragranceName;
     this.applyFilters();
   }
 
@@ -499,37 +605,85 @@ class FragranceExplorerCard extends LitElement {
 
   handleBack() {
     if (this.currentView === 'detail') {
-      this.currentView = this.searchQuery.trim() ? 'list' : 'dashboard';
+      this.currentView = this.searchQuery.trim() || this.selectedFragranceName ? 'list' : 'dashboard';
     } else if (this.currentView === 'list') {
       this.currentView = 'dashboard';
       this.searchQuery = '';
+      this.selectedFragranceName = null;
       this.applyFilters();
     }
   }
 
-  clearSearch() {
+  clearFilters() {
     this.searchQuery = '';
+    this.selectedFragranceName = null;
     this.currentView = 'dashboard';
     this.applyFilters();
+  }
+
+  getSeasonIcon(season) {
+    const icons = {
+      'Spring': '🌸',
+      'Summer': '☀️',
+      'Autumn': '🍂',
+      'Winter': '❄️'
+    };
+    return icons[season] || '📅';
+  }
+
+  getTimeIcon(time) {
+    return time === 'Day' ? '☀️' : '🌙';
+  }
+
+  getOccasionIcon(occasion) {
+    const icons = {
+      'Casual': '👕',
+      'Office': '💼',
+      'Formal': '🎩',
+      'Evening': '🌃'
+    };
+    return icons[occasion] || '✨';
   }
 
   renderDashboard() {
     return html`
       <div class="content-area">
-        <div style="margin-bottom: 16px;">
-          <div class="detail-label">Select Season</div>
+        <div class="dashboard-section">
+          <div class="dashboard-label">
+            <span>📅</span> Season
+          </div>
+          <div class="dashboard-grid">
+            ${this.seasons.map(season =>
+              html`
+                <button
+                  class="filter-btn ${this.selectedSeason === season ? 'active' : ''}"
+                  @click="${() => this.toggleSeasonFilter(season)}"
+                >
+                  <span class="filter-icon">${this.getSeasonIcon(season)}</span>
+                  <span>${season}</span>
+                </button>
+              `
+            )}
+          </div>
         </div>
-        <div class="dashboard-grid">
-          ${this.seasons.map(season =>
-            html`
-              <button
-                class="filter-btn ${this.selectedSeason === season ? 'active' : ''}"
-                @click="${() => this.handleSeasonFilter(season)}"
-              >
-                ${season}
-              </button>
-            `
-          )}
+
+        <div class="dashboard-section">
+          <div class="dashboard-label">
+            <span>⏰</span> Time of Day
+          </div>
+          <div class="dashboard-grid">
+            ${this.times.map(time =>
+              html`
+                <button
+                  class="filter-btn ${this.selectedTime === time ? 'active' : ''}"
+                  @click="${() => this.toggleTimeFilter(time)}"
+                >
+                  <span class="filter-icon">${this.getTimeIcon(time)}</span>
+                  <span>${time}</span>
+                </button>
+              `
+            )}
+          </div>
         </div>
       </div>
     `;
@@ -541,8 +695,8 @@ class FragranceExplorerCard extends LitElement {
         <div class="content-area">
           <div class="no-results">
             <div class="no-results-icon">🔍</div>
-            <div>No fragrances found</div>
-            <div style="margin-top: 8px; font-size: 12px;">Try adjusting your search or season filter</div>
+            <div style="font-size: 16px; font-weight: 600;">No fragrances found</div>
+            <div style="margin-top: 8px; font-size: 13px;">Try adjusting your filters</div>
           </div>
         </div>
       `;
@@ -553,19 +707,19 @@ class FragranceExplorerCard extends LitElement {
         <div class="fragrance-list">
           ${this.filteredItems.map(item =>
             html`
-              <div
-                class="fragrance-item"
-                @click="${() => this.handleFragranceSelect(item)}"
-              >
-                <div class="fragrance-header">
-                  <div class="fragrance-name">${item.name}</div>
-                  <div class="rating">★ ${item.rating}</div>
+              <div class="fragrance-item" @click="${() => this.handleFragranceSelect(item)}">
+                <div class="fragrance-item-left">
+                  <div class="fragrance-header">
+                    <span class="fragrance-icon">✨</span>
+                    <span class="fragrance-name" @click="${(e) => { e.stopPropagation(); this.handleFragranceNameClick(item.name); }}">${item.name}</span>
+                  </div>
+                  <div class="fragrance-meta">
+                    <span class="meta-tag">${this.getSeasonIcon(item.season)} ${item.season}</span>
+                    <span class="meta-tag">${this.getTimeIcon(item.time)} ${item.time}</span>
+                    <span class="meta-tag">${this.getOccasionIcon(item.occasion)} ${item.occasion}</span>
+                  </div>
                 </div>
-                <div class="fragrance-meta">
-                  <span class="meta-tag">${item.season}</span>
-                  <span class="meta-tag">${item.time}</span>
-                  <span class="meta-tag">${item.occasion}</span>
-                </div>
+                <div class="rating">★ ${item.rating}</div>
               </div>
             `
           )}
@@ -582,7 +736,10 @@ class FragranceExplorerCard extends LitElement {
     return html`
       <div class="content-area">
         <div class="detail-header">
-          <div class="detail-title">${frag.name}</div>
+          <div class="detail-title-section">
+            <div class="detail-icon">✨</div>
+            <div class="detail-title">${frag.name}</div>
+          </div>
           <div class="detail-rating">★ ${frag.rating}</div>
         </div>
 
@@ -598,9 +755,17 @@ class FragranceExplorerCard extends LitElement {
 
         <div class="detail-section">
           <div class="detail-label">Core Fragrances</div>
-          <div class="fragrances-list">
+          <div class="fragrances-grid">
             ${frag.fragrances.map(f =>
-              html`<span class="fragrance-tag">${f}</span>`
+              html`
+                <span 
+                  class="fragrance-tag" 
+                  @click="${() => this.handleFragranceNameClick(f)}"
+                  style="cursor: pointer; transition: all 0.2s; text-decoration: ${this.selectedFragranceName === f ? 'underline' : 'none'};"
+                >
+                  ${f}
+                </span>
+              `
             )}
           </div>
         </div>
@@ -651,18 +816,18 @@ class FragranceExplorerCard extends LitElement {
       navText = `${this.selectedFragrance?.name || 'Detail View'}`;
       showBack = true;
     } else if (this.currentView === 'list') {
-      navText = `${this.filteredItems.length} fragrance${this.filteredItems.length !== 1 ? 's' : ''} found`;
+      navText = `${this.filteredItems.length} blend${this.filteredItems.length !== 1 ? 's' : ''}`;
       showBack = true;
     } else {
-      navText = `${this.database.length} blends in database`;
+      navText = `${this.database.length} total blends`;
     }
 
     return html`
       <div class="bottom-nav">
         <div class="nav-info">${navText}</div>
-        <div>
-          ${this.searchQuery.trim() ? html`
-            <button class="clear-btn" @click="${() => this.clearSearch()}">Clear Search</button>
+        <div class="nav-buttons">
+          ${(this.searchQuery.trim() || this.selectedFragranceName) ? html`
+            <button class="clear-btn" @click="${() => this.clearFilters()}">Clear</button>
           ` : ''}
           ${showBack ? html`
             <button class="nav-btn" @click="${() => this.handleBack()}">← Back</button>
@@ -680,7 +845,7 @@ class FragranceExplorerCard extends LitElement {
             <input
               type="text"
               class="search-input"
-              placeholder="Search fragrances, profiles, or ingredients..."
+              placeholder="🔍 Search fragrances, profiles, or ingredients..."
               .value="${this.searchQuery}"
               @input="${(e) => this.handleSearchInput(e)}"
             />
