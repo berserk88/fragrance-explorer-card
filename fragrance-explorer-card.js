@@ -12,6 +12,7 @@ class FragranceExplorerCard extends LitElement {
       selectedFragranceName: { type: String },
       selectedFragrance: { type: Object },
       filteredItems: { type: Array },
+      databaseLoaded: { type: Boolean },
     };
   }
 
@@ -114,10 +115,11 @@ class FragranceExplorerCard extends LitElement {
         transition: all 0.3s ease;
         font-family: inherit;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 6px;
-        min-height: 50px;
+        min-height: 60px;
       }
 
       .filter-btn:hover {
@@ -134,7 +136,8 @@ class FragranceExplorerCard extends LitElement {
       }
 
       .filter-icon {
-        font-size: 16px;
+        font-size: 24px;
+        display: block;
       }
 
       /* Fragrance List Styles */
@@ -175,7 +178,7 @@ class FragranceExplorerCard extends LitElement {
       }
 
       .fragrance-icon {
-        font-size: 20px;
+        font-size: 24px;
       }
 
       .fragrance-name {
@@ -183,12 +186,14 @@ class FragranceExplorerCard extends LitElement {
         color: var(--accent-color);
         font-size: 14px;
         cursor: pointer;
-        text-decoration: underline;
+        text-decoration: none;
         transition: all 0.2s ease;
+        border-bottom: 2px solid transparent;
       }
 
       .fragrance-name:hover {
         color: #ff9a9f;
+        border-bottom-color: #ff9a9f;
       }
 
       .fragrance-meta {
@@ -202,10 +207,13 @@ class FragranceExplorerCard extends LitElement {
 
       .meta-tag {
         background: rgba(255, 107, 107, 0.15);
-        padding: 3px 8px;
+        padding: 4px 10px;
         border-radius: 4px;
         border-left: 2px solid var(--accent-color);
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
 
       .rating {
@@ -214,10 +222,11 @@ class FragranceExplorerCard extends LitElement {
         gap: 4px;
         background: var(--accent-color);
         color: #000;
-        padding: 4px 10px;
+        padding: 6px 12px;
         border-radius: 6px;
         font-weight: bold;
         font-size: 12px;
+        flex-shrink: 0;
       }
 
       /* Detail View Styles */
@@ -235,7 +244,7 @@ class FragranceExplorerCard extends LitElement {
       }
 
       .detail-icon {
-        font-size: 32px;
+        font-size: 40px;
         margin-bottom: 8px;
       }
 
@@ -248,7 +257,7 @@ class FragranceExplorerCard extends LitElement {
       .detail-rating {
         background: var(--accent-color);
         color: #000;
-        padding: 6px 12px;
+        padding: 8px 14px;
         border-radius: 6px;
         font-weight: bold;
         display: inline-flex;
@@ -303,13 +312,25 @@ class FragranceExplorerCard extends LitElement {
 
       .fragrance-tag {
         background: var(--sidebar-background-color);
-        padding: 8px 12px;
+        padding: 10px 12px;
         border-radius: 6px;
         font-size: 12px;
         color: var(--accent-color);
-        border: 1px solid var(--accent-color);
+        border: 2px solid var(--accent-color);
         font-weight: 600;
         text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .fragrance-tag:hover {
+        background: var(--accent-color);
+        color: #000;
+      }
+
+      .fragrance-tag.selected {
+        background: var(--accent-color);
+        color: #000;
       }
 
       .steps-timeline {
@@ -428,7 +449,7 @@ class FragranceExplorerCard extends LitElement {
       }
 
       .clear-btn {
-        padding: 6px 12px;
+        padding: 8px 14px;
         background: rgba(255, 107, 107, 0.2);
         color: var(--accent-color);
         border: 1px solid var(--accent-color);
@@ -445,6 +466,12 @@ class FragranceExplorerCard extends LitElement {
         color: #000;
       }
 
+      .loading-message {
+        text-align: center;
+        padding: 48px 16px;
+        color: var(--text-secondary);
+      }
+
       @media (max-width: 600px) {
         .content-area {
           padding: 12px;
@@ -457,8 +484,8 @@ class FragranceExplorerCard extends LitElement {
 
         .filter-btn {
           font-size: 12px;
-          padding: 10px 12px;
-          min-height: 45px;
+          padding: 10px 8px;
+          min-height: 55px;
         }
 
         .detail-header {
@@ -486,47 +513,586 @@ class FragranceExplorerCard extends LitElement {
     this.selectedFragranceName = null;
     this.selectedFragrance = null;
     this.filteredItems = [];
+    this.databaseLoaded = false;
 
     this.database = [
-      { id: 1, name: "High-Heat Shield", rating: 4.5, season: "Summer", time: "Day", occasion: "Casual", profile: "Sparkling ginger-citrus.", synergy: "Perfect interlocking of blue ambroxan and sharp citrus.", fragrances: ["Turathi Blue", "Jean Lowe Immortal"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "Jean Lowe Immortal", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 2, name: "Ultimate Luxury Blue", rating: 5.0, season: "All Seasons", time: "All", occasion: "Formal", profile: "Deep amber powdery blue.", synergy: "Caprice's cardamom softens the sharp edges of Turathi.", fragrances: ["Al Nashama Caprice", "Turathi Blue"], steps: [{ f: "Al Nashama Caprice", v: "2 sprays", z: "Skin / Chest" }, { f: "Turathi Blue", v: "2 sprays", z: "Clothes / Shoulders" }] },
-      { id: 3, name: "Ginger Elysium", rating: 4.5, season: "Summer", time: "Day", occasion: "Casual", profile: "High-end effervescent lime/ginger.", synergy: "Immortal boosts the bright, sparkling opening of Divin Asylum.", fragrances: ["Jean Lowe Immortal", "Divin Asylum"], steps: [{ f: "Jean Lowe Immortal", v: "2 sprays", z: "Skin / Neck" }, { f: "Divin Asylum", v: "2 sprays", z: "Clothes / Collar" }] },
-      { id: 4, name: "Alpine Ocean Breeze", rating: 4.0, season: "Summer", time: "Day", occasion: "Casual", profile: "Metallic marine sea-salt air.", synergy: "Milestone adds crisp marine salt to the green tea of Heaven.", fragrances: ["Supremacy in Heaven", "CDNI Milestone"], steps: [{ f: "Supremacy in Heaven", v: "2 sprays", z: "Skin / Chest" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 5, name: "Modernized Emerald Vetiver", rating: 4.0, season: "Spring", time: "Day", occasion: "Office", profile: "Sharp retro-modern green.", synergy: "Immortal updates the heavy, dark oud-vetiver base of Ash'aa.", fragrances: ["Ash'aa Oud Noir", "Jean Lowe Immortal"], steps: [{ f: "Ash'aa Oud Noir", v: "2 sprays", z: "Skin / Neck" }, { f: "Jean Lowe Immortal", v: "2 sprays", z: "Clothes / Shoulders" }] },
-      { id: 6, name: "Inky Citrus Bomb", rating: 4.0, season: "Autumn", time: "Day", occasion: "Casual", profile: "Earthy dark grapefruit.", synergy: "Turathi's bright grapefruit cuts through the damp ink of Encre Noire.", fragrances: ["Encre Noire l'Extreme", "Turathi Blue"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Chest" }, { f: "Turathi Blue", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 7, name: "Coastal Countryside", rating: 4.0, season: "Spring", time: "Day", occasion: "Casual", profile: "Salty crisp ozonic green.", synergy: "Milestone adds a bright oceanic breeze to the dark green landscape.", fragrances: ["Ash'aa Oud Noir", "CDNI Milestone"], steps: [{ f: "Ash'aa Oud Noir", v: "2 sprays", z: "Skin / Neck" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Jacket" }] },
-      { id: 8, name: "Professional Comfort", rating: 4.5, season: "Autumn", time: "Day", occasion: "Office", profile: "Creamy fig and sharp vetiver.", synergy: "Liam Grey's milky tea accord perfectly balances Divin Asylum's crispness.", fragrances: ["Lattafa Liam Grey", "Divin Asylum"], steps: [{ f: "Lattafa Liam Grey", v: "2 sprays", z: "Skin / Neck" }, { f: "Divin Asylum", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 9, name: "Executive Fresh", rating: 4.5, season: "Spring", time: "Day", occasion: "Office", profile: "Elite fresh-cut grass and lime.", synergy: "A highly clean, professional aura with a hint of dark wood depth.", fragrances: ["Ash'aa Oud Noir", "Divin Asylum"], steps: [{ f: "Ash'aa Oud Noir", v: "2 sprays", z: "Skin / Chest" }, { f: "Divin Asylum", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 10, name: "Upscale Ginger Cream-Soda", rating: 5.0, season: "Autumn", time: "All", occasion: "Evening", profile: "Sparkling gourmand vanilla.", synergy: "Ghost's rich vanilla gourmand structure is uplifted by Immortal's ginger.", fragrances: ["Spectre Ghost", "Jean Lowe Immortal"], steps: [{ f: "Spectre Ghost", v: "2 sprays", z: "Skin / Neck" }, { f: "Jean Lowe Immortal", v: "3 sprays", z: "Clothes / Sweater" }] },
-      { id: 11, name: "Emperor's Tea Accord", rating: 4.5, season: "Spring", time: "Day", occasion: "Office", profile: "Luxury green and black tea lounge.", synergy: "Liam Grey adds a dense black tea and fig richness to Heaven's silver mountain air.", fragrances: ["Supremacy in Heaven", "Lattafa Liam Grey"], steps: [{ f: "Supremacy in Heaven", v: "2 sprays", z: "Skin / Chest" }, { f: "Lattafa Liam Grey", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 12, name: "Luxury Cashmere", rating: 5.0, season: "Winter", time: "All", occasion: "Formal", profile: "Niche woody shield.", synergy: "Encre Noire adds an earthy framework to the soft, powdery tea of Liam Grey.", fragrances: ["Encre Noire l'Extreme", "Lattafa Liam Grey"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Chest" }, { f: "Lattafa Liam Grey", v: "3 sprays", z: "Clothes / Sweater" }] },
-      { id: 13, name: "Seductive Pineapple", rating: 4.5, season: "Spring", time: "Night", occasion: "Evening", profile: "Romantic fruity pineapple spice.", synergy: "Caprice introduces a sensual cardamom cloud over the bright pineapple base.", fragrances: ["Supremacy Collector's", "Al Nashama Caprice"], steps: [{ f: "Supremacy Collector's", v: "2 sprays", z: "Skin / Neck" }, { f: "Al Nashama Caprice", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 14, name: "Bad Boy in a Clean Suit", rating: 5.0, season: "Winter", time: "Night", occasion: "Evening", profile: "Rugged leather and clean powder.", synergy: "The masculine spice of Costume National I meets the clean powder of Caprice.", fragrances: ["Costume National I", "Al Nashama Caprice"], steps: [{ f: "Costume National I", v: "2 sprays", z: "Skin / Neck" }, { f: "Al Nashama Caprice", v: "3 sprays", z: "Clothes / Jacket" }] },
-      { id: 15, name: "Freezing Powerhouse", rating: 5.0, season: "Winter", time: "Night", occasion: "Formal", profile: "Smoky spicy tobacco vanilla.", synergy: "Hercules provides a heavy tobacco base that anchors the airy vanilla of Ghost.", fragrances: ["Maison Alhambra Hercules", "Spectre Ghost"], steps: [{ f: "Maison Alhambra Hercules", v: "2 sprays", z: "Skin / Chest" }, { f: "Spectre Ghost", v: "2 sprays", z: "Clothes / Heavy Coat" }] },
-      { id: 16, name: "Spiced Chai & Tobacco", rating: 4.5, season: "Autumn", time: "All", occasion: "Casual", profile: "Ultra-cozy spiced gourmand.", synergy: "Hercules injects a warm cinnamon tobacco note into Liam Grey's fig-milk tea.", fragrances: ["Maison Alhambra Hercules", "Lattafa Liam Grey"], steps: [{ f: "Maison Alhambra Hercules", v: "2 sprays", z: "Skin / Neck" }, { f: "Lattafa Liam Grey", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 17, name: "Smoked Pineapple Leather", rating: 4.5, season: "Winter", time: "Night", occasion: "Evening", profile: "Alpha dark fruit and leather.", synergy: "SNOI's intense smoky performance perfectly overlays the rich saffron of National I.", fragrances: ["Costume National I", "SNOI"], steps: [{ f: "Costume National I", v: "2 sprays", z: "Skin / Chest" }, { f: "SNOI", v: "2 sprays", z: "Clothes / Leather Jacket" }] },
-      { id: 18, name: "Seductive Vanilla Leather", rating: 5.0, season: "Winter", time: "Night", occasion: "Evening", profile: "Sweet rugged luxury leather.", synergy: "The spicy, structural amber of National I is sweetened beautifully by Spectre Ghost.", fragrances: ["Costume National I", "Spectre Ghost"], steps: [{ f: "Costume National I", v: "2 sprays", z: "Skin / Neck" }, { f: "Spectre Ghost", v: "2 sprays", z: "Clothes / Coat" }] },
-      { id: 19, name: "Spiced Vanilla Tobacco", rating: 4.5, season: "Autumn", time: "Night", occasion: "Evening", profile: "Powdery warm tobacco lavender.", synergy: "Caprice introduces a clean clean lavender note directly to Hercules' dark tobacco.", fragrances: ["Maison Alhambra Hercules", "Al Nashama Caprice"], steps: [{ f: "Maison Alhambra Hercules", v: "2 sprays", z: "Skin / Chest" }, { f: "Al Nashama Caprice", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 20, name: "Salty Watermelon Tobacco", rating: 4.0, season: "Autumn", time: "Day", occasion: "Casual", profile: "Experimental sweet-salty ozonic tobacco.", synergy: "Milestone's ocean salt completely transforms the heavy sweet tobacco notes.", fragrances: ["Maison Alhambra Hercules", "CDNI Milestone"], steps: [{ f: "Maison Alhambra Hercules", v: "2 sprays", z: "Skin / Neck" }, { f: "CDNI Milestone", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 21, name: "Imperial Saffron Blue", rating: 4.5, season: "Autumn", time: "All", occasion: "Evening", profile: "Exotic leathery blue amber.", synergy: "National I creates an elite amber base that anchors Turathi's projecting blue notes.", fragrances: ["Costume National I", "Turathi Blue"], steps: [{ f: "Costume National I", v: "2 sprays", z: "Skin / Chest" }, { f: "Turathi Blue", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 22, name: "Midnight Metallic Ocean", rating: 4.0, season: "Summer", time: "Night", occasion: "Casual", profile: "Dark fruity metallic marine.", synergy: "Milestone adds crisp ozonic sea air to the heavy oakmoss/pineapple of SNOI.", fragrances: ["SNOI", "CDNI Milestone"], steps: [{ f: "SNOI", v: "2 sprays", z: "Skin / Neck" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Shoulders" }] },
-      { id: 23, name: "Creamy Alpine Woods", rating: 4.0, season: "Spring", time: "Day", occasion: "Office", profile: "Green tea smoothed by milky fig.", synergy: "Heaven's sharp ink/tea edges are completely smoothed out by Liam Grey.", fragrances: ["Supremacy in Heaven", "Lattafa Liam Grey"], steps: [{ f: "Supremacy in Heaven", v: "2 sprays", z: "Skin / Chest" }, { f: "Lattafa Liam Grey", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 24, name: "Smoky Mountain Vetiver", rating: 4.0, season: "Autumn", time: "Day", occasion: "Office", profile: "Dark ink vetiver meeting clean tea.", synergy: "Heaven provides a clean, metallic airiness that ventilates the dark Encre Noire core.", fragrances: ["Encre Noire l'Extreme", "Supremacy in Heaven"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Neck" }, { f: "Supremacy in Heaven", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 25, name: "Absolute Universal King", rating: 5.0, season: "All Seasons", time: "All", occasion: "Casual", profile: "Crowdspleasing fresh cardamom blue.", synergy: "Flawless interweaving of clean corporate lavender and high-projection ambroxan.", fragrances: ["Al Nashama Caprice", "Turathi Blue"], steps: [{ f: "Al Nashama Caprice", v: "2 sprays", z: "Skin / Neck" }, { f: "Turathi Blue", v: "3 sprays", z: "Clothes / Clothes" }] },
-      { id: 26, name: "Aromatic Ink & Leather", rating: 4.5, season: "Winter", time: "Night", occasion: "Formal", profile: "Intense ultra-masculine dark niche wood.", synergy: "Pure dark art. Earthy cypress and heavy incense clashing with spiced saffron leather.", fragrances: ["Encre Noire l'Extreme", "Costume National I"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Chest" }, { f: "Costume National I", v: "2 sprays", z: "Clothes / Jacket" }] },
-      { id: 27, name: "Citrus Saffron Spark", rating: 4.0, season: "Autumn", time: "Day", occasion: "Office", profile: "Leathery zesty ginger.", synergy: "Immortal's ginger top note introduces a bright opening to the dry leather base.", fragrances: ["Costume National I", "Jean Lowe Immortal"], steps: [{ f: "Costume National I", v: "2 sprays", z: "Skin / Neck" }, { f: "Jean Lowe Immortal", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 28, name: "Golden Pineapple Breeze", rating: 4.5, season: "Summer", time: "Day", occasion: "Casual", profile: "Premium sharp tropical pineapple.", synergy: "Divin Asylum supercharges the fruity traits of the collector's edition.", fragrances: ["Supremacy Collector's", "Divin Asylum"], steps: [{ f: "Supremacy Collector's", v: "2 sprays", z: "Skin / Chest" }, { f: "Divin Asylum", v: "3 sprays", z: "Clothes / Shirt" }] },
-      { id: 29, name: "Emperor's Sovereign", rating: 5.0, season: "Spring", time: "All", occasion: "Formal", profile: "[3-LAYER] Deep multi-dimensional smoky pineapple.", synergy: "SNOI anchors the bottom while Divin Asylum adds high-end niche sparkle to the top.", fragrances: ["SNOI", "Supremacy Collector's", "Divin Asylum"], steps: [{ f: "SNOI", v: "1 spray", z: "Skin / Chest" }, { f: "Supremacy Collector's", v: "2 sprays", z: "Skin / Neck" }, { f: "Divin Asylum", v: "2 sprays", z: "Clothes / Shoulders" }] },
-      { id: 30, name: "Gothic Vanilla Incense", rating: 4.5, season: "Winter", time: "Night", occasion: "Formal", profile: "[3-LAYER] Mysterious dark woody vanilla.", synergy: "Encre Noire adds an inky darkness to Hercules' tobacco and Ghost's rich vanilla.", fragrances: ["Encre Noire l'Extreme", "Maison Alhambra Hercules", "Spectre Ghost"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Chest" }, { f: "Maison Alhambra Hercules", v: "2 sprays", z: "Skin / Neck" }, { f: "Spectre Ghost", v: "2 sprays", z: "Clothes / Coat" }] },
-      { id: 31, name: "Royal Cardamom Sea", rating: 4.5, season: "Summer", time: "All", occasion: "Office", profile: "[3-LAYER] Advanced aquatic-spicy fusion.", synergy: "Turathi provides deep blue weight, Caprice adds spicy mid-tier fluff, Milestone freshens the top.", fragrances: ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "Al Nashama Caprice", v: "1 spray", z: "Skin / Chest" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Collar" }] },
-      { id: 32, name: "Ultimate Zesty Aquatic", rating: 4.5, season: "Summer", time: "Day", occasion: "Casual", profile: "[3-LAYER] Extreme hot weather defense.", synergy: "Unstoppable high-heat projection matrix using triple citrus-ambroxan layers.", fragrances: ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Chest" }, { f: "Jean Lowe Immortal", v: "2 sprays", z: "Clothes / Shoulders" }] },
-      { id: 33, name: "Executive Creed Tribute", rating: 4.5, season: "Spring", time: "Day", occasion: "Office", profile: "[3-LAYER] Green violet leaf, pineapple, salt-air.", synergy: "Classic masculine contours enhanced by modern oceanics and direct fruit sweetness.", fragrances: ["Ash'aa Oud Noir", "Supremacy Collector's", "CDNI Milestone"], steps: [{ f: "Ash'aa Oud Noir", v: "2 sprays", z: "Skin / Neck" }, { f: "Supremacy Collector's", v: "1 spray", z: "Skin / Chest" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Shirt" }] },
-      { id: 34, name: "Sovereign Niche Overlord", rating: 5.0, season: "Winter", time: "Night", occasion: "Formal", profile: "[4-LAYER] Ultimate niche symphony of leather, tea, vetiver, vanilla.", synergy: "Masterclass arrangement. Heavy, dense base elements shifting smoothly into sweet and powdery layers over time.", fragrances: ["Encre Noire l'Extreme", "Costume National I", "Lattafa Liam Grey", "Spectre Ghost"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Lower Back" }, { f: "Costume National I", v: "2 sprays", z: "Skin / Chest" }, { f: "Lattafa Liam Grey", v: "2 sprays", z: "Skin / Neck" }, { f: "Spectre Ghost", v: "2 sprays", z: "Clothes / Coat" }] },
-      { id: 35, name: "High-Heat Overlord", rating: 5.0, season: "Summer", time: "Day", occasion: "Casual", profile: "[4-LAYER] Blockbuster summer shield of ambroxan, spice, marine salt, ginger.", synergy: "Absolute armor against sweat. Designed to sequentially boil off over an 8-hour period.", fragrances: ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Jean Lowe Immortal"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "Al Nashama Caprice", v: "1 spray", z: "Skin / Chest" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Left Shoulder" }, { f: "Jean Lowe Immortal", v: "2 sprays", z: "Clothes / Right Shoulder" }] }
+      {
+        id: 1,
+        name: "High-Heat Shield",
+        icon: "🧊",
+        rating: 4.5,
+        season: "Summer",
+        time: "Day",
+        occasion: "Casual",
+        profile: "Sparkling ginger-citrus blend with marine elements.",
+        synergy: "Perfect interlocking of blue ambroxan and spice notes.",
+        fragrances: ["Immortal", "Milestone", "Turathi"],
+        steps: [
+          { f: "Immortal", v: "2 sprays", z: "Chest" },
+          { f: "Milestone", v: "1 spray", z: "Neck" },
+          { f: "Turathi", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 2,
+        name: "Ultimate Luxury Blue",
+        icon: "💎",
+        rating: 5.0,
+        season: "All Seasons",
+        time: "All",
+        occasion: "Formal",
+        profile: "Deep amber powdery blue - versatile masterpiece.",
+        synergy: "Caprice's cardamom softens the sharp edges.",
+        fragrances: ["Caprice", "Heaven", "National I"],
+        steps: [
+          { f: "Caprice", v: "2 sprays", z: "Neck" },
+          { f: "Heaven", v: "1 spray", z: "Chest" },
+          { f: "National I", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 3,
+        name: "Ginger Elysium",
+        icon: "🌟",
+        rating: 4.5,
+        season: "Summer",
+        time: "Day",
+        occasion: "Casual",
+        profile: "High-end effervescent lime and ginger.",
+        synergy: "Immortal boosts the bright, sparkling top notes.",
+        fragrances: ["Immortal", "Divin Asylum"],
+        steps: [
+          { f: "Immortal", v: "2 sprays", z: "Neck" },
+          { f: "Divin Asylum", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 4,
+        name: "Alpine Ocean Breeze",
+        icon: "🌊",
+        rating: 4.0,
+        season: "Summer",
+        time: "Day",
+        occasion: "Casual",
+        profile: "Metallic marine sea-salt air - fresh and invigorating.",
+        synergy: "Milestone adds crisp marine salt notes.",
+        fragrances: ["Milestone", "Turathi"],
+        steps: [
+          { f: "Milestone", v: "2 sprays", z: "Neck" },
+          { f: "Turathi", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 5,
+        name: "Modernized Emerald Vetiver",
+        icon: "🌿",
+        rating: 4.0,
+        season: "Spring",
+        time: "Day",
+        occasion: "Office",
+        profile: "Sharp retro-modern green for the office.",
+        synergy: "Immortal updates the heavy, dark vetiver.",
+        fragrances: ["Immortal", "Heaven"],
+        steps: [
+          { f: "Immortal", v: "1 spray", z: "Neck" },
+          { f: "Heaven", v: "2 sprays", z: "Chest" }
+        ]
+      },
+      {
+        id: 6,
+        name: "Inky Citrus Bomb",
+        icon: "💣",
+        rating: 4.0,
+        season: "Autumn",
+        time: "Day",
+        occasion: "Casual",
+        profile: "Earthy dark grapefruit explosion.",
+        synergy: "Turathi's bright grapefruit cuts through.",
+        fragrances: ["Turathi", "Heaven"],
+        steps: [
+          { f: "Turathi", v: "2 sprays", z: "Neck" },
+          { f: "Heaven", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 7,
+        name: "Coastal Countryside",
+        icon: "🏞️",
+        rating: 4.0,
+        season: "Spring",
+        time: "Day",
+        occasion: "Casual",
+        profile: "Salty crisp ozonic green.",
+        synergy: "Milestone adds bright oceanic breeze.",
+        fragrances: ["Milestone", "Immortal"],
+        steps: [
+          { f: "Milestone", v: "1 spray", z: "Neck" },
+          { f: "Immortal", v: "2 sprays", z: "Chest" }
+        ]
+      },
+      {
+        id: 8,
+        name: "Professional Comfort",
+        icon: "💼",
+        rating: 4.5,
+        season: "Autumn",
+        time: "Day",
+        occasion: "Office",
+        profile: "Creamy fig and sharp vetiver.",
+        synergy: "Liam Grey's milky tea accord perfects balance.",
+        fragrances: ["Liam Grey", "Heaven"],
+        steps: [
+          { f: "Liam Grey", v: "2 sprays", z: "Neck" },
+          { f: "Heaven", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 9,
+        name: "Executive Fresh",
+        icon: "✨",
+        rating: 4.5,
+        season: "Spring",
+        time: "Day",
+        occasion: "Office",
+        profile: "Elite fresh-cut grass and lime.",
+        synergy: "Highly clean, professional aura.",
+        fragrances: ["Immortal", "Caprice"],
+        steps: [
+          { f: "Immortal", v: "1 spray", z: "Neck" },
+          { f: "Caprice", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 10,
+        name: "Upscale Ginger Cream-Soda",
+        icon: "🥃",
+        rating: 5.0,
+        season: "Autumn",
+        time: "All",
+        occasion: "Evening",
+        profile: "Sparkling gourmand vanilla.",
+        synergy: "Ghost's rich vanilla gourmand sweetness.",
+        fragrances: ["Ghost", "Immortal"],
+        steps: [
+          { f: "Ghost", v: "2 sprays", z: "Neck" },
+          { f: "Immortal", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 11,
+        name: "Emperor's Tea Accord",
+        icon: "🍵",
+        rating: 4.5,
+        season: "Spring",
+        time: "Day",
+        occasion: "Office",
+        profile: "Luxury green and black tea lounge.",
+        synergy: "Liam Grey adds dense black tea notes.",
+        fragrances: ["Liam Grey", "Heaven"],
+        steps: [
+          { f: "Liam Grey", v: "2 sprays", z: "Chest" },
+          { f: "Heaven", v: "1 spray", z: "Neck" }
+        ]
+      },
+      {
+        id: 12,
+        name: "Luxury Cashmere",
+        icon: "🧥",
+        rating: 5.0,
+        season: "Winter",
+        time: "All",
+        occasion: "Formal",
+        profile: "Niche woody shield.",
+        synergy: "Encre Noire adds earthy framework.",
+        fragrances: ["Encre Noire", "Ghost"],
+        steps: [
+          { f: "Encre Noire", v: "2 sprays", z: "Chest" },
+          { f: "Ghost", v: "1 spray", z: "Neck" }
+        ]
+      },
+      {
+        id: 13,
+        name: "Seductive Pineapple",
+        icon: "🍍",
+        rating: 4.5,
+        season: "Spring",
+        time: "Night",
+        occasion: "Evening",
+        profile: "Romantic fruity pineapple spice.",
+        synergy: "Caprice introduces sensual smoothness.",
+        fragrances: ["Caprice", "SNOI"],
+        steps: [
+          { f: "Caprice", v: "1 spray", z: "Neck" },
+          { f: "SNOI", v: "2 sprays", z: "Chest" }
+        ]
+      },
+      {
+        id: 14,
+        name: "Bad Boy in a Clean Suit",
+        icon: "🎩",
+        rating: 5.0,
+        season: "Winter",
+        time: "Night",
+        occasion: "Evening",
+        profile: "Rugged leather and clean powder.",
+        synergy: "Masculine spice perfection.",
+        fragrances: ["Encre Noire", "Hercules"],
+        steps: [
+          { f: "Encre Noire", v: "2 sprays", z: "Neck" },
+          { f: "Hercules", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 15,
+        name: "Freezing Powerhouse",
+        icon: "❄️",
+        rating: 5.0,
+        season: "Winter",
+        time: "Night",
+        occasion: "Formal",
+        profile: "Smoky spicy tobacco vanilla.",
+        synergy: "Hercules provides heavy tobacco richness.",
+        fragrances: ["Hercules", "Ghost"],
+        steps: [
+          { f: "Hercules", v: "2 sprays", z: "Chest" },
+          { f: "Ghost", v: "1 spray", z: "Neck" }
+        ]
+      },
+      {
+        id: 16,
+        name: "Spiced Chai & Tobacco",
+        icon: "🌶️",
+        rating: 4.5,
+        season: "Autumn",
+        time: "All",
+        occasion: "Casual",
+        profile: "Ultra-cozy spiced gourmand.",
+        synergy: "Hercules injects warm cinnamon spice.",
+        fragrances: ["Hercules", "Immortal"],
+        steps: [
+          { f: "Hercules", v: "1 spray", z: "Neck" },
+          { f: "Immortal", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 17,
+        name: "Smoked Pineapple Leather",
+        icon: "🔥",
+        rating: 4.5,
+        season: "Winter",
+        time: "Night",
+        occasion: "Evening",
+        profile: "Alpha dark fruit and leather.",
+        synergy: "SNOI's intense smoky performance.",
+        fragrances: ["SNOI", "Encre Noire"],
+        steps: [
+          { f: "SNOI", v: "2 sprays", z: "Neck" },
+          { f: "Encre Noire", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 18,
+        name: "Seductive Vanilla Leather",
+        icon: "💋",
+        rating: 5.0,
+        season: "Winter",
+        time: "Night",
+        occasion: "Evening",
+        profile: "Sweet rugged luxury leather.",
+        synergy: "Spicy structural ambroxan excellence.",
+        fragrances: ["Ghost", "SNOI"],
+        steps: [
+          { f: "Ghost", v: "1 spray", z: "Chest" },
+          { f: "SNOI", v: "2 sprays", z: "Neck" }
+        ]
+      },
+      {
+        id: 19,
+        name: "Spiced Vanilla Tobacco",
+        icon: "🚬",
+        rating: 4.5,
+        season: "Autumn",
+        time: "Night",
+        occasion: "Evening",
+        profile: "Powdery warm tobacco lavender.",
+        synergy: "Caprice introduces clean smooth edges.",
+        fragrances: ["Caprice", "Hercules"],
+        steps: [
+          { f: "Caprice", v: "1 spray", z: "Wrists" },
+          { f: "Hercules", v: "2 sprays", z: "Neck" }
+        ]
+      },
+      {
+        id: 20,
+        name: "Salty Watermelon Tobacco",
+        icon: "🍉",
+        rating: 4.0,
+        season: "Autumn",
+        time: "Day",
+        occasion: "Casual",
+        profile: "Experimental sweet-salty ozonic tobacco.",
+        synergy: "Milestone's ocean spray harmony.",
+        fragrances: ["Milestone", "Hercules"],
+        steps: [
+          { f: "Milestone", v: "1 spray", z: "Neck" },
+          { f: "Hercules", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 21,
+        name: "Imperial Saffron Blue",
+        icon: "👑",
+        rating: 4.5,
+        season: "Autumn",
+        time: "All",
+        occasion: "Evening",
+        profile: "Exotic leathery blue amber.",
+        synergy: "National I creates elite amber base.",
+        fragrances: ["National I", "SNOI"],
+        steps: [
+          { f: "National I", v: "2 sprays", z: "Chest" },
+          { f: "SNOI", v: "1 spray", z: "Neck" }
+        ]
+      },
+      {
+        id: 22,
+        name: "Midnight Metallic Ocean",
+        icon: "🌙",
+        rating: 4.0,
+        season: "Summer",
+        time: "Night",
+        occasion: "Casual",
+        profile: "Dark fruity metallic marine.",
+        synergy: "Milestone adds crisp ozonic salt.",
+        fragrances: ["Milestone", "SNOI"],
+        steps: [
+          { f: "Milestone", v: "1 spray", z: "Neck" },
+          { f: "SNOI", v: "2 sprays", z: "Chest" }
+        ]
+      },
+      {
+        id: 23,
+        name: "Creamy Alpine Woods",
+        icon: "🌲",
+        rating: 4.0,
+        season: "Spring",
+        time: "Day",
+        occasion: "Office",
+        profile: "Green tea smoothed by milky fig.",
+        synergy: "Heaven's sharp ink and tea edges.",
+        fragrances: ["Heaven", "Liam Grey"],
+        steps: [
+          { f: "Heaven", v: "1 spray", z: "Neck" },
+          { f: "Liam Grey", v: "2 sprays", z: "Chest" }
+        ]
+      },
+      {
+        id: 24,
+        name: "Smoky Mountain Vetiver",
+        icon: "⛰️",
+        rating: 4.0,
+        season: "Autumn",
+        time: "Day",
+        occasion: "Office",
+        profile: "Dark ink vetiver meeting clean tea.",
+        synergy: "Heaven provides clean fresh air.",
+        fragrances: ["Heaven", "Encre Noire"],
+        steps: [
+          { f: "Heaven", v: "1 spray", z: "Wrists" },
+          { f: "Encre Noire", v: "2 sprays", z: "Neck" }
+        ]
+      },
+      {
+        id: 25,
+        name: "Absolute Universal King",
+        icon: "🏆",
+        rating: 5.0,
+        season: "All Seasons",
+        time: "All",
+        occasion: "Casual",
+        profile: "Crowdspleasing fresh cardamom blue.",
+        synergy: "Flawless interweaving of notes.",
+        fragrances: ["Caprice", "Immortal", "Milestone"],
+        steps: [
+          { f: "Caprice", v: "1 spray", z: "Neck" },
+          { f: "Immortal", v: "1 spray", z: "Chest" },
+          { f: "Milestone", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 26,
+        name: "Aromatic Ink & Leather",
+        icon: "📖",
+        rating: 4.5,
+        season: "Winter",
+        time: "Night",
+        occasion: "Formal",
+        profile: "Intense ultra-masculine dark niche wood.",
+        synergy: "Pure dark art excellence.",
+        fragrances: ["Encre Noire", "Ghost"],
+        steps: [
+          { f: "Encre Noire", v: "2 sprays", z: "Chest" },
+          { f: "Ghost", v: "1 spray", z: "Neck" }
+        ]
+      },
+      {
+        id: 27,
+        name: "Citrus Saffron Spark",
+        icon: "⚡",
+        rating: 4.0,
+        season: "Autumn",
+        time: "Day",
+        occasion: "Office",
+        profile: "Leathery zesty ginger.",
+        synergy: "Immortal's ginger introduces brightness.",
+        fragrances: ["Immortal", "Turathi"],
+        steps: [
+          { f: "Immortal", v: "1 spray", z: "Neck" },
+          { f: "Turathi", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 28,
+        name: "Golden Pineapple Breeze",
+        icon: "☀️",
+        rating: 4.5,
+        season: "Summer",
+        time: "Day",
+        occasion: "Casual",
+        profile: "Premium sharp tropical pineapple.",
+        synergy: "Divin Asylum supercharges fruity notes.",
+        fragrances: ["Divin Asylum", "Immortal"],
+        steps: [
+          { f: "Divin Asylum", v: "2 sprays", z: "Neck" },
+          { f: "Immortal", v: "1 spray", z: "Chest" }
+        ]
+      },
+      {
+        id: 29,
+        name: "Emperor's Sovereign",
+        icon: "👨‍⚖️",
+        rating: 5.0,
+        season: "Spring",
+        time: "All",
+        occasion: "Formal",
+        profile: "[3-LAYER] Deep multi-dimensional smoky pineapple.",
+        synergy: "SNOI anchors the composition perfectly.",
+        fragrances: ["SNOI", "Divin Asylum", "Caprice"],
+        steps: [
+          { f: "SNOI", v: "1 spray", z: "Neck" },
+          { f: "Divin Asylum", v: "1 spray", z: "Chest" },
+          { f: "Caprice", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 30,
+        name: "Gothic Vanilla Incense",
+        icon: "💀",
+        rating: 4.5,
+        season: "Winter",
+        time: "Night",
+        occasion: "Formal",
+        profile: "[3-LAYER] Mysterious dark woody vanilla.",
+        synergy: "Encre Noire adds rich dark framework.",
+        fragrances: ["Encre Noire", "Ghost", "Hercules"],
+        steps: [
+          { f: "Encre Noire", v: "1 spray", z: "Neck" },
+          { f: "Ghost", v: "1 spray", z: "Chest" },
+          { f: "Hercules", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 31,
+        name: "Royal Cardamom Sea",
+        icon: "🌊",
+        rating: 4.5,
+        season: "Summer",
+        time: "All",
+        occasion: "Office",
+        profile: "[3-LAYER] Advanced aquatic-spicy fusion.",
+        synergy: "Turathi provides deep aquatic notes.",
+        fragrances: ["Turathi", "Caprice", "Milestone"],
+        steps: [
+          { f: "Turathi", v: "1 spray", z: "Neck" },
+          { f: "Caprice", v: "1 spray", z: "Chest" },
+          { f: "Milestone", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 32,
+        name: "Ultimate Zesty Aquatic",
+        icon: "💧",
+        rating: 4.5,
+        season: "Summer",
+        time: "Day",
+        occasion: "Casual",
+        profile: "[3-LAYER] Extreme hot weather defense.",
+        synergy: "Unstoppable high-heat protection.",
+        fragrances: ["Immortal", "Milestone", "Turathi"],
+        steps: [
+          { f: "Immortal", v: "2 sprays", z: "Neck" },
+          { f: "Milestone", v: "1 spray", z: "Chest" },
+          { f: "Turathi", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 33,
+        name: "Executive Creed Tribute",
+        icon: "🎯",
+        rating: 4.5,
+        season: "Spring",
+        time: "Day",
+        occasion: "Office",
+        profile: "[3-LAYER] Green violet leaf, pineapple, salt-air.",
+        synergy: "Classic masterful balance achieved.",
+        fragrances: ["Immortal", "Divin Asylum", "Milestone"],
+        steps: [
+          { f: "Immortal", v: "1 spray", z: "Neck" },
+          { f: "Divin Asylum", v: "1 spray", z: "Chest" },
+          { f: "Milestone", v: "1 spray", z: "Wrists" }
+        ]
+      },
+      {
+        id: 34,
+        name: "Sovereign Niche Overlord",
+        icon: "🌟",
+        rating: 5.0,
+        season: "Winter",
+        time: "Night",
+        occasion: "Formal",
+        profile: "[4-LAYER] Ultimate niche symphony of leather, tea, vetiver, vanilla.",
+        synergy: "The ultimate fragrance composition.",
+        fragrances: ["Encre Noire", "Liam Grey", "Heaven", "Ghost"],
+        steps: [
+          { f: "Encre Noire", v: "1 spray", z: "Neck" },
+          { f: "Liam Grey", v: "1 spray", z: "Chest" },
+          { f: "Heaven", v: "1 spray", z: "Wrists" },
+          { f: "Ghost", v: "1 spray", z: "Behind ears" }
+        ]
+      },
+      {
+        id: 35,
+        name: "High-Heat Overlord",
+        icon: "🔥",
+        rating: 5.0,
+        season: "Summer",
+        time: "Day",
+        occasion: "Casual",
+        profile: "[4-LAYER] Blockbuster summer shield of ambroxan, spice, marine salt, ginger.",
+        synergy: "Maximum performance guarantee.",
+        fragrances: ["Immortal", "Turathi", "Milestone", "SNOI"],
+        steps: [
+          { f: "Immortal", v: "2 sprays", z: "Neck" },
+          { f: "Turathi", v: "1 spray", z: "Chest" },
+          { f: "Milestone", v: "1 spray", z: "Wrists" },
+          { f: "SNOI", v: "1 spray", z: "Behind ears" }
+        ]
+      }
     ];
 
     this.seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
-    this.times = ['Day', 'Night'];
+    this.times = ['Day', 'Night', 'All'];
+    this.databaseLoaded = true;
     this.applyFilters();
   }
 
@@ -545,7 +1111,7 @@ class FragranceExplorerCard extends LitElement {
     let filtered = this.database;
 
     if (this.selectedSeason) {
-      filtered = filtered.filter(item => 
+      filtered = filtered.filter(item =>
         item.season === this.selectedSeason || item.season === 'All Seasons'
       );
     }
@@ -581,26 +1147,31 @@ class FragranceExplorerCard extends LitElement {
   handleSearchInput(e) {
     this.searchQuery = e.target.value;
     this.applyFilters();
+    this.requestUpdate();
   }
 
   toggleSeasonFilter(season) {
     this.selectedSeason = this.selectedSeason === season ? null : season;
     this.applyFilters();
+    this.requestUpdate();
   }
 
   toggleTimeFilter(time) {
     this.selectedTime = this.selectedTime === time ? null : time;
     this.applyFilters();
+    this.requestUpdate();
   }
 
   handleFragranceNameClick(fragranceName) {
     this.selectedFragranceName = this.selectedFragranceName === fragranceName ? null : fragranceName;
     this.applyFilters();
+    this.requestUpdate();
   }
 
   handleFragranceSelect(fragrance) {
     this.selectedFragrance = fragrance;
     this.currentView = 'detail';
+    this.requestUpdate();
   }
 
   handleBack() {
@@ -612,13 +1183,17 @@ class FragranceExplorerCard extends LitElement {
       this.selectedFragranceName = null;
       this.applyFilters();
     }
+    this.requestUpdate();
   }
 
   clearFilters() {
     this.searchQuery = '';
     this.selectedFragranceName = null;
+    this.selectedSeason = null;
+    this.selectedTime = null;
     this.currentView = 'dashboard';
     this.applyFilters();
+    this.requestUpdate();
   }
 
   getSeasonIcon(season) {
@@ -632,7 +1207,12 @@ class FragranceExplorerCard extends LitElement {
   }
 
   getTimeIcon(time) {
-    return time === 'Day' ? '☀️' : '🌙';
+    const icons = {
+      'Day': '☀️',
+      'Night': '🌙',
+      'All': '⏰'
+    };
+    return icons[time] || '⏰';
   }
 
   getOccasionIcon(occasion) {
@@ -646,6 +1226,17 @@ class FragranceExplorerCard extends LitElement {
   }
 
   renderDashboard() {
+    if (!this.databaseLoaded) {
+      return html`
+        <div class="content-area">
+          <div class="loading-message">
+            <div style="font-size: 24px; margin-bottom: 16px;">⏳</div>
+            <div>Loading fragrance database...</div>
+          </div>
+        </div>
+      `;
+    }
+
     return html`
       <div class="content-area">
         <div class="dashboard-section">
@@ -653,7 +1244,7 @@ class FragranceExplorerCard extends LitElement {
             <span>📅</span> Season
           </div>
           <div class="dashboard-grid">
-            ${this.seasons.map(season =>
+            ${this.seasons.slice(0, 4).map(season =>
               html`
                 <button
                   class="filter-btn ${this.selectedSeason === season ? 'active' : ''}"
@@ -685,6 +1276,31 @@ class FragranceExplorerCard extends LitElement {
             )}
           </div>
         </div>
+
+        <div class="dashboard-section">
+          <div class="dashboard-label">
+            <span>✨</span> Featured Blends (${this.database.length})
+          </div>
+          <div class="fragrance-list">
+            ${this.database.slice(0, 5).map(item =>
+              html`
+                <div class="fragrance-item" @click="${() => this.handleFragranceSelect(item)}">
+                  <div class="fragrance-item-left">
+                    <div class="fragrance-header">
+                      <span class="fragrance-icon">${item.icon}</span>
+                      <span class="fragrance-name">${item.name}</span>
+                    </div>
+                    <div class="fragrance-meta">
+                      <span class="meta-tag">${this.getSeasonIcon(item.season)} ${item.season}</span>
+                      <span class="meta-tag">${this.getTimeIcon(item.time)} ${item.time}</span>
+                    </div>
+                  </div>
+                  <div class="rating">★ ${item.rating}</div>
+                </div>
+              `
+            )}
+          </div>
+        </div>
       </div>
     `;
   }
@@ -710,7 +1326,7 @@ class FragranceExplorerCard extends LitElement {
               <div class="fragrance-item" @click="${() => this.handleFragranceSelect(item)}">
                 <div class="fragrance-item-left">
                   <div class="fragrance-header">
-                    <span class="fragrance-icon">✨</span>
+                    <span class="fragrance-icon">${item.icon}</span>
                     <span class="fragrance-name" @click="${(e) => { e.stopPropagation(); this.handleFragranceNameClick(item.name); }}">${item.name}</span>
                   </div>
                   <div class="fragrance-meta">
@@ -737,7 +1353,7 @@ class FragranceExplorerCard extends LitElement {
       <div class="content-area">
         <div class="detail-header">
           <div class="detail-title-section">
-            <div class="detail-icon">✨</div>
+            <div class="detail-icon">${frag.icon}</div>
             <div class="detail-title">${frag.name}</div>
           </div>
           <div class="detail-rating">★ ${frag.rating}</div>
@@ -758,10 +1374,9 @@ class FragranceExplorerCard extends LitElement {
           <div class="fragrances-grid">
             ${frag.fragrances.map(f =>
               html`
-                <span 
-                  class="fragrance-tag" 
+                <span
+                  class="fragrance-tag ${this.selectedFragranceName === f ? 'selected' : ''}"
                   @click="${() => this.handleFragranceNameClick(f)}"
-                  style="cursor: pointer; transition: all 0.2s; text-decoration: ${this.selectedFragranceName === f ? 'underline' : 'none'};"
                 >
                   ${f}
                 </span>
@@ -816,18 +1431,18 @@ class FragranceExplorerCard extends LitElement {
       navText = `${this.selectedFragrance?.name || 'Detail View'}`;
       showBack = true;
     } else if (this.currentView === 'list') {
-      navText = `${this.filteredItems.length} blend${this.filteredItems.length !== 1 ? 's' : ''}`;
+      navText = `${this.filteredItems.length} blend${this.filteredItems.length !== 1 ? 's' : ''} found`;
       showBack = true;
     } else {
-      navText = `${this.database.length} total blends`;
+      navText = `${this.database.length} total blends available`;
     }
 
     return html`
       <div class="bottom-nav">
         <div class="nav-info">${navText}</div>
         <div class="nav-buttons">
-          ${(this.searchQuery.trim() || this.selectedFragranceName) ? html`
-            <button class="clear-btn" @click="${() => this.clearFilters()}">Clear</button>
+          ${(this.searchQuery.trim() || this.selectedFragranceName || this.selectedSeason || this.selectedTime) ? html`
+            <button class="clear-btn" @click="${() => this.clearFilters()}">Clear All</button>
           ` : ''}
           ${showBack ? html`
             <button class="nav-btn" @click="${() => this.handleBack()}">← Back</button>
