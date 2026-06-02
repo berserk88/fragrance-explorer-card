@@ -53,12 +53,10 @@ class FragranceExplorerCard extends HTMLElement {
     this.initialized = false;
   }
 
-  // Home Assistant configuration handler
   setConfig(config) {
     this.config = config;
   }
 
-  // Handle Home Assistant state engine bindings safely
   set hass(hass) {
     this._hass = hass;
     if (!this.initialized && this.shadowRoot) {
@@ -72,7 +70,6 @@ class FragranceExplorerCard extends HTMLElement {
     }
   }
 
-  // Render the persistent shell framework EXACTLY once
   initCard() {
     if (!this.shadowRoot) return;
     this.initialized = true;
@@ -86,7 +83,8 @@ class FragranceExplorerCard extends HTMLElement {
         .app-view { flex: 1; overflow-y: auto; padding-bottom: 65px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .category-card { background: var(--sidebar-background-color, #0f172a); padding: 16px; border-radius: 8px; text-align: center; font-size: 15px; cursor: pointer; border: 1px solid var(--divider-color); font-weight: bold; }
+        .category-card { background: var(--sidebar-background-color, #0f172a); padding: 16px; border-radius: 8px; text-align: center; font-size: 15px; cursor: pointer; border: 1px solid var(--divider-color); font-weight: bold; transition: background 0.2s; }
+        .category-card:hover { background: var(--divider-color, #334155); }
         
         .header-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 2px solid var(--divider-color); font-weight: bold; font-size: 14px; background: var(--sidebar-background-color); margin-bottom: 8px; border-radius: 4px; }
         .sort-trigger { cursor: pointer; color: var(--accent-color, #38bdf8); display: flex; align-items: center; gap: 4px; user-select: none; }
@@ -95,7 +93,7 @@ class FragranceExplorerCard extends HTMLElement {
         .blend-meta { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; color: var(--accent-color, #38bdf8); }
         .single-column-matrix { display: flex; flex-direction: column; gap: 4px; border-left: 2px solid var(--divider-color); padding-left: 10px; margin-top: 6px; }
         
-        .relational-link { color: var(--accent-color, #38bdf8); text-decoration: none; font-weight: 500; display: inline-block; cursor: pointer; }
+        .relational-link { color: var(--accent-color, #38bdf8); text-decoration: none; font-weight: 500; display: inline-block; cursor: pointer; margin-top: 10px; }
         .relational-link:hover { text-decoration: underline; }
         
         .step-timeline { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
@@ -103,4 +101,4 @@ class FragranceExplorerCard extends HTMLElement {
         .step-num { font-weight: bold; font-size: 11px; color: var(--accent-color); text-transform: uppercase; }
         
         .infobox { background: var(--sidebar-background-color); padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 14px; border: 1px solid var(--divider-color); line-height: 1.4; }
-        .control-hub { position: absolute; bottom: 0; left: 0; right: 
+        .control-hub { position: absolute; bottom: 0; left: 0; right: 0; height: 55px; background: va
