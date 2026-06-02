@@ -396,6 +396,8 @@ class FragranceExplorerCard extends LitElement {
 
   constructor() {
     super();
+    this.config = {};
+    this.hass = undefined;
     this.currentView = 'dashboard';
     this.searchQuery = '';
     this.selectedSeason = 'All Seasons';
@@ -441,10 +443,18 @@ class FragranceExplorerCard extends LitElement {
     ];
 
     this.seasons = ['All Seasons', 'Spring', 'Summer', 'Autumn', 'Winter'];
+    this.applyFilters();
   }
 
   setConfig(config) {
+    if (!config) {
+      throw new Error('Invalid configuration');
+    }
     this.config = config;
+  }
+
+  getCardSize() {
+    return 4;
   }
 
   applyFilters() {
