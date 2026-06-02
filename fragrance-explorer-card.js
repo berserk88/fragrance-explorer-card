@@ -3,6 +3,8 @@ import { LitElement, html, css } from 'https://unpkg.com/lit-element@2.4.0/lit-e
 class FragranceExplorerCard extends LitElement {
   static get properties() {
     return {
+      hass: { type: Object },
+      config: { type: Object },
       currentView: { type: String },
       searchQuery: { type: String },
       selectedSeason: { type: String },
@@ -20,6 +22,14 @@ class FragranceExplorerCard extends LitElement {
         --text-primary: var(--text-primary, #ffffff);
         --text-secondary: var(--text-secondary, #b0b0b0);
         --border-color: var(--border-color, #333333);
+        display: block;
+      }
+
+      ha-card {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       .card-wrapper {
@@ -27,8 +37,6 @@ class FragranceExplorerCard extends LitElement {
         flex-direction: column;
         height: 100%;
         background: var(--ha-card-background);
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         overflow: hidden;
       }
 
@@ -36,6 +44,7 @@ class FragranceExplorerCard extends LitElement {
         padding: 16px;
         border-bottom: 1px solid var(--border-color);
         background: var(--sidebar-background-color);
+        flex-shrink: 0;
       }
 
       .search-input {
@@ -49,6 +58,7 @@ class FragranceExplorerCard extends LitElement {
         outline: none;
         transition: all 0.2s ease;
         box-sizing: border-box;
+        font-family: inherit;
       }
 
       .search-input:focus {
@@ -83,6 +93,7 @@ class FragranceExplorerCard extends LitElement {
         font-weight: 500;
         font-size: 13px;
         transition: all 0.3s ease;
+        font-family: inherit;
       }
 
       .filter-btn:hover {
@@ -187,6 +198,7 @@ class FragranceExplorerCard extends LitElement {
         font-size: 12px;
         text-transform: uppercase;
         margin-bottom: 8px;
+        letter-spacing: 0.5px;
       }
 
       .detail-text {
@@ -200,6 +212,9 @@ class FragranceExplorerCard extends LitElement {
         padding: 12px;
         border-radius: 6px;
         border-left: 3px solid var(--accent-color);
+        color: var(--text-primary);
+        font-size: 14px;
+        line-height: 1.5;
       }
 
       .synergy-box {
@@ -207,6 +222,9 @@ class FragranceExplorerCard extends LitElement {
         padding: 12px;
         border-radius: 6px;
         border-left: 3px solid var(--accent-color);
+        color: var(--text-primary);
+        font-size: 14px;
+        line-height: 1.5;
       }
 
       .fragrances-list {
@@ -223,6 +241,7 @@ class FragranceExplorerCard extends LitElement {
         font-size: 12px;
         color: var(--text-primary);
         border: 1px solid var(--border-color);
+        width: fit-content;
       }
 
       .steps-timeline {
@@ -262,6 +281,7 @@ class FragranceExplorerCard extends LitElement {
         font-weight: bold;
         color: #000;
         z-index: 1;
+        font-size: 16px;
       }
 
       .step-content {
@@ -284,6 +304,7 @@ class FragranceExplorerCard extends LitElement {
         gap: 12px;
         font-size: 12px;
         color: var(--text-secondary);
+        flex-wrap: wrap;
       }
 
       .bottom-nav {
@@ -293,6 +314,7 @@ class FragranceExplorerCard extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-shrink: 0;
       }
 
       .nav-info {
@@ -311,6 +333,7 @@ class FragranceExplorerCard extends LitElement {
         font-size: 12px;
         transition: all 0.2s ease;
         margin-left: 8px;
+        font-family: inherit;
       }
 
       .nav-btn:hover {
@@ -338,6 +361,8 @@ class FragranceExplorerCard extends LitElement {
         cursor: pointer;
         font-size: 12px;
         transition: all 0.2s ease;
+        margin-right: 8px;
+        font-family: inherit;
       }
 
       .clear-btn:hover {
@@ -358,6 +383,12 @@ class FragranceExplorerCard extends LitElement {
           flex-direction: column;
           align-items: flex-start;
           gap: 12px;
+        }
+
+        .bottom-nav {
+          flex-direction: column;
+          gap: 12px;
+          align-items: flex-start;
         }
       }
     `;
@@ -410,11 +441,10 @@ class FragranceExplorerCard extends LitElement {
     ];
 
     this.seasons = ['All Seasons', 'Spring', 'Summer', 'Autumn', 'Winter'];
-    this.applyFilters();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  setConfig(config) {
+    this.config = config;
   }
 
   applyFilters() {
@@ -634,21 +664,23 @@ class FragranceExplorerCard extends LitElement {
 
   render() {
     return html`
-      <div class="card-wrapper">
-        <div class="search-container">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search fragrances, profiles, or ingredients..."
-            .value="${this.searchQuery}"
-            @input="${(e) => this.handleSearchInput(e)}"
-          />
+      <ha-card>
+        <div class="card-wrapper">
+          <div class="search-container">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search fragrances, profiles, or ingredients..."
+              .value="${this.searchQuery}"
+              @input="${(e) => this.handleSearchInput(e)}"
+            />
+          </div>
+
+          ${this.renderContent()}
+
+          ${this.renderBottomNav()}
         </div>
-
-        ${this.renderContent()}
-
-        ${this.renderBottomNav()}
-      </div>
+      </ha-card>
     `;
   }
 }
