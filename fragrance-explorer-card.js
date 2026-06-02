@@ -3,16 +3,15 @@ class FragranceExplorerCard extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     
-    // Core App State
     this.state = {
-      currentView: 'dashboard', // dashboard, list, detail
+      currentView: 'dashboard',
       searchQuery: '',
       selectedSeason: '',
       sortAsc: true,
       selectedBlend: null
     };
 
-    // Complete 35-Blend Integrated Database
+    // Complete 35-Blend Database
     this.database = [
       { id: 1, name: "High-Heat Shield", rating: 4.5, season: "Summer", time: "Day", occasion: "Casual", profile: "Sparkling ginger-citrus.", synergy: "Perfect interlocking of blue ambroxan and sharp citrus.", fragrances: ["Turathi Blue", "Jean Lowe Immortal"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "Jean Lowe Immortal", v: "3 sprays", z: "Clothes / Shirt" }] },
       { id: 2, name: "Ultimate Luxury Blue", rating: 5.0, season: "All Seasons", time: "All", occasion: "Formal", profile: "Deep amber powdery blue.", synergy: "Caprice's cardamom softens the sharp edges of Turathi.", fragrances: ["Al Nashama Caprice", "Turathi Blue"], steps: [{ f: "Al Nashama Caprice", v: "2 sprays", z: "Skin / Chest" }, { f: "Turathi Blue", v: "2 sprays", z: "Clothes / Shoulders" }] },
@@ -50,50 +49,58 @@ class FragranceExplorerCard extends HTMLElement {
       { id: 34, name: "Sovereign Niche Overlord", rating: 5.0, season: "Winter", time: "Night", occasion: "Formal", profile: "[4-LAYER] Ultimate niche symphony of leather, tea, vetiver, vanilla.", synergy: "Masterclass arrangement. Heavy, dense base elements shifting smoothly into sweet and powdery layers over time.", fragrances: ["Encre Noire l'Extreme", "Costume National I", "Lattafa Liam Grey", "Spectre Ghost"], steps: [{ f: "Encre Noire l'Extreme", v: "1 spray", z: "Skin / Lower Back" }, { f: "Costume National I", v: "2 sprays", z: "Skin / Chest" }, { f: "Lattafa Liam Grey", v: "2 sprays", z: "Skin / Neck" }, { f: "Spectre Ghost", v: "2 sprays", z: "Clothes / Coat" }] },
       { id: 35, name: "High-Heat Overlord", rating: 5.0, season: "Summer", time: "Day", occasion: "Casual", profile: "[4-LAYER] Blockbuster summer shield of ambroxan, spice, marine salt, ginger.", synergy: "Absolute armor against sweat. Designed to sequentially boil off over an 8-hour period.", fragrances: ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Jean Lowe Immortal"], steps: [{ f: "Turathi Blue", v: "2 sprays", z: "Skin / Neck" }, { f: "Al Nashama Caprice", v: "1 spray", z: "Skin / Chest" }, { f: "CDNI Milestone", v: "2 sprays", z: "Clothes / Left Shoulder" }, { f: "Jean Lowe Immortal", v: "2 sprays", z: "Clothes / Right Shoulder" }] }
     ];
+
+    this.initialized = false;
   }
 
-  // Configuration Setup required by Home Assistant
+  // Home Assistant configuration handler
   setConfig(config) {
     this.config = config;
   }
 
-  // Sync with Home Assistant DOM Lifecycle
-  connectedCallback() {
-    this.render();
+  // Handle Home Assistant state engine bindings safely
+  set hass(hass) {
+    this._hass = hass;
+    if (!this.initialized && this.shadowRoot) {
+      this.initCard();
+    }
   }
 
-  // Core Template Engine
-  render() {
-    if (!this.shadowRoot) return;
+  connectedCallback() {
+    if (!this.initialized) {
+      this.initCard();
+    }
+  }
 
-    // Isolate UI styles to prevent breaking your Home Assistant dashboard layout
+  // Render the persistent shell framework EXACTLY once
+  initCard() {
+    if (!this.shadowRoot) return;
+    this.initialized = true;
+
     this.shadowRoot.innerHTML = `
       <style>
-        ha-card { padding: 16px; background: var(--ha-card-background, var(--card-background-color, #1e293b)); color: var(--primary-text-color, #f8fafc); font-family: sans-serif; overflow: hidden; position: relative; min-height: 500px; display: flex; flex-direction: column; }
+        ha-card { padding: 16px; background: var(--ha-card-background, var(--card-background-color, #1e293b)); color: var(--primary-text-color, #f8fafc); font-family: sans-serif; overflow: hidden; position: relative; min-height: 540px; display: flex; flex-direction: column; box-sizing: border-box; }
+        .search-container { margin-bottom: 16px; width: 100%; }
+        input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--divider-color, #334155); background: var(--sidebar-background-color, #0f172a); color: var(--primary-text-color); font-size: 16px; box-sizing: border-box; outline: none; }
+        
         .app-view { flex: 1; overflow-y: auto; padding-bottom: 65px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         
-        /* Level 1 Components */
-        .search-container { margin-bottom: 16px; }
-        input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--divider-color, #334155); background: var(--sidebar-background-color, #0f172a); color: var(--primary-text-color); font-size: 16px; box-sizing: border-box; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .category-card { background: var(--sidebar-background-color, #0f172a); padding: 20px; border-radius: 8px; text-align: center; font-size: 16px; cursor: pointer; border: 1px solid var(--divider-color); font-weight: bold; }
+        .category-card { background: var(--sidebar-background-color, #0f172a); padding: 16px; border-radius: 8px; text-align: center; font-size: 15px; cursor: pointer; border: 1px solid var(--divider-color); font-weight: bold; }
         
-        /* Level 2 Components (Single Column Applications Order) */
         .header-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 2px solid var(--divider-color); font-weight: bold; font-size: 14px; background: var(--sidebar-background-color); margin-bottom: 8px; border-radius: 4px; }
         .sort-trigger { cursor: pointer; color: var(--accent-color, #38bdf8); display: flex; align-items: center; gap: 4px; user-select: none; }
+        
         .blend-list-item { background: var(--sidebar-background-color, #0f172a); padding: 14px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--divider-color); cursor: pointer; }
         .blend-meta { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; color: var(--accent-color, #38bdf8); }
         .single-column-matrix { display: flex; flex-direction: column; gap: 4px; border-left: 2px solid var(--divider-color); padding-left: 10px; margin-top: 6px; }
         
-        /* Hyperlink Overrides */
-        .relational-link { color: var(--accent-color, #38bdf8); text-decoration: none; font-weight: 500; display: inline-block; }
+        .relational-link { color: var(--accent-color, #38bdf8); text-decoration: none; font-weight: 500; display: inline-block; cursor: pointer; }
         .relational-link:hover { text-decoration: underline; }
         
-        /* Level 3 Components */
         .step-timeline { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
         .step-node { background: var(--sidebar-background-color); border: 1px solid var(--divider-color); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent-color); }
-        .step-num { font-weight: bold; font-size: 12px; color: var(--accent-color); text-transform: uppercase; }
-        .infobox { background: var(--sidebar-background-color); padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 14px; border: 1px solid var(--divider-color); line-height: 1.4; }
+        .step-num { font-weight: bold; font-size: 11px; color: var(--accent-color); text-transform: uppercase; }
         
-        /* Control Panel */
-        .control-hub { position: absolute; bottom: 0; left: 0; right: 0; bac
+        .infobox { background: var(--sidebar-background-color); padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 14px; border: 1px solid var(--divider-color); line-height: 1.4; }
+        .control-hub { position: absolute; bottom: 0; left: 0; right: 
