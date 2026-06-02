@@ -5,11 +5,11 @@ class FragranceExplorerCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      currentView: { type: String },
-      searchQuery: { type: String },
-      selectedSeason: { type: String },
-      selectedTime: { type: String },
-      selectedFragranceName: { type: String },
+      currentView: { type: String, reflect: true },
+      searchQuery: { type: String, reflect: true },
+      selectedSeason: { type: String, reflect: true },
+      selectedTime: { type: String, reflect: true },
+      selectedFragranceName: { type: String, reflect: true },
       selectedFragrance: { type: Object },
       filteredItems: { type: Array },
       databaseLoaded: { type: Boolean },
@@ -1093,7 +1093,6 @@ class FragranceExplorerCard extends LitElement {
     this.seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
     this.times = ['Day', 'Night', 'All'];
     this.databaseLoaded = true;
-    this.applyFilters();
   }
 
   setConfig(config) {
@@ -1110,24 +1109,28 @@ class FragranceExplorerCard extends LitElement {
   applyFilters() {
     let filtered = this.database;
 
-    if (this.selectedSeason) {
-      filtered = filtered.filter(item =>
-        item.season === this.selectedSeason || item.season === 'All Seasons'
-      );
-    }
-
-    if (this.selectedTime && this.selectedTime !== 'All') {
-      filtered = filtered.filter(item =>
-        item.time === this.selectedTime || item.time === 'All'
-      );
-    }
-
+    // If a fragrance name is selected, clear other filters and show matching blends
     if (this.selectedFragranceName) {
       filtered = filtered.filter(item =>
         item.fragrances.includes(this.selectedFragranceName)
       );
+    } else {
+      // Apply season filter only if no fragrance name is selected
+      if (this.selectedSeason) {
+        filtered = filtered.filter(item =>
+          item.season === this.selectedSeason || item.season === 'All Seasons'
+        );
+      }
+
+      // Apply time filter only if no fragrance name is selected
+      if (this.selectedTime && this.selectedTime !== 'All') {
+        filtered = filtered.filter(item =>
+          item.time === this.selectedTime || item.time === 'All'
+        );
+      }
     }
 
+    // Apply search query
     if (this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase();
       filtered = filtered.filter(item =>
@@ -1139,39 +1142,44 @@ class FragranceExplorerCard extends LitElement {
 
     this.filteredItems = filtered;
 
+    // Switch to list view if filters are active
     if ((this.searchQuery.trim() || this.selectedFragranceName) && this.currentView === 'dashboard') {
       this.currentView = 'list';
     }
   }
 
+  updated(changedProperties) {
+    // Re-apply filters whenever properties change
+    if (changedProperties.has('selectedSeason') || 
+        changedProperties.has('selectedTime') || 
+        changedProperties.has('selectedFragranceName') ||
+        changedProperties.has('searchQuery')) {
+      this.applyFilters();
+    }
+  }
+
   handleSearchInput(e) {
     this.searchQuery = e.target.value;
-    this.applyFilters();
-    this.requestUpdate();
   }
 
   toggleSeasonFilter(season) {
     this.selectedSeason = this.selectedSeason === season ? null : season;
-    this.applyFilters();
-    this.requestUpdate();
   }
 
   toggleTimeFilter(time) {
     this.selectedTime = this.selectedTime === time ? null : time;
-    this.applyFilters();
-    this.requestUpdate();
   }
 
   handleFragranceNameClick(fragranceName) {
+    // Clicking a fragrance name clears other filters and sets this as the only filter
+    this.selectedSeason = null;
+    this.selectedTime = null;
     this.selectedFragranceName = this.selectedFragranceName === fragranceName ? null : fragranceName;
-    this.applyFilters();
-    this.requestUpdate();
   }
 
   handleFragranceSelect(fragrance) {
     this.selectedFragrance = fragrance;
     this.currentView = 'detail';
-    this.requestUpdate();
   }
 
   handleBack() {
@@ -1181,9 +1189,7 @@ class FragranceExplorerCard extends LitElement {
       this.currentView = 'dashboard';
       this.searchQuery = '';
       this.selectedFragranceName = null;
-      this.applyFilters();
     }
-    this.requestUpdate();
   }
 
   clearFilters() {
@@ -1192,8 +1198,6 @@ class FragranceExplorerCard extends LitElement {
     this.selectedSeason = null;
     this.selectedTime = null;
     this.currentView = 'dashboard';
-    this.applyFilters();
-    this.requestUpdate();
   }
 
   getSeasonIcon(season) {
@@ -1244,7 +1248,7 @@ class FragranceExplorerCard extends LitElement {
             <span>📅</span> Season
           </div>
           <div class="dashboard-grid">
-            ${this.seasons.slice(0, 4).map(season =>
+            ${this.seasons.map(season =>
               html`
                 <button
                   class="filter-btn ${this.selectedSeason === season ? 'active' : ''}"
