@@ -3,7 +3,8 @@
  * Version 3.0: External Data Fetching, Colors & Icon Integration
  */
 
-import { FRAGRANCE_DATA } from '/local/fragrance_data.js';
+import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_data.js?v=3.0';
+
 
 // Visual Mapping Dictionary for UI Icons
 const ICONS = {
