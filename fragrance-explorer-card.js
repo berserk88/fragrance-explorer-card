@@ -1,8 +1,12 @@
 // fragrance-explorer-card.js
-// No external dependencies — pure custom element with Shadow DOM
+// Extracts LitElement directly from Home Assistant's own bundle.
+// Zero CDN dependency — works offline, on mobile app, everywhere.
+
+const LitElement = Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
+const { html, css } = LitElement.prototype;
 
 // ─── Database ────────────────────────────────────────────────────────────────
-const DATABASE = [
+const DB = [
   {
     id: 1, name: "High-Heat Shield", icon: "🧊", rating: 4.5,
     season: "Summer", time: "Day", occasion: "Casual",
@@ -388,6 +392,7 @@ const DATABASE = [
   }
 ];
 
+// ─── Filter options ───────────────────────────────────────────────────────────
 const SEASONS   = [
   { label: "Spring",      icon: "🌸" },
   { label: "Summer",      icon: "☀️" },
@@ -398,7 +403,7 @@ const SEASONS   = [
 const TIMES     = [
   { label: "Day",   icon: "🌤️" },
   { label: "Night", icon: "🌙" },
-  { label: "All",   icon: "🕐" }
+  { label: "All",   icon: "🕐"  }
 ];
 const OCCASIONS = [
   { label: "Casual",  icon: "👟" },
@@ -408,159 +413,137 @@ const OCCASIONS = [
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-function renderStars(rating) {
+function stars(rating) {
   const full  = Math.floor(rating);
   const half  = (rating % 1) >= 0.5 ? 1 : 0;
   const empty = 5 - full - half;
-  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+  return "★".repeat(full) + (half ? "½" : "") + "☆".repeat(empty);
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+// ─── Card ────────────────────────────────────────────────────────────────────
+class FragranceExplorerCard extends LitElement {
 
-// ─── Styles string ────────────────────────────────────────────────────────────
-const STYLES = `
-  :host { display: block; }
-
-  .shell {
-    display: flex;
-    flex-direction: column;
-    height: var(--frag-height, 25dvh);
-    max-height: var(--frag-height, 25dvh);
-    background: var(--ha-card-background, #1c1c1e);
-    border-radius: var(--ha-card-border-radius, 12px);
-    overflow: hidden;
-    position: relative;
-    font-family: var(--paper-font-body1_-_font-family, 'Segoe UI', sans-serif);
-    font-size: 14px;
-    color: var(--primary-text-color, #e0e0e0);
+  static get properties() {
+    return {
+      _view:     { type: String },   // 'dashboard' | 'list' | 'detail'
+      _search:   { type: String },
+      _fSeason:  { type: String },
+      _fTime:    { type: String },
+      _fOcc:     { type: String },
+      _item:     { type: Object },
+      _exitWarn: { type: Boolean },
+    };
   }
 
-  /* Search */
-  .search-bar {
-    flex-shrink: 0;
-    padding: 10px 12px 8px;
-    background: var(--sidebar-background-color, #111);
-    border-bottom: 1px solid var(--divider-color, rgba(255,255,255,0.08));
-  }
-  .search-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1.5px solid var(--divider-color, rgba(255,255,255,0.15));
-    background: var(--secondary-background-color, #2c2c2e);
-    color: var(--primary-text-color, #fff);
-    font-size: 13px;
-    font-family: inherit;
-    outline: none;
-    -webkit-appearance: none;
-  }
-  .search-input:focus { border-color: var(--accent-color, #e07b54); }
-  .search-input::placeholder { color: var(--secondary-text-color, #888); }
+  static get styles() {
+    return css`
+      :host { display: block; }
 
-  /* Content scroll area */
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 12px;
-    -webkit-overflow-scrolling: touch;
-    box-sizing: border-box;
-  }
+      ha-card {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: var(--frag-h, 25dvh);
+        max-height: var(--frag-h, 25dvh);
+      }
 
-  /* Bottom nav */
-  .bottom-nav {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    background: var(--sidebar-background-color, #111);
-    border-top: 1px solid var(--divider-color, rgba(255,255,255,0.08));
-    min-height: 44px;
-    box-sizing: border-box;
-  }
-  .nav-info { font-size: 12px; color: var(--secondary-text-color, #888); font-weight: 500; }
-  .nav-btns  { display: flex; gap: 8px; }
-  .nav-btn {
-    padding: 6px 14px;
-    border-radius: 6px;
-    border: none;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .nav-btn-back { background: var(--secondary-background-color, #2c2c2e); color: var(--primary-text-color, #fff); }
-  .nav-btn-home { background: var(--accent-color, #e07b54); color: #fff; }
+      /* ── Search ── */
+      .search-bar {
+        flex-shrink: 0;
+        padding: 10px 12px 8px;
+        background: var(--sidebar-background-color, #111);
+        border-bottom: 1px solid var(--divider-color, rgba(255,255,255,.08));
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1.5px solid var(--divider-color, rgba(255,255,255,.15));
+        background: var(--secondary-background-color, #2c2c2e);
+        color: var(--primary-text-color, #fff);
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        -webkit-appearance: none;
+      }
+      input:focus { border-color: var(--accent-color, #e07b54); }
+      input::placeholder { color: var(--secondary-text-color, #888); }
 
-  /* Section label */
-  .sec-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--accent-color, #e07b54);
-    margin: 0 0 8px;
-  }
-  .sec-block { margin-bottom: 14px; }
+      /* ── Scroll body ── */
+      .body {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px;
+        -webkit-overflow-scrolling: touch;
+      }
 
-  /* Filter chips */
-  .filter-row { display: flex; flex-wrap: wrap; gap: 7px; }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 11px;
-    border-radius: 20px;
-    border: 1.5px solid var(--divider-color, rgba(255,255,255,0.15));
-    background: var(--secondary-background-color, #2c2c2e);
-    color: var(--primary-text-color, #e0e0e0);
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-  .chip.active {
-    background: var(--accent-color, #e07b54);
-    border-color: var(--accent-color, #e07b54);
-    color: #fff;
-  }
+      /* ── Bottom nav ── */
+      .nav {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        background: var(--sidebar-background-color, #111);
+        border-top: 1px solid var(--divider-color, rgba(255,255,255,.08));
+        min-height: 44px;
+      }
+      .nav-info { font-size: 12px; color: var(--secondary-text-color, #888); font-weight: 500; }
+      .nav-btns { display: flex; gap: 8px; }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .btn {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .btn-back { background: var(--secondary-background-color, #2c2c2e); color: var(--primary-text-color, #fff); }
+      .btn-home { background: var(--accent-color, #e07b54); color: #fff; }
 
-  /* Fragrance list */
-  .frag-list { display: flex; flex-direction: column; gap: 9px; }
-  .frag-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 11px 12px;
-    border-radius: 10px;
-    background: var(--secondary-background-color, #2c2c2e);
-    border: 1px solid var(--divider-color, rgba(255,255,255,0.07));
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    box-sizing: border-box;
-  }
-  .frag-emoji { font-size: 24px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
-  .frag-body  { flex: 1; min-width: 0; }
-  .frag-name  {
-    font-size: 13px; font-weight: 700;
-    color: var(--primary-text-color, #fff);
-    margin-bottom: 5px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .frag-tags  { display: flex; flex-wrap: wrap; gap: 4px; }
-  .frag-tag   {
-    font-size: 10px; font-weight: 600;
-    padding: 2px 7px; border-radius: 4px;
-    background: rgba(224,123,84,0.15);
-    color: var(--acce
+      /* ── Labels ── */
+      .lbl {
+        font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+        text-transform: uppercase; color: var(--accent-color, #e07b54);
+        margin: 0 0 8px;
+      }
+      .sec { margin-bottom: 14px; }
+
+      /* ── Filter chips ── */
+      .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 6px 11px; border-radius: 20px;
+        border: 1.5px solid var(--divider-color, rgba(255,255,255,.15));
+        background: var(--secondary-background-color, #2c2c2e);
+        color: var(--primary-text-color, #e0e0e0);
+        font-size: 12px; font-weight: 600;
+        user-select: none;
+      }
+      .chip.on {
+        background: var(--accent-color, #e07b54);
+        border-color: var(--accent-color, #e07b54);
+        color: #fff;
+      }
+
+      /* ── Blend list ── */
+      .list { display: flex; flex-direction: column; gap: 9px; }
+      .card {
+        display: flex; align-items: flex-start; gap: 10px;
+        padding: 11px 12px; border-radius: 10px;
+        background: var(--secondary-background-color, #2c2c2e);
+        border: 1px solid var(--divider-color, rgba(255,255,255,.07));
+        cursor: pointer;
+      }
+      .card:active { opacity: .8; }
+      .em { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+      .info { flex: 1; min-width: 0; }
+      .bname {
+        font-size: 13px; font-weight: 700;
+        color: var(--primary-text-color,
