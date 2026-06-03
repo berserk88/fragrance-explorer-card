@@ -1,21 +1,16 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 3.0: External Data Fetching, Colors & Icon Integration
+ * Version 3.3: External Data + Search + Navigation Protection + Detail View
  */
 
-import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_data.js';
+import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_data.js?v=3.3';
 
-// Visual Mapping Dictionary for UI Icons
 const ICONS = {
-  // Seasons
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
-  // Time of Day
   'Day': '🌅', 'Night': '🌃', 'All': '🌗',
-  // Occasion
   'Casual': '👕', 'Office': '💼', 'Evening': '🍸', 'Formal': '👔'
 };
 
-// Configuration variables for the Filter UI layout
 const FILTER_CATEGORIES = {
   season: ['Spring', 'Summer', 'Autumn', 'Winter'],
   time_of_day: ['Day', 'Night'],
@@ -33,24 +28,16 @@ class FragranceExplorerCard extends HTMLElement {
     this.exitTimer = null;
     this.backPressedOnce = false;
 
-    // Filter state tracking Set objects
-    this.activeFilters = {
-      season: new Set(),
-      time_of_day: new Set(),
-      occasion: new Set()
-    };
+    // Filter state
+    this.searchTerm = '';
+    this.activeFilters = { season: new Set(), time_of_day: new Set(), occasion: new Set() };
     
-    // Binding event handlers securely
+    // Bind event handlers
     this._handlePopState = this._handlePopState.bind(this);
   }
 
-  set hass(hass) {
-    this._hass = hass;
-  }
-
-  setConfig(config) {
-    this._config = config;
-  }
+  set hass(hass) { this._hass = hass; }
+  setConfig(config) { this._config = config; }
 
   connectedCallback() {
     this._renderSkeleton();
@@ -63,6 +50,7 @@ class FragranceExplorerCard extends HTMLElement {
     if (this.exitTimer) clearTimeout(this.exitTimer);
   }
 
+  /* --- Navigation Engine --- */
   _initNavigationEngine() {
     const uniqueStateId = 'fragrance_explorer_' + Date.now();
     this.sessionStateKey = uniqueStateId;
@@ -89,11 +77,13 @@ class FragranceExplorerCard extends HTMLElement {
 
     if (targetDepth < this.currentDepth) {
       if (this.navStack.length > 1) {
+        // Go back to the main list
         this.navStack.pop();
         this.currentDepth = this.navStack.length;
         this.backPressedOnce = false; 
         this._renderCurrentView();
       } else {
+        // Exit protection logic
         if (!this.backPressedOnce) {
           this.backPressedOnce = true;
           this._showToastMessage("Press back again to exit Home Assistant");
@@ -128,87 +118,75 @@ class FragranceExplorerCard extends HTMLElement {
     }
   }
 
-  /**
-   * Main Browser View (Faceted Search with Icons)
-   */
+  /* --- View Builders --- */
   _buildBrowserView() {
     const div = document.createElement('div');
     div.className = 'fade-in';
     
-    let filterHtml = `<div class="header-title">Fragrance Blends</div><div class="filters-container">`;
+    let html = `
+      <div class="header-title">Fragrance Blends</div>
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by name or fragrance..." value="${this.searchTerm}">
+      </div>
+      <div class="filters-container">`;
     
     for (const [category, options] of Object.entries(FILTER_CATEGORIES)) {
-      const displayTitle = category.replace('_', ' ');
-      filterHtml += `<div class="filter-group">`;
-      filterHtml += `<div class="group-label">${displayTitle}</div>`;
-      filterHtml += `<div class="chip-container">`;
-      
+      html += `<div class="filter-group"><div class="group-label">${category.replace('_', ' ')}</div><div class="chip-container">`;
       options.forEach(opt => {
         const isActive = this.activeFilters[category].has(opt) ? 'active' : '';
-        const icon = ICONS[opt] || '';
-        
-        // Dynamic class generator to attach colors based on the term (e.g., 'chip-spring')
         const colorClass = `chip-${opt.toLowerCase().replace(' ', '-')}`;
-        
-        filterHtml += `<button class="chip ${colorClass} ${isActive}" data-category="${category}" data-val="${opt}">
-          <span class="chip-icon">${icon}</span> ${opt}
+        html += `<button class="chip ${colorClass} ${isActive}" data-category="${category}" data-val="${opt}">
+          <span class="chip-icon">${ICONS[opt]}</span> ${opt}
         </button>`;
       });
-      
-      filterHtml += `</div></div>`;
+      html += `</div></div>`;
     }
-    filterHtml += `</div><div id="results-list" class="scrollable-list"></div>`;
-    
-    div.innerHTML = filterHtml;
+    html += `</div><div id="results-list" class="scrollable-list"></div>`;
+    div.innerHTML = html;
 
-    // Attach Chip Toggle Events
+    // Attach listeners
+    div.querySelector('#search-input').addEventListener('input', (e) => {
+      this.searchTerm = e.target.value.toLowerCase();
+      this._updateResultsList(div.querySelector('#results-list'));
+    });
+
     div.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', (e) => {
         const btn = e.currentTarget;
         const cat = btn.getAttribute('data-category');
         const val = btn.getAttribute('data-val');
-        
-        // Toggle Set
-        if (this.activeFilters[cat].has(val)) {
-          this.activeFilters[cat].delete(val);
-          btn.classList.remove('active');
-        } else {
-          this.activeFilters[cat].add(val);
-          btn.classList.add('active');
+        if (this.activeFilters[cat].has(val)) { 
+          this.activeFilters[cat].delete(val); 
+          btn.classList.remove('active'); 
+        } else { 
+          this.activeFilters[cat].add(val); 
+          btn.classList.add('active'); 
         }
-        
         this._updateResultsList(div.querySelector('#results-list'));
       });
     });
 
-    // Initial render of the list based on current state
     this._updateResultsList(div.querySelector('#results-list'));
-
     return div;
   }
 
-  /**
-   * Filters the master data array based on active criteria
-   */
   _updateResultsList(containerElement) {
     if (!containerElement) return;
 
-    const s = this.activeFilters.season;
-    const t = this.activeFilters.time_of_day;
-    const o = this.activeFilters.occasion;
-
     const filtered = FRAGRANCE_DATA.filter(item => {
-      const matchSeason = s.size === 0 || s.has(item.season) || item.season === 'All Seasons';
-      const matchTime = t.size === 0 || t.has(item.time_of_day) || item.time_of_day === 'All';
-      const matchOccasion = o.size === 0 || o.has(item.occasion);
-
-      return matchSeason && matchTime && matchOccasion;
+      const matchSearch = this.searchTerm === '' || 
+                          item.name.toLowerCase().includes(this.searchTerm) || 
+                          item.tags.some(t => t.toLowerCase().includes(this.searchTerm));
+      const matchSeason = this.activeFilters.season.size === 0 || this.activeFilters.season.has(item.season) || item.season === 'All Seasons';
+      const matchTime = this.activeFilters.time_of_day.size === 0 || this.activeFilters.time_of_day.has(item.time_of_day) || item.time_of_day === 'All';
+      const matchOccasion = this.activeFilters.occasion.size === 0 || this.activeFilters.occasion.has(item.occasion);
+      return matchSearch && matchSeason && matchTime && matchOccasion;
     });
 
     let listHtml = `<div class="results-count">${filtered.length} matches found</div>`;
     
     if (filtered.length === 0) {
-      listHtml += `<div class="empty-state">No blends match these exact filters. Try removing a few!</div>`;
+      listHtml += `<div class="empty-state">No blends match your criteria.</div>`;
     } else {
       listHtml += `<div class="list-container">`;
       filtered.forEach(item => {
@@ -239,9 +217,6 @@ class FragranceExplorerCard extends HTMLElement {
     });
   }
 
-  /**
-   * Detail View for individual combinations
-   */
   _buildCombinationDetailView(id) {
     const div = document.createElement('div');
     div.className = 'fade-in';
@@ -334,15 +309,30 @@ class FragranceExplorerCard extends HTMLElement {
           padding-bottom: 10px;
         }
         
+        /* Search System */
+        .search-container { margin-bottom: 12px; }
+        #search-input {
+          width: 100%;
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid var(--divider-color, #444);
+          background: var(--secondary-background-color, #2c2c2e);
+          color: var(--primary-text-color, #fff);
+          box-sizing: border-box;
+          font-size: 14px;
+        }
+        #search-input:focus {
+          outline: none;
+          border-color: var(--accent-color, #0076ff);
+        }
+
         /* Filter System Styles */
         .filters-container {
           margin-bottom: 16px;
           padding-bottom: 12px;
           border-bottom: 1px dashed var(--divider-color, rgba(255,255,255,0.1));
         }
-        .filter-group {
-          margin-bottom: 12px;
-        }
+        .filter-group { margin-bottom: 12px; }
         .group-label {
           font-size: 11px;
           text-transform: uppercase;
@@ -351,11 +341,7 @@ class FragranceExplorerCard extends HTMLElement {
           color: var(--secondary-text-color, #8e8e93);
           margin-bottom: 6px;
         }
-        .chip-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+        .chip-container { display: flex; flex-wrap: wrap; gap: 6px; }
         .chip {
           background: var(--secondary-background-color, #2c2c2e);
           border: 1px solid var(--divider-color, #3a3a3c);
@@ -370,14 +356,9 @@ class FragranceExplorerCard extends HTMLElement {
           align-items: center;
           gap: 4px;
         }
-        .chip:active {
-          transform: scale(0.95);
-        }
+        .chip:active { transform: scale(0.95); }
         
-        /* Dynamic Tag Colors (Active States) */
-        .chip.active {
-          border-color: currentColor;
-        }
+        .chip.active { border-color: currentColor; }
         .chip-spring.active { background: rgba(52, 199, 89, 0.15); color: #34c759; }
         .chip-summer.active { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
         .chip-autumn.active { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
@@ -389,32 +370,17 @@ class FragranceExplorerCard extends HTMLElement {
         .chip-evening.active { background: rgba(255, 45, 85, 0.15); color: #ff2d55; }
         .chip-formal.active { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
 
-        /* List Area Styles */
+        /* List Area */
         .scrollable-list {
           flex: 1;
           overflow-y: auto;
           max-height: 400px;
           padding-right: 4px;
         }
-        .scrollable-list::-webkit-scrollbar {
-          width: 6px;
-        }
-        .scrollable-list::-webkit-scrollbar-thumb {
-          background: var(--divider-color, #3a3a3c);
-          border-radius: 4px;
-        }
-        .results-count {
-          font-size: 11px;
-          font-weight: 600;
-          color: var(--secondary-text-color, #8e8e93);
-          margin-bottom: 8px;
-          text-align: right;
-        }
-        .list-container {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+        .scrollable-list::-webkit-scrollbar { width: 6px; }
+        .scrollable-list::-webkit-scrollbar-thumb { background: var(--divider-color, #3a3a3c); border-radius: 4px; }
+        .results-count { font-size: 11px; font-weight: 600; color: var(--secondary-text-color, #8e8e93); margin-bottom: 8px; text-align: right; }
+        .list-container { display: flex; flex-direction: column; gap: 8px; }
         .list-row {
           background: var(--secondary-background-color, #2c2c2e);
           border: none;
@@ -432,69 +398,21 @@ class FragranceExplorerCard extends HTMLElement {
           align-items: center;
           transition: background 0.1s;
         }
-        .list-row:active {
-          background: var(--table-row-alternative-background-color, #3a3a3c);
-        }
-        .combination-row {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 6px;
-        }
-        .row-meta {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          font-weight: 600;
-        }
-        .row-tags {
-          font-size: 12px;
-          color: var(--secondary-text-color, #8e8e93);
-        }
-        .row-context {
-          font-size: 11px;
-          color: var(--secondary-text-color, #8e8e93);
-          margin-top: 2px;
-          opacity: 0.9;
-          font-weight: 500;
-        }
+        .list-row:active { background: var(--table-row-alternative-background-color, #3a3a3c); }
+        .combination-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+        .row-meta { display: flex; justify-content: space-between; width: 100%; font-weight: 600; }
+        .row-tags { font-size: 12px; color: var(--secondary-text-color, #8e8e93); }
+        .row-context { font-size: 11px; color: var(--secondary-text-color, #8e8e93); margin-top: 2px; opacity: 0.9; font-weight: 500; }
 
-        /* Detail View Styles */
-        .detail-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 12px;
-        }
-        .detail-title {
-          font-size: 22px;
-          font-weight: 800;
-          letter-spacing: -0.5px;
-        }
+        /* Detail View */
+        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .detail-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
         .detail-badge-rating {
-          background: rgba(255, 159, 10, 0.2);
-          color: #ff9f0a;
-          padding: 4px 8px;
-          border-radius: 6px;
-          font-size: 13px;
-          font-weight: 700;
+          background: rgba(255, 159, 10, 0.2); color: #ff9f0a; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 700;
         }
-        .tag-pill-container {
-          display: flex;
-          gap: 6px;
-          margin-bottom: 16px;
-          flex-wrap: wrap;
-        }
-        .pill {
-          background: var(--table-row-alternative-background-color, #3a3a3c);
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
-          color: var(--primary-text-color, #ffffff);
-        }
+        .tag-pill-container { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+        .pill { background: var(--table-row-alternative-background-color, #3a3a3c); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--primary-text-color, #ffffff); }
         
-        /* Permanent Detail Pill Colors */
         .pill-spring { background: rgba(52, 199, 89, 0.15); color: #34c759; }
         .pill-summer { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
         .pill-autumn { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
@@ -508,85 +426,25 @@ class FragranceExplorerCard extends HTMLElement {
         .pill-evening { background: rgba(255, 45, 85, 0.15); color: #ff2d55; }
         .pill-formal { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
 
-        .detail-section {
-          margin-bottom: 14px;
-        }
-        .section-label {
-          font-size: 11px;
-          text-transform: uppercase;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          color: var(--secondary-text-color, #8e8e93);
-          margin-bottom: 4px;
-        }
-        .section-body-text {
-          margin: 0;
-          font-size: 14px;
-          line-height: 1.4;
-          color: var(--primary-text-color);
-        }
-        .ingredients-list {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-        .ingredient-item {
-          font-size: 13px;
-          font-weight: 600;
-        }
-        .steps-box {
-          background: rgba(var(--accent-color-rgb), 0.08);
-          border-left: 3px solid var(--accent-color, #0076ff);
-          padding: 10px 12px;
-          border-radius: 0 6px 6px 0;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .step-line {
-          font-size: 13px;
-          line-height: 1.35;
-        }
-        
-        .empty-state {
-          text-align: center;
-          padding: 24px;
-          color: var(--secondary-text-color);
-          font-size: 13px;
-        }
+        .detail-section { margin-bottom: 14px; }
+        .section-label { font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; color: var(--secondary-text-color, #8e8e93); margin-bottom: 4px; }
+        .section-body-text { margin: 0; font-size: 14px; line-height: 1.4; color: var(--primary-text-color); }
+        .ingredients-list { display: flex; flex-direction: column; gap: 4px; }
+        .ingredient-item { font-size: 13px; font-weight: 600; }
+        .steps-box { background: rgba(var(--accent-color-rgb), 0.08); border-left: 3px solid var(--accent-color, #0076ff); padding: 10px 12px; border-radius: 0 6px 6px 0; display: flex; flex-direction: column; gap: 6px; }
+        .step-line { font-size: 13px; line-height: 1.35; }
+        .empty-state { text-align: center; padding: 24px; color: var(--secondary-text-color); font-size: 13px; }
         
         /* Toast Notifications */
         .toast {
-          position: absolute;
-          bottom: 16px;
-          left: 50%;
-          transform: translateX(-50%) translateY(100px);
-          background: #323232;
-          color: #ffffff;
-          padding: 10px 16px;
-          border-radius: 24px;
-          font-size: 13px;
-          font-weight: 500;
-          pointer-events: none;
-          opacity: 0;
-          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
-          z-index: 99;
-          white-space: nowrap;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(100px);
+          background: #323232; color: #ffffff; padding: 10px 16px; border-radius: 24px; font-size: 13px; font-weight: 500;
+          pointer-events: none; opacity: 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s; z-index: 99; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-        .toast.show {
-          transform: translateX(-50%) translateY(0);
-          opacity: 1;
-        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         
-        /* Animations */
-        .fade-in {
-          animation: fadeIn 0.2s ease-out forwards;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(4px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+        .fade-in { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
       </style>
       <div class="main-card-frame">
         <div id="view-port"></div>
