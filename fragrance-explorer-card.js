@@ -3,7 +3,7 @@
  * Version 3.1: Search Bar Integration + Faceted Filtering
  */
 
-import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_data.js?v=3.1';
+import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_data.js';
 
 // ... (Keep ICONS and FILTER_CATEGORIES exactly as they were)
 const ICONS = {
