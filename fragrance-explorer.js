@@ -1,9 +1,10 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 3.3: External Data + Search + Navigation Protection + Detail View
+ * Version 4.0: Unified Index, Cross-Linking, and Advanced Filters
  */
 
-import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_data.js?v=3.3';
+import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.0';
+import { INDIVIDUAL_FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.0';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
@@ -30,9 +31,15 @@ class FragranceExplorerCard extends HTMLElement {
 
     // Filter state
     this.searchTerm = '';
+    this.ratingFilter = { type: '', min: '' };
     this.activeFilters = { season: new Set(), time_of_day: new Set(), occasion: new Set() };
     
-    // Bind event handlers
+    // Unified Data Array Compiled directly from external schemas
+    this.masterData = [
+      ...FRAGRANCE_DATA.map(item => ({ ...item, _type: 'combo' })),
+      ...INDIVIDUAL_FRAGRANCE_DATA.map(item => ({ ...item, _type: 'frag' }))
+    ];
+
     this._handlePopState = this._handlePopState.bind(this);
   }
 
@@ -50,14 +57,12 @@ class FragranceExplorerCard extends HTMLElement {
     if (this.exitTimer) clearTimeout(this.exitTimer);
   }
 
-  /* --- Navigation Engine --- */
+  /* --- Navigation Engine & App Closure Prevention --- */
   _initNavigationEngine() {
     const uniqueStateId = 'fragrance_explorer_' + Date.now();
     this.sessionStateKey = uniqueStateId;
-
     window.history.replaceState({ app: this.sessionStateKey, depth: 0 }, '');
     window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
-    
     this.currentDepth = 1;
     this._renderCurrentView();
   }
@@ -65,35 +70,34 @@ class FragranceExplorerCard extends HTMLElement {
   _navigateForward(nextView, value = null) {
     this.navStack.push({ view: nextView, value: value });
     this.currentDepth = this.navStack.length;
-    
     window.history.pushState({ app: this.sessionStateKey, depth: this.currentDepth }, '');
     this._renderCurrentView();
   }
 
   _handlePopState(event) {
     if (!event.state || event.state.app !== this.sessionStateKey) return;
-
     const targetDepth = event.state.depth;
 
     if (targetDepth < this.currentDepth) {
       if (this.navStack.length > 1) {
-        // Go back to the main list
+        // Handle normal internal sub-menu backward transitions
         this.navStack.pop();
         this.currentDepth = this.navStack.length;
         this.backPressedOnce = false; 
         this._renderCurrentView();
       } else {
-        // Exit protection logic
+        // Enforce double-tap back verification at top level menu to trap HA App exit routing
         if (!this.backPressedOnce) {
           this.backPressedOnce = true;
-          this._showToastMessage("Press back again to exit Home Assistant");
+          this._showToastMessage("Press back again to exit");
           
+          // Re-inject protective history state cushion
           window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
           this.currentDepth = 1;
-
-          this.exitTimer = setTimeout(() => {
-            this.backPressedOnce = false;
-          }, 5000);
+          
+          this.exitTimer = setTimeout(() => { 
+            this.backPressedOnce = false; 
+          }, 3000);
         } else {
           if (this.exitTimer) clearTimeout(this.exitTimer);
           window.history.go(-1); 
@@ -113,9 +117,77 @@ class FragranceExplorerCard extends HTMLElement {
 
     if (activeState.view === 'browser') {
       container.appendChild(this._buildBrowserView());
-    } else if (activeState.view === 'detail') {
-      container.appendChild(this._buildCombinationDetailView(activeState.value));
+    } else if (activeState.view === 'combo-detail') {
+      container.appendChild(this._buildComboDetailView(activeState.value));
+    } else if (activeState.view === 'frag-detail') {
+      container.appendChild(this._buildFragDetailView(activeState.value));
     }
+  }
+
+  /* --- Dynamic Multi-Schema Hyperlink Engine --- */
+  _autoLinkText(text) {
+    if (!text) return '';
+    let linkedText = text;
+    
+    const allEntities = [];
+
+    // Map combination items dynamically
+    FRAGRANCE_DATA.forEach(c => {
+      if (c.name) allEntities.push({ name: c.name, id: c.id, type: 'combo' });
+    });
+
+    // Map individual items dynamically
+    INDIVIDUAL_FRAGRANCE_DATA.forEach(f => {
+      if (f.name) allEntities.push({ name: f.name, id: f.id, type: 'frag' });
+    });
+
+    // Sort descending by length to prevent nested substring collision loops
+    allEntities.sort((a, b) => b.name.length - a.name.length);
+
+    // Filter unique entity declarations to block redundant token lookups
+    const seen = new Set();
+    const uniqueEntities = [];
+    allEntities.forEach(item => {
+      const uniqueKey = `${item.type}_${item.id}_${item.name.toLowerCase()}`;
+      if (!seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
+        uniqueEntities.push(item);
+      }
+    });
+
+    // Isolate text mutations from inner HTML attributes using temporary token markers
+    const tokenRegistry = [];
+    uniqueEntities.forEach(entity => {
+      const escapedPhrase = entity.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const regex = new RegExp(escapedPhrase, 'gi');
+
+      linkedText = linkedText.replace(regex, (matchedText) => {
+        const replacementToken = `##FRAG_TOKEN_${tokenRegistry.length}##`;
+        tokenRegistry.push({
+          token: replacementToken,
+          html: `<span class="internal-link" data-type="${entity.type}" data-id="${entity.id}">${matchedText}</span>`
+        });
+        return replacementToken;
+      });
+    });
+
+    // Safe sequential rehydration of deep DOM tokens
+    for (let i = tokenRegistry.length - 1; i >= 0; i--) {
+      linkedText = linkedText.replace(tokenRegistry[i].token, tokenRegistry[i].html);
+    }
+
+    return linkedText;
+  }
+
+  _attachLinkListeners(container) {
+    container.querySelectorAll('.internal-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const type = e.currentTarget.getAttribute('data-type');
+        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+        this._navigateForward(`${type}-detail`, id);
+      });
+    });
   }
 
   /* --- View Builders --- */
@@ -124,10 +196,25 @@ class FragranceExplorerCard extends HTMLElement {
     div.className = 'fade-in';
     
     let html = `
-      <div class="header-title">Fragrance Blends</div>
+      <div class="header-title">Fragrance Database</div>
+      
       <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search by name or fragrance..." value="${this.searchTerm}">
+        <input type="text" id="search-input" placeholder="Search brands, notes, families, blends..." value="${this.searchTerm}">
       </div>
+
+      <div class="rating-filter-container">
+        <select id="rating-type">
+          <option value="" ${this.ratingFilter.type === '' ? 'selected' : ''}>Filter by Rating Metric...</option>
+          <option value="rating" ${this.ratingFilter.type === 'rating' ? 'selected' : ''}>Overall Balance (Blends)</option>
+          <option value="projection rating" ${this.ratingFilter.type === 'projection rating' ? 'selected' : ''}>Projection Score</option>
+          <option value="longevity rating" ${this.ratingFilter.type === 'longevity rating' ? 'selected' : ''}>Longevity Score</option>
+          <option value="compliment_factor rating" ${this.ratingFilter.type === 'compliment_factor rating' ? 'selected' : ''}>Compliment Factor</option>
+          <option value="complexity rating" ${this.ratingFilter.type === 'complexity rating' ? 'selected' : ''}>Complexity (Blends)</option>
+          <option value="versatility rating" ${this.ratingFilter.type === 'versatility rating' ? 'selected' : ''}>Versatility (Frags)</option>
+        </select>
+        <input type="number" id="rating-min" step="0.1" min="0" max="5" placeholder="Min (e.g. 4.3)" value="${this.ratingFilter.min}">
+      </div>
+
       <div class="filters-container">`;
     
     for (const [category, options] of Object.entries(FILTER_CATEGORIES)) {
@@ -144,12 +231,23 @@ class FragranceExplorerCard extends HTMLElement {
     html += `</div><div id="results-list" class="scrollable-list"></div>`;
     div.innerHTML = html;
 
-    // Attach listeners
+    // Search and Rating Event Handlers
     div.querySelector('#search-input').addEventListener('input', (e) => {
       this.searchTerm = e.target.value.toLowerCase();
       this._updateResultsList(div.querySelector('#results-list'));
     });
 
+    div.querySelector('#rating-type').addEventListener('change', (e) => {
+      this.ratingFilter.type = e.target.value;
+      this._updateResultsList(div.querySelector('#results-list'));
+    });
+
+    div.querySelector('#rating-min').addEventListener('input', (e) => {
+      this.ratingFilter.min = parseFloat(e.target.value) || '';
+      this._updateResultsList(div.querySelector('#results-list'));
+    });
+
+    // Chip Filtering Engine mapping
     div.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', (e) => {
         const btn = e.currentTarget;
@@ -173,35 +271,84 @@ class FragranceExplorerCard extends HTMLElement {
   _updateResultsList(containerElement) {
     if (!containerElement) return;
 
-    const filtered = FRAGRANCE_DATA.filter(item => {
-      const matchSearch = this.searchTerm === '' || 
-                          item.name.toLowerCase().includes(this.searchTerm) || 
-                          item.tags.some(t => t.toLowerCase().includes(this.searchTerm));
-      const matchSeason = this.activeFilters.season.size === 0 || this.activeFilters.season.has(item.season) || item.season === 'All Seasons';
-      const matchTime = this.activeFilters.time_of_day.size === 0 || this.activeFilters.time_of_day.has(item.time_of_day) || item.time_of_day === 'All';
-      const matchOccasion = this.activeFilters.occasion.size === 0 || this.activeFilters.occasion.has(item.occasion);
-      return matchSearch && matchSeason && matchTime && matchOccasion;
+    const filtered = this.masterData.filter(item => {
+      // 1. Fully-Unified Deep Schema Search Engine
+      let matchSearch = false;
+      if (this.searchTerm === '') { 
+        matchSearch = true; 
+      } else {
+        if (item._type === 'combo') {
+          matchSearch = (item.name || '').toLowerCase().includes(this.searchTerm) || 
+                        (item.tags || []).some(t => t.toLowerCase().includes(this.searchTerm)) ||
+                        (item.fragrances || []).some(f => f.toLowerCase().includes(this.searchTerm)) ||
+                        (item.profile || '').toLowerCase().includes(this.searchTerm) ||
+                        (item.synergy || '').toLowerCase().includes(this.searchTerm);
+        } else {
+          matchSearch = (item.name || '').toLowerCase().includes(this.searchTerm) || 
+                        (item.fragrance_family || '').toLowerCase().includes(this.searchTerm) ||
+                        (item.dominant_notes || []).some(n => n.toLowerCase().includes(this.searchTerm)) ||
+                        (item.inspiration || '').toLowerCase().includes(this.searchTerm) ||
+                        (item.description || '').toLowerCase().includes(this.searchTerm);
+        }
+      }
+
+      // 2. Multi-Metric Mathematical Rating Boundary Filter
+      let matchRating = true;
+      if (this.ratingFilter.type && this.ratingFilter.min !== '') {
+        const val = item[this.ratingFilter.type];
+        if (val === undefined || val < this.ratingFilter.min) { 
+          matchRating = false; 
+        }
+      }
+
+      // 3. Environment Conditional Matrix Logic
+      let matchSeason = true, matchTime = true, matchOccasion = true;
+      
+      if (this.activeFilters.season.size > 0) {
+        if (item._type === 'combo') matchSeason = this.activeFilters.season.has(item.season) || item.season === 'All Seasons';
+        if (item._type === 'frag') matchSeason = Array.from(this.activeFilters.season).some(s => (item.seasons || []).includes(s));
+      }
+
+      if (this.activeFilters.time_of_day.size > 0) {
+        if (item._type === 'combo') matchTime = this.activeFilters.time_of_day.has(item.time_of_day) || item.time_of_day === 'All';
+        if (item._type === 'frag') {
+          const reqDay = this.activeFilters.time_of_day.has('Day') && (item.day_score >= 4.0);
+          const reqNight = this.activeFilters.time_of_day.has('Night') && (item.night_score >= 4.0);
+          matchTime = reqDay || reqNight;
+        }
+      }
+
+      if (this.activeFilters.occasion.size > 0) {
+        if (item._type === 'combo') matchOccasion = this.activeFilters.occasion.has(item.occasion);
+        if (item._type === 'frag') {
+          matchOccasion = Array.from(this.activeFilters.occasion).some(occ => {
+            return item[`${occ.toLowerCase()}_score`] >= 4.0;
+          });
+        }
+      }
+
+      return matchSearch && matchRating && matchSeason && matchTime && matchOccasion;
     });
 
-    let listHtml = `<div class="results-count">${filtered.length} matches found</div>`;
+    let listHtml = `<div class="results-count">${filtered.length} entries located</div>`;
     
     if (filtered.length === 0) {
-      listHtml += `<div class="empty-state">No blends match your criteria.</div>`;
+      listHtml += `<div class="empty-state">No individual profiles or blends align with criteria fields.</div>`;
     } else {
       listHtml += `<div class="list-container">`;
       filtered.forEach(item => {
-        const seasonIcon = ICONS[item.season] || '';
-        const timeIcon = ICONS[item.time_of_day] || '';
-        const occasionIcon = ICONS[item.occasion] || '';
-
+        const typeIcon = item._type === 'combo' ? '🧪' : '🧴';
+        const typeLabel = item._type === 'combo' ? 'Combination Blend' : 'Individual Fragrance';
+        const rawScore = item.rating !== undefined ? item.rating : item['projection rating'];
+        
         listHtml += `
-          <button class="list-row combination-row" data-id="${item.id}">
+          <button class="list-row list-row-clickable" data-type="${item._type}" data-id="${item.id}">
             <div class="row-meta">
-              <span class="row-name">${item.name}</span>
-              <span class="row-rating">⭐ ${item.rating.toFixed(1)}</span>
+              <span class="row-name">${typeIcon} ${item.name}</span>
+              <span class="row-rating">⭐ ${(rawScore || 0).toFixed(1)}</span>
             </div>
-            <div class="row-tags">🧪 ${item.tags.join(' + ')}</div>
-            <div class="row-context">${seasonIcon} ${item.season} &nbsp;•&nbsp; ${timeIcon} ${item.time_of_day} &nbsp;•&nbsp; ${occasionIcon} ${item.occasion}</div>
+            <div class="row-tags">${item._type === 'combo' ? (item.tags || []).join(' • ') : item.fragrance_family}</div>
+            <div class="row-context">${typeLabel}</div>
           </button>
         `;
       });
@@ -210,31 +357,27 @@ class FragranceExplorerCard extends HTMLElement {
 
     containerElement.innerHTML = listHtml;
 
-    containerElement.querySelectorAll('.combination-row').forEach(row => {
+    containerElement.querySelectorAll('.list-row-clickable').forEach(row => {
       row.addEventListener('click', () => {
-        this._navigateForward('detail', parseInt(row.getAttribute('data-id')));
+        this._navigateForward(`${row.getAttribute('data-type')}-detail`, parseInt(row.getAttribute('data-id')));
       });
     });
   }
 
-  _buildCombinationDetailView(id) {
+  _buildComboDetailView(id) {
     const div = document.createElement('div');
     div.className = 'fade-in';
     const item = FRAGRANCE_DATA.find(f => f.id === id);
+    if (!item) return div;
 
-    if (!item) {
-      div.innerHTML = `<div class="empty-state">Error loading mix template profile.</div>`;
-      return div;
-    }
-
-    const sClass = `pill-${item.season.toLowerCase().replace(' ', '-')}`;
-    const tClass = `pill-${item.time_of_day.toLowerCase().replace(' ', '-')}`;
-    const oClass = `pill-${item.occasion.toLowerCase().replace(' ', '-')}`;
+    const sClass = `pill-${(item.season || '').toLowerCase().replace(' ', '-')}`;
+    const tClass = `pill-${(item.time_of_day || '').toLowerCase().replace(' ', '-')}`;
+    const oClass = `pill-${(item.occasion || '').toLowerCase().replace(' ', '-')}`;
 
     div.innerHTML = `
       <div class="detail-header">
-        <div class="detail-title">${item.name}</div>
-        <div class="detail-badge-rating">⭐ ${item.rating.toFixed(1)}</div>
+        <div class="detail-title">🧪 ${item.name}</div>
+        <div class="detail-badge-rating">⭐ ${(item.rating || 0).toFixed(1)}</div>
       </div>
       
       <div class="tag-pill-container">
@@ -243,122 +386,137 @@ class FragranceExplorerCard extends HTMLElement {
         <span class="pill ${oClass}">${ICONS[item.occasion] || ''} ${item.occasion}</span>
       </div>
 
+      <div class="ratings-grid">
+        <div class="rating-box"><div class="rb-val">${(item['projection rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
+        <div class="rating-box"><div class="rb-val">${(item['longevity rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
+        <div class="rating-box"><div class="rb-val">${(item['compliment_factor rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
+        <div class="rating-box"><div class="rb-val">${(item['complexity rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Complexity</div></div>
+      </div>
+
       <div class="detail-section">
         <div class="section-label">Composition Elements</div>
         <div class="ingredients-list">
-          ${item.tags.map(tag => `<div class="ingredient-item">🧪 ${tag}</div>`).join('')}
+          ${(item.fragrances || []).map(f => `<div class="ingredient-item">🧴 ${this._autoLinkText(f)}</div>`).join('')}
         </div>
       </div>
 
       <div class="detail-section">
-        <div class="section-label">Olfactory Architecture Profile</div>
-        <p class="section-body-text">${item.description}</p>
+        <div class="section-label">Olfactory Profile & Synergy</div>
+        <p class="section-body-text">${this._autoLinkText(item.profile)}</p>
+        <p class="section-body-text synergy-text"><em>Synergy Profile:</em> ${this._autoLinkText(item.synergy)}</p>
       </div>
 
       <div class="detail-section">
         <div class="section-label">Application Mapping Sequence</div>
-        <div class="steps-box">${item.steps.split('; ').map(step => `<div class="step-line">🔹 ${step}</div>`).join('')}</div>
+        <div class="steps-box">${(item.steps || '').split('\n').map(step => `<div class="step-line">${this._autoLinkText(step)}</div>`).join('')}</div>
       </div>
+      
+      ${item.alternatives && item.alternatives.length > 0 ? `
+      <div class="detail-section">
+        <div class="section-label">Alternative Fragrance Combinations</div>
+        <p class="section-body-text">${item.alternatives.map(alt => this._autoLinkText(alt)).join('<br>')}</p>
+      </div>` : ''}
     `;
+
+    this._attachLinkListeners(div);
+    return div;
+  }
+
+  _buildFragDetailView(id) {
+    const div = document.createElement('div');
+    div.className = 'fade-in';
+    const item = INDIVIDUAL_FRAGRANCE_DATA.find(f => f.id === id);
+    if (!item) return div;
+
+    div.innerHTML = `
+      <div class="detail-header">
+        <div class="detail-title">🧴 ${item.name}</div>
+      </div>
+      
+      <div class="frag-meta-row">
+        <strong>Family Base:</strong> ${item.fragrance_family} <br>
+        <strong>Formulation Style:</strong> ${item.clone_type} <br>
+        <strong>Olfactory Tribute:</strong> ${this._autoLinkText(item.inspiration)}
+      </div>
+
+      <div class="ratings-grid">
+        <div class="rating-box"><div class="rb-val">${(item['projection rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
+        <div class="rating-box"><div class="rb-val">${(item['longevity rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
+        <div class="rating-box"><div class="rb-val">${(item['compliment_factor rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
+        <div class="rating-box"><div class="rb-val">${(item['versatility rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Versatility</div></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-label">Dominant Notes</div>
+        <div class="tag-pill-container" style="margin-bottom:0;">
+          ${(item.dominant_notes || []).map(note => `<span class="pill pill-casual">${note}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-label">Performance Parameters Description</div>
+        <p class="section-body-text">${this._autoLinkText(item.description)}</p>
+      </div>
+      
+      <div class="detail-section">
+        <div class="section-label">Target Scenarios Architecture</div>
+        <div class="scores-grid">
+          <div>Day: <strong>${(item.day_score || 0).toFixed(1)}</strong></div>
+          <div>Night: <strong>${(item.night_score || 0).toFixed(1)}</strong></div>
+          <div>Office: <strong>${(item.office_score || 0).toFixed(1)}</strong></div>
+          <div>Formal: <strong>${(item.formal_score || 0).toFixed(1)}</strong></div>
+          <div>Casual: <strong>${(item.casual_score || 0).toFixed(1)}</strong></div>
+          <div>Evening: <strong>${(item.evening_score || 0).toFixed(1)}</strong></div>
+        </div>
+      </div>
+
+      ${item.related_fragrances && item.related_fragrances.length > 0 ? `
+      <div class="detail-section">
+        <div class="section-label">Related Collections Profiles</div>
+        <p class="section-body-text">${item.related_fragrances.map(rel => this._autoLinkText(rel)).join(', ')}</p>
+      </div>` : ''}
+    `;
+
+    this._attachLinkListeners(div);
     return div;
   }
 
   _showToastMessage(msg) {
     let container = this.shadowRoot.getElementById('toast-box');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'toast-box';
-      this.shadowRoot.appendChild(container);
-    }
+    if (!container) return;
     container.textContent = msg;
     container.className = "toast show";
-    
-    setTimeout(() => {
-      container.className = "toast";
-    }, 2500);
+    setTimeout(() => { container.className = "toast"; }, 2500);
   }
 
   _renderSkeleton() {
     this.shadowRoot.innerHTML = `
       <style>
-        :host {
-          display: block;
-          --accent-color-rgb: 0, 118, 255;
-          font-family: var(--paper-font-body1_-_font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
-        }
+        :host { display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         .main-card-frame {
-          background: var(--ha-card-background, var(--card-background-color, #1c1c1e));
-          border-radius: var(--ha-card-border-radius, 12px);
-          box-shadow: var(--ha-card-box-shadow, 0 2px 8px rgba(0,0,0,0.15));
-          color: var(--primary-text-color, #ffffff);
-          padding: 16px;
-          min-height: 450px;
-          position: relative;
-          overflow: hidden;
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
+          background: var(--ha-card-background, #1c1c1e); border-radius: 12px;
+          color: var(--primary-text-color, #ffffff); padding: 16px; min-height: 450px;
+          position: relative; overflow: hidden; display: flex; flex-direction: column;
         }
-        .header-title {
-          font-size: 20px;
-          font-weight: 700;
-          letter-spacing: -0.5px;
-          margin-bottom: 12px;
-          color: var(--primary-text-color);
-          border-bottom: 1px solid var(--divider-color, rgba(255,255,255,0.1));
-          padding-bottom: 10px;
-        }
+        .header-title { font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px; }
         
-        /* Search System */
-        .search-container { margin-bottom: 12px; }
-        #search-input {
-          width: 100%;
-          padding: 10px;
-          border-radius: 8px;
-          border: 1px solid var(--divider-color, #444);
-          background: var(--secondary-background-color, #2c2c2e);
-          color: var(--primary-text-color, #fff);
-          box-sizing: border-box;
-          font-size: 14px;
+        /* Interactive Input Wrappers */
+        .search-container { margin-bottom: 8px; }
+        .rating-filter-container { display: flex; gap: 8px; margin-bottom: 12px; }
+        input[type="text"], input[type="number"], select {
+          padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2c2c2e; color: #fff; font-size: 13px; box-sizing: border-box; outline: none;
         }
-        #search-input:focus {
-          outline: none;
-          border-color: var(--accent-color, #0076ff);
-        }
-
-        /* Filter System Styles */
-        .filters-container {
-          margin-bottom: 16px;
-          padding-bottom: 12px;
-          border-bottom: 1px dashed var(--divider-color, rgba(255,255,255,0.1));
-        }
+        input[type="text"] { width: 100%; }
+        select { flex: 2; } input[type="number"] { flex: 1; }
+        
+        /* Functional Tag Chips */
+        .filters-container { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
         .filter-group { margin-bottom: 12px; }
-        .group-label {
-          font-size: 11px;
-          text-transform: uppercase;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          color: var(--secondary-text-color, #8e8e93);
-          margin-bottom: 6px;
-        }
+        .group-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8e8e93; margin-bottom: 6px; }
         .chip-container { display: flex; flex-wrap: wrap; gap: 6px; }
-        .chip {
-          background: var(--secondary-background-color, #2c2c2e);
-          border: 1px solid var(--divider-color, #3a3a3c);
-          color: var(--primary-text-color, #ffffff);
-          padding: 6px 12px;
-          border-radius: 16px;
-          font-size: 12px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-        .chip:active { transform: scale(0.95); }
-        
+        .chip { background: #2c2c2e; border: 1px solid #3a3a3c; color: #fff; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
         .chip.active { border-color: currentColor; }
+        
         .chip-spring.active { background: rgba(52, 199, 89, 0.15); color: #34c759; }
         .chip-summer.active { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
         .chip-autumn.active { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
@@ -370,79 +528,47 @@ class FragranceExplorerCard extends HTMLElement {
         .chip-evening.active { background: rgba(255, 45, 85, 0.15); color: #ff2d55; }
         .chip-formal.active { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
 
-        /* List Area */
-        .scrollable-list {
-          flex: 1;
-          overflow-y: auto;
-          max-height: 400px;
-          padding-right: 4px;
-        }
-        .scrollable-list::-webkit-scrollbar { width: 6px; }
-        .scrollable-list::-webkit-scrollbar-thumb { background: var(--divider-color, #3a3a3c); border-radius: 4px; }
-        .results-count { font-size: 11px; font-weight: 600; color: var(--secondary-text-color, #8e8e93); margin-bottom: 8px; text-align: right; }
+        /* Render List Layouts */
+        .scrollable-list { flex: 1; overflow-y: auto; max-height: 400px; }
+        .results-count { font-size: 11px; font-weight: 600; color: #8e8e93; text-align: right; margin-bottom: 8px; }
         .list-container { display: flex; flex-direction: column; gap: 8px; }
-        .list-row {
-          background: var(--secondary-background-color, #2c2c2e);
-          border: none;
-          border-radius: 6px;
-          padding: 12px 16px;
-          text-align: left;
-          color: var(--primary-text-color);
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          width: 100%;
-          box-sizing: border-box;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          transition: background 0.1s;
-        }
-        .list-row:active { background: var(--table-row-alternative-background-color, #3a3a3c); }
-        .combination-row { flex-direction: column; align-items: flex-start; gap: 6px; }
-        .row-meta { display: flex; justify-content: space-between; width: 100%; font-weight: 600; }
-        .row-tags { font-size: 12px; color: var(--secondary-text-color, #8e8e93); }
-        .row-context { font-size: 11px; color: var(--secondary-text-color, #8e8e93); margin-top: 2px; opacity: 0.9; font-weight: 500; }
+        .list-row { background: #2c2c2e; border: none; border-radius: 6px; padding: 12px 16px; text-align: left; color: #fff; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
+        .list-row:active { background: #3a3a3c; }
+        .row-meta { display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
+        .row-tags { font-size: 12px; color: #8e8e93; }
+        .row-context { font-size: 11px; color: #0076ff; font-weight: 600; text-transform: uppercase; }
 
-        /* Detail View */
+        /* Profile Detail Modals Elements */
         .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .detail-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-        .detail-badge-rating {
-          background: rgba(255, 159, 10, 0.2); color: #ff9f0a; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 700;
-        }
+        .detail-title { font-size: 20px; font-weight: 800; line-height: 1.2; }
+        .detail-badge-rating { background: rgba(255, 159, 10, 0.2); color: #ff9f0a; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 700; }
         .tag-pill-container { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-        .pill { background: var(--table-row-alternative-background-color, #3a3a3c); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--primary-text-color, #ffffff); }
+        .pill { background: #3a3a3c; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #fff; }
         
-        .pill-spring { background: rgba(52, 199, 89, 0.15); color: #34c759; }
-        .pill-summer { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .pill-autumn { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
-        .pill-winter { background: rgba(88, 86, 214, 0.15); color: #5856d6; }
-        .pill-all-seasons { background: rgba(142, 142, 147, 0.15); color: #aeaeb2; }
-        .pill-day { background: rgba(90, 200, 250, 0.15); color: #5ac8fa; }
-        .pill-night { background: rgba(142, 142, 147, 0.15); color: #aeaeb2; }
-        .pill-all { background: rgba(142, 142, 147, 0.15); color: #aeaeb2; }
-        .pill-casual { background: rgba(50, 173, 230, 0.15); color: #32ade6; }
-        .pill-office { background: rgba(175, 82, 222, 0.15); color: #af52de; }
-        .pill-evening { background: rgba(255, 45, 85, 0.15); color: #ff2d55; }
-        .pill-formal { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
+        .ratings-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+        .rating-box { background: #2c2c2e; padding: 10px 4px; border-radius: 8px; text-align: center; border: 1px solid #3a3a3c; }
+        .rb-val { font-size: 16px; font-weight: 800; color: #ff9f0a; margin-bottom: 2px; }
+        .rb-lbl { font-size: 9px; text-transform: uppercase; font-weight: 700; color: #8e8e93; }
 
         .detail-section { margin-bottom: 14px; }
-        .section-label { font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; color: var(--secondary-text-color, #8e8e93); margin-bottom: 4px; }
-        .section-body-text { margin: 0; font-size: 14px; line-height: 1.4; color: var(--primary-text-color); }
-        .ingredients-list { display: flex; flex-direction: column; gap: 4px; }
-        .ingredient-item { font-size: 13px; font-weight: 600; }
-        .steps-box { background: rgba(var(--accent-color-rgb), 0.08); border-left: 3px solid var(--accent-color, #0076ff); padding: 10px 12px; border-radius: 0 6px 6px 0; display: flex; flex-direction: column; gap: 6px; }
-        .step-line { font-size: 13px; line-height: 1.35; }
-        .empty-state { text-align: center; padding: 24px; color: var(--secondary-text-color); font-size: 13px; }
+        .section-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8e8e93; margin-bottom: 6px; }
+        .section-body-text { margin: 0; font-size: 13px; line-height: 1.5; color: #eee; }
+        .synergy-text { margin-top: 6px; padding-left: 8px; border-left: 2px solid #5ac8fa; color: #ccc; }
+        .frag-meta-row { background: #2c2c2e; padding: 10px; border-radius: 8px; font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+        .scores-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 12px; background: #2c2c2e; padding: 10px; border-radius: 8px; }
         
-        /* Toast Notifications */
-        .toast {
-          position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(100px);
-          background: #323232; color: #ffffff; padding: 10px 16px; border-radius: 24px; font-size: 13px; font-weight: 500;
-          pointer-events: none; opacity: 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s; z-index: 99; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
+        .ingredient-item { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .steps-box { background: rgba(0, 118, 255, 0.08); border-left: 3px solid #0076ff; padding: 10px; border-radius: 0 6px 6px 0; }
+        .step-line { font-size: 13px; margin-bottom: 8px; line-height: 1.4; white-space: pre-wrap; }
+        .empty-state { text-align: center; padding: 24px; color: #8e8e93; font-size: 13px; }
+        
+        /* Cross-Schema Global Anchors Styling */
+        .internal-link { color: #0076ff; text-decoration: underline; cursor: pointer; font-weight: 600; transition: opacity 0.2s; }
+        .internal-link:active { opacity: 0.6; }
+        
+        /* System UI Notifications */
+        .toast { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(100px); background: #323232; color: #fff; padding: 10px 16px; border-radius: 24px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 99; white-space: nowrap; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        
         .fade-in { animation: fadeIn 0.2s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
       </style>
