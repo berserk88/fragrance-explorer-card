@@ -3,8 +3,8 @@
  * Version 4.3: Added Notes Filter, Isolated Fixes, Cross-Linking Filters, and Dual Home Engine
  */
 
-import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.3';
-import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.3';
+import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.35';
+import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.35';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
