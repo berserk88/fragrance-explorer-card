@@ -3,8 +3,8 @@
  * Version 4.1: Unified Index, Cross-Linking, and Advanced Filters
  */
 
-import { FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.1';
-import { INDIVIDUAL_FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.1';
+import { fragranceCombinations as FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.1';
+import { individualFragrances as INDIVIDUAL_FRAGRANCE_DATA } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.1';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
@@ -34,10 +34,10 @@ class FragranceExplorerCard extends HTMLElement {
     this.ratingFilter = { type: '', min: '' };
     this.activeFilters = { season: new Set(), time_of_day: new Set(), occasion: new Set() };
     
-    // Defensive initialization of unified master array compiling from the two allowed data schemas
+    // Defensive initialization of unified master array compiling from the two data schemas
     this.masterData = [
-      ...(FRAGRANCE_DATA || []).map(item => ({ ...item, _type: 'combo' })),
-      ...(INDIVIDUAL_FRAGRANCE_DATA || []).map(item => ({ ...item, _type: 'frag' }))
+      ...(Array.isArray(FRAGRANCE_DATA) ? FRAGRANCE_DATA : []).map(item => ({ ...item, _type: 'combo' })),
+      ...(Array.isArray(INDIVIDUAL_FRAGRANCE_DATA) ? INDIVIDUAL_FRAGRANCE_DATA : []).map(item => ({ ...item, _type: 'frag' }))
     ];
 
     this._handlePopState = this._handlePopState.bind(this);
@@ -97,7 +97,7 @@ class FragranceExplorerCard extends HTMLElement {
           
           this.exitTimer = setTimeout(() => { 
             this.backPressedOnce = false; 
-          }, 3000); // 3 seconds succession window
+          }, 4000); // 4 seconds succession window
         } else {
           if (this.exitTimer) clearTimeout(this.exitTimer);
           // Go back past our local history states completely to trigger native dashboard exit mapping
@@ -132,11 +132,11 @@ class FragranceExplorerCard extends HTMLElement {
     
     const allEntities = [];
 
-    (FRAGRANCE_DATA || []).forEach(c => {
+    (Array.isArray(FRAGRANCE_DATA) ? FRAGRANCE_DATA : []).forEach(c => {
       if (c && c.name) allEntities.push({ name: c.name, id: c.id, type: 'combo' });
     });
 
-    (INDIVIDUAL_FRAGRANCE_DATA || []).forEach(f => {
+    (Array.isArray(INDIVIDUAL_FRAG_DATA) ? INDIVIDUAL_FRAGRANCE_DATA : INDIVIDUAL_FRAGRANCE_DATA || []).forEach(f => {
       if (f && f.name) allEntities.push({ name: f.name, id: f.id, type: 'frag' });
     });
 
@@ -364,7 +364,7 @@ class FragranceExplorerCard extends HTMLElement {
   _buildComboDetailView(id) {
     const div = document.createElement('div');
     div.className = 'fade-in';
-    const item = (FRAGRANCE_DATA || []).find(f => f.id === id);
+    const item = (Array.isArray(FRAGRANCE_DATA) ? FRAGRANCE_DATA : []).find(f => f.id === id);
     if (!item) return div;
 
     const sClass = `pill-${(item.season || '').toLowerCase().replace(' ', '-')}`;
@@ -374,7 +374,7 @@ class FragranceExplorerCard extends HTMLElement {
     div.innerHTML = `
       <div class="detail-header">
         <div class="detail-title">🧪 ${(item.name || 'Unnamed Blend')}</div>
-        <div class="detail-badge-rating">⭐ ${(item.rating || 0).toFixed(1)}</div>
+        <div class="detail-badge-rating">⭐ ${typeof item.rating === 'number' ? item.rating.toFixed(1) : parseFloat(item.rating || 0).toFixed(1)}</div>
       </div>
       
       <div class="tag-pill-container">
@@ -422,7 +422,7 @@ class FragranceExplorerCard extends HTMLElement {
   _buildFragDetailView(id) {
     const div = document.createElement('div');
     div.className = 'fade-in';
-    const item = (INDIVIDUAL_FRAGRANCE_DATA || []).find(f => f.id === id);
+    const item = (Array.isArray(INDIVIDUAL_FRAGRANCE_DATA) ? INDIVIDUAL_FRAGRANCE_DATA : []).find(f => f.id === id);
     if (!item) return div;
 
     div.innerHTML = `
