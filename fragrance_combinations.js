@@ -1,4 +1,4 @@
-const fragranceCombinations = [
+export const fragranceCombinations = [
   {
     "id": 1,
     "name": "High-Heat Shield",

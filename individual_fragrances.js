@@ -1,4 +1,4 @@
-const individualFragrances = [
+export const individualFragrances = [
   {
     "id": 1,
     "name": "SNOI (Supremacy Not Only Intense)",
