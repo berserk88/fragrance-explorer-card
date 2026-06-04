@@ -1,10 +1,10 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 5.1: Unified Database Schemas, Advanced History State Capturing, Context Matrix Cross-Navigation & Robust Cross-Linking
+ * Version 6.0: Hardened Double-Tap Exit Defense, Universal Data Matrix Schemas, & Persistent Global Actions
  */
 
-import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=5.1';
-import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=5.1';
+import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
+import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=6.0';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
@@ -18,7 +18,7 @@ class FragranceExplorerCard extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     
-    // Core Navigation Stack State
+    // Core Navigation Stack & Hardware Defense State
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
     this.exitTimer = null;
@@ -44,12 +44,9 @@ class FragranceExplorerCard extends HTMLElement {
 
   connectedCallback() {
     // Intercept physical browser and mobile hardware back navigation
+    this.currentDepth = 1;
+    window.history.pushState({ fragAppDepth: this.currentDepth }, '');
     window.addEventListener('popstate', this._handlePopState);
-    
-    // Push an initial anchor state to prevent instant dashboard exits
-    if (!window.history.state || !window.history.state.fragranceExplorer) {
-      window.history.pushState({ fragranceExplorer: true, depth: this.currentDepth }, '');
-    }
     
     this.render();
   }
@@ -72,13 +69,24 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   initData() {
+    // Defensive Normalizer guarantees both single strings and arrays resolve into iteratable arrays
+    const normalizeToArray = (val) => {
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'string') {
+        if (val.trim() === '') return [];
+        if (val.includes(',')) return val.split(',').map(s => s.trim());
+        return [val.trim()];
+      }
+      return [];
+    };
+
     const normalizedFragrances = (Array.isArray(individualFragrances) ? individualFragrances : []).map(item => ({
       ...item,
       type: 'Fragrance',
-      seasons: Array.isArray(item.seasons) ? item.seasons : [],
-      time_of_day: Array.isArray(item.time_of_day) ? item.time_of_day : [],
-      occasion: Array.isArray(item.occasion) ? item.occasion : [],
-      dominant_notes: Array.isArray(item.dominant_notes) ? item.dominant_notes : [],
+      seasons: normalizeToArray(item.seasons || item.season),
+      time_of_day: normalizeToArray(item.time_of_day),
+      occasion: normalizeToArray(item.occasion),
+      dominant_notes: normalizeToArray(item.dominant_notes),
       rating: parseFloat(item.rating) || 0,
       projection: parseFloat(item.projection) || 0,
       longevity: parseFloat(item.longevity) || 0,
@@ -89,10 +97,10 @@ class FragranceExplorerCard extends HTMLElement {
     const normalizedCombos = (Array.isArray(fragranceCombinations) ? fragranceCombinations : []).map(item => ({
       ...item,
       type: 'Blend',
-      seasons: Array.isArray(item.seasons) ? item.seasons : [],
-      time_of_day: Array.isArray(item.time_of_day) ? item.time_of_day : [],
-      occasion: Array.isArray(item.occasion) ? item.occasion : [],
-      dominant_notes: Array.isArray(item.dominant_notes) ? item.dominant_notes : [],
+      seasons: normalizeToArray(item.seasons || item.season),
+      time_of_day: normalizeToArray(item.time_of_day),
+      occasion: normalizeToArray(item.occasion),
+      dominant_notes: normalizeToArray(item.dominant_notes),
       rating: parseFloat(item.rating) || 0,
       projection: parseFloat(item.projection) || 0,
       longevity: parseFloat(item.longevity) || 0,
@@ -109,28 +117,33 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   _handlePopState(event) {
-    // Check if back action is meant for internal card history navigation layers
-    if (this.navStack.length > 1) {
-      this.navStack.pop();
-      this.currentDepth--;
+    const state = event.state;
+    const targetDepth = state && state.fragAppDepth ? state.fragAppDepth : 0;
+    
+    if (targetDepth < this.currentDepth && this.navStack.length > 1) {
+      // User pressed hardware back button, navigating internal views
+      const diff = this.currentDepth - targetDepth;
+      for (let i = 0; i < diff && this.navStack.length > 1; i++) {
+        this.navStack.pop();
+      }
+      this.currentDepth = this.navStack.length;
       this.render();
-      // Keep state tracking locked within the application shell frame
-      window.history.pushState({ fragranceExplorer: true, depth: this.currentDepth }, '');
-    } else {
-      // Top Level Home View: Implement Double-Tap Defensive Exit Logic
-      if (this.backPressedOnce) {
-        this.backPressedOnce = false;
-        if (this.exitTimer) clearTimeout(this.exitTimer);
-        // Authorize absolute system termination or exit from current dashboard path
-        window.history.back();
-      } else {
+    } else if (targetDepth === 0 || !state) {
+      // User hit the top-level anchor. Execute Defense Protocol.
+      if (!this.backPressedOnce) {
+        // PREVENT HA EXIT: Instantly push a new anchor state back onto the stack
+        window.history.pushState({ fragAppDepth: 1 }, '');
+        this.currentDepth = 1;
         this.backPressedOnce = true;
-        this.showToast('Press Back once more to exit Fragrance Explorer');
+        this.showToast('Press Back again to exit Fragrance Explorer');
+        
         this.exitTimer = setTimeout(() => {
           this.backPressedOnce = false;
         }, 2000);
-        // Force state locking anchor back on the tab context tree
-        window.history.pushState({ fragranceExplorer: true, depth: this.currentDepth }, '');
+      } else {
+        // ALLOW HA EXIT: User double-tapped within 2 seconds
+        this.backPressedOnce = false;
+        if (this.exitTimer) clearTimeout(this.exitTimer);
       }
     }
   }
@@ -138,43 +151,27 @@ class FragranceExplorerCard extends HTMLElement {
   navigateInternal(view, value) {
     this.navStack.push({ view, value });
     this.currentDepth++;
-    window.history.pushState({ fragranceExplorer: true, depth: this.currentDepth }, '');
+    window.history.pushState({ fragAppDepth: this.currentDepth }, '');
     this.render();
   }
 
   handleBackAction() {
-    // Intercept manual UI hardware panel clicks to channel core interceptors uniformly
     if (this.navStack.length > 1) {
-      this.navStack.pop();
-      this.currentDepth--;
-      this.render();
-    } else {
-      if (this.backPressedOnce) {
-        this.backPressedOnce = false;
-        if (this.exitTimer) clearTimeout(this.exitTimer);
-        // Exit panel gracefully to external Home Assistant root
-        const event = new CustomEvent('hass-navigate', {
-          detail: { path: '/lovelace/home' },
-          bubbles: true,
-          composed: true
-        });
-        this.dispatchEvent(event);
-      } else {
-        this.backPressedOnce = true;
-        this.showToast('Press Back once more to exit Fragrance Explorer');
-        this.exitTimer = setTimeout(() => {
-          this.backPressedOnce = false;
-        }, 2000);
-      }
+      window.history.back(); // Triggers _handlePopState automatically
     }
   }
 
   resetToHomeView() {
+    const depthDiff = this.currentDepth - 1;
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
     this.clearAllFilters();
-    window.history.pushState({ fragranceExplorer: true, depth: this.currentDepth }, '');
-    this.render();
+    
+    if (depthDiff > 0) {
+      window.history.go(-depthDiff); // Asynchronously triggers popstate to clean up browser history
+    } else {
+      this.render();
+    }
   }
 
   showToast(message) {
@@ -221,9 +218,15 @@ class FragranceExplorerCard extends HTMLElement {
     }
     
     // Jump cleanly to filtered catalog explorer frame
+    const depthDiff = this.currentDepth - 1;
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
-    this.render();
+    
+    if (depthDiff > 0) {
+      window.history.go(-depthDiff); 
+    } else {
+      this.render();
+    }
   }
 
   // Cross-Linking Smart Token Query Engine
@@ -264,12 +267,12 @@ class FragranceExplorerCard extends HTMLElement {
       }
 
       if (this.activeFilters.time_of_day.size > 0) {
-        const matchesTime = item.time_of_day.some(t => this.activeFilters.time_of_day.has(t));
+        const matchesTime = item.time_of_day.some(t => this.activeFilters.time_of_day.has(t) || t === 'All');
         if (!matchesTime) return false;
       }
 
       if (this.activeFilters.occasion.size > 0) {
-        const matchesOccasion = item.occasion.some(o => this.activeFilters.occasion.has(o));
+        const matchesOccasion = item.occasion.some(o => this.activeFilters.occasion.has(o) || o === 'All');
         if (!matchesOccasion) return false;
       }
 
@@ -890,7 +893,7 @@ class FragranceExplorerCard extends HTMLElement {
         </div>
 
         <div class="context-matrix-section">
-          <h5 class="matrix-title">Optimal Seasonal Periods</h5>
+          <h5 class="matrix-title">Optimal Seasons</h5>
           <div class="matrix-badge-row">
             ${item.seasons.length > 0 ? item.seasons.map(season => `
               <span class="interactive-badge" data-matrix-cat="season" data-matrix-val="${season}">
