@@ -22,7 +22,7 @@ class FragranceExplorerCard extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    
+
     // Core state tracking arrays
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
@@ -33,8 +33,8 @@ class FragranceExplorerCard extends HTMLElement {
     this.searchTerm = '';
     this.ratingFilter = { type: '', min: '' };
     this.activeFilters = { season: new Set(), time_of_day: new Set(), occasion: new Set() };
-    
-    // Unified Data Array Compiled directly from external schemas
+
+    // Unified Data Array
     this.masterData = [
       ...FRAGRANCE_DATA.map(item => ({ ...item, _type: 'combo' })),
       ...INDIVIDUAL_FRAGRANCE_DATA.map(item => ({ ...item, _type: 'frag' }))
@@ -57,7 +57,7 @@ class FragranceExplorerCard extends HTMLElement {
     if (this.exitTimer) clearTimeout(this.exitTimer);
   }
 
-  /* --- Navigation Engine & App Closure Prevention --- */
+  /* --- Navigation Engine --- */
   _initNavigationEngine() {
     const uniqueStateId = 'fragrance_explorer_' + Date.now();
     this.sessionStateKey = uniqueStateId;
@@ -80,27 +80,20 @@ class FragranceExplorerCard extends HTMLElement {
 
     if (targetDepth < this.currentDepth) {
       if (this.navStack.length > 1) {
-        // Handle normal internal sub-menu backward transitions
         this.navStack.pop();
         this.currentDepth = this.navStack.length;
-        this.backPressedOnce = false; 
+        this.backPressedOnce = false;
         this._renderCurrentView();
       } else {
-        // Enforce double-tap back verification at top level menu to trap HA App exit routing
         if (!this.backPressedOnce) {
           this.backPressedOnce = true;
           this._showToastMessage("Press back again to exit");
-          
-          // Re-inject protective history state cushion
           window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
           this.currentDepth = 1;
-          
-          this.exitTimer = setTimeout(() => { 
-            this.backPressedOnce = false; 
-          }, 3000);
+          this.exitTimer = setTimeout(() => { this.backPressedOnce = false; }, 5000);
         } else {
           if (this.exitTimer) clearTimeout(this.exitTimer);
-          window.history.go(-1); 
+          window.history.go(-1);
         }
       }
     } else if (targetDepth > this.currentDepth) {
@@ -112,7 +105,7 @@ class FragranceExplorerCard extends HTMLElement {
     const activeState = this.navStack[this.navStack.length - 1];
     const container = this.shadowRoot.getElementById('view-port');
     if (!container) return;
-    
+
     container.innerHTML = '';
 
     if (activeState.view === 'browser') {
@@ -124,57 +117,22 @@ class FragranceExplorerCard extends HTMLElement {
     }
   }
 
-  /* --- Dynamic Multi-Schema Hyperlink Engine --- */
+  /* --- Hyperlink Engine --- */
   _autoLinkText(text) {
     if (!text) return '';
     let linkedText = text;
-    
-    const allEntities = [];
 
-    // Map combination items dynamically
-    FRAGRANCE_DATA.forEach(c => {
-      if (c.name) allEntities.push({ name: c.name, id: c.id, type: 'combo' });
+    // Sort descending by length to avoid partial matches
+    const allNames = [
+      ...INDIVIDUAL_FRAGRANCE_DATA.map(f => ({ name: f.name, id: f.id, type: 'frag' })),
+      ...FRAGRANCE_DATA.map(c => ({ name: c.name, id: c.id, type: 'combo' }))
+    ].sort((a, b) => b.name.length - a.name.length);
+
+    allNames.forEach(entity => {
+      // Create a regex to match the exact phrase globally
+      const regex = new RegExp(`(${entity.name})`, 'gi');
+      linkedText = linkedText.replace(regex, `<span class="internal-link" data-type="${entity.type}" data-id="${entity.id}">$1</span>`);
     });
-
-    // Map individual items dynamically
-    INDIVIDUAL_FRAGRANCE_DATA.forEach(f => {
-      if (f.name) allEntities.push({ name: f.name, id: f.id, type: 'frag' });
-    });
-
-    // Sort descending by length to prevent nested substring collision loops
-    allEntities.sort((a, b) => b.name.length - a.name.length);
-
-    // Filter unique entity declarations to block redundant token lookups
-    const seen = new Set();
-    const uniqueEntities = [];
-    allEntities.forEach(item => {
-      const uniqueKey = `${item.type}_${item.id}_${item.name.toLowerCase()}`;
-      if (!seen.has(uniqueKey)) {
-        seen.add(uniqueKey);
-        uniqueEntities.push(item);
-      }
-    });
-
-    // Isolate text mutations from inner HTML attributes using temporary token markers
-    const tokenRegistry = [];
-    uniqueEntities.forEach(entity => {
-      const escapedPhrase = entity.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-      const regex = new RegExp(escapedPhrase, 'gi');
-
-      linkedText = linkedText.replace(regex, (matchedText) => {
-        const replacementToken = `##FRAG_TOKEN_${tokenRegistry.length}##`;
-        tokenRegistry.push({
-          token: replacementToken,
-          html: `<span class="internal-link" data-type="${entity.type}" data-id="${entity.id}">${matchedText}</span>`
-        });
-        return replacementToken;
-      });
-    });
-
-    // Safe sequential rehydration of deep DOM tokens
-    for (let i = tokenRegistry.length - 1; i >= 0; i--) {
-      linkedText = linkedText.replace(tokenRegistry[i].token, tokenRegistry[i].html);
-    }
 
     return linkedText;
   }
@@ -194,21 +152,21 @@ class FragranceExplorerCard extends HTMLElement {
   _buildBrowserView() {
     const div = document.createElement('div');
     div.className = 'fade-in';
-    
+
     let html = `
       <div class="header-title">Fragrance Database</div>
-      
+
       <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search brands, notes, families, blends..." value="${this.searchTerm}">
+        <input type="text" id="search-input" placeholder="Search blends, notes, families..." value="${this.searchTerm}">
       </div>
 
       <div class="rating-filter-container">
         <select id="rating-type">
-          <option value="" ${this.ratingFilter.type === '' ? 'selected' : ''}>Filter by Rating Metric...</option>
-          <option value="rating" ${this.ratingFilter.type === 'rating' ? 'selected' : ''}>Overall Balance (Blends)</option>
-          <option value="projection rating" ${this.ratingFilter.type === 'projection rating' ? 'selected' : ''}>Projection Score</option>
-          <option value="longevity rating" ${this.ratingFilter.type === 'longevity rating' ? 'selected' : ''}>Longevity Score</option>
-          <option value="compliment_factor rating" ${this.ratingFilter.type === 'compliment_factor rating' ? 'selected' : ''}>Compliment Factor</option>
+          <option value="" ${this.ratingFilter.type === '' ? 'selected' : ''}>Filter by Rating...</option>
+          <option value="rating" ${this.ratingFilter.type === 'rating' ? 'selected' : ''}>Overall (Blends)</option>
+          <option value="projection rating" ${this.ratingFilter.type === 'projection rating' ? 'selected' : ''}>Projection</option>
+          <option value="longevity rating" ${this.ratingFilter.type === 'longevity rating' ? 'selected' : ''}>Longevity</option>
+          <option value="compliment_factor rating" ${this.ratingFilter.type === 'compliment_factor rating' ? 'selected' : ''}>Compliments</option>
           <option value="complexity rating" ${this.ratingFilter.type === 'complexity rating' ? 'selected' : ''}>Complexity (Blends)</option>
           <option value="versatility rating" ${this.ratingFilter.type === 'versatility rating' ? 'selected' : ''}>Versatility (Frags)</option>
         </select>
@@ -216,7 +174,7 @@ class FragranceExplorerCard extends HTMLElement {
       </div>
 
       <div class="filters-container">`;
-    
+
     for (const [category, options] of Object.entries(FILTER_CATEGORIES)) {
       html += `<div class="filter-group"><div class="group-label">${category.replace('_', ' ')}</div><div class="chip-container">`;
       options.forEach(opt => {
@@ -231,7 +189,7 @@ class FragranceExplorerCard extends HTMLElement {
     html += `</div><div id="results-list" class="scrollable-list"></div>`;
     div.innerHTML = html;
 
-    // Search and Rating Event Handlers
+    // Search and Rating Listeners
     div.querySelector('#search-input').addEventListener('input', (e) => {
       this.searchTerm = e.target.value.toLowerCase();
       this._updateResultsList(div.querySelector('#results-list'));
@@ -247,19 +205,14 @@ class FragranceExplorerCard extends HTMLElement {
       this._updateResultsList(div.querySelector('#results-list'));
     });
 
-    // Chip Filtering Engine mapping
+    // Chip Listeners
     div.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', (e) => {
         const btn = e.currentTarget;
         const cat = btn.getAttribute('data-category');
         const val = btn.getAttribute('data-val');
-        if (this.activeFilters[cat].has(val)) { 
-          this.activeFilters[cat].delete(val); 
-          btn.classList.remove('active'); 
-        } else { 
-          this.activeFilters[cat].add(val); 
-          btn.classList.add('active'); 
-        }
+        if (this.activeFilters[cat].has(val)) { this.activeFilters[cat].delete(val); btn.classList.remove('active'); }
+        else { this.activeFilters[cat].add(val); btn.classList.add('active'); }
         this._updateResultsList(div.querySelector('#results-list'));
       });
     });
@@ -272,48 +225,41 @@ class FragranceExplorerCard extends HTMLElement {
     if (!containerElement) return;
 
     const filtered = this.masterData.filter(item => {
-      // 1. Fully-Unified Deep Schema Search Engine
+      // 1. Search Filter (Cross-schema)
       let matchSearch = false;
-      if (this.searchTerm === '') { 
-        matchSearch = true; 
-      } else {
+      if (this.searchTerm === '') { matchSearch = true; }
+      else {
         if (item._type === 'combo') {
-          matchSearch = (item.name || '').toLowerCase().includes(this.searchTerm) || 
-                        (item.tags || []).some(t => t.toLowerCase().includes(this.searchTerm)) ||
-                        (item.fragrances || []).some(f => f.toLowerCase().includes(this.searchTerm)) ||
-                        (item.profile || '').toLowerCase().includes(this.searchTerm) ||
-                        (item.synergy || '').toLowerCase().includes(this.searchTerm);
+          matchSearch = item.name.toLowerCase().includes(this.searchTerm) ||
+                        item.tags.some(t => t.toLowerCase().includes(this.searchTerm)) ||
+                        item.fragrances.some(f => f.toLowerCase().includes(this.searchTerm));
         } else {
-          matchSearch = (item.name || '').toLowerCase().includes(this.searchTerm) || 
-                        (item.fragrance_family || '').toLowerCase().includes(this.searchTerm) ||
-                        (item.dominant_notes || []).some(n => n.toLowerCase().includes(this.searchTerm)) ||
-                        (item.inspiration || '').toLowerCase().includes(this.searchTerm) ||
-                        (item.description || '').toLowerCase().includes(this.searchTerm);
+          matchSearch = item.name.toLowerCase().includes(this.searchTerm) ||
+                        item.fragrance_family.toLowerCase().includes(this.searchTerm) ||
+                        item.dominant_notes.some(n => n.toLowerCase().includes(this.searchTerm));
         }
       }
 
-      // 2. Multi-Metric Mathematical Rating Boundary Filter
+      // 2. Rating Filter
       let matchRating = true;
       if (this.ratingFilter.type && this.ratingFilter.min !== '') {
         const val = item[this.ratingFilter.type];
-        if (val === undefined || val < this.ratingFilter.min) { 
-          matchRating = false; 
-        }
+        if (val === undefined || val < this.ratingFilter.min) { matchRating = false; }
       }
 
-      // 3. Environment Conditional Matrix Logic
+      // 3. Category Chip Filters (Adapted for both schemas)
       let matchSeason = true, matchTime = true, matchOccasion = true;
-      
+
       if (this.activeFilters.season.size > 0) {
         if (item._type === 'combo') matchSeason = this.activeFilters.season.has(item.season) || item.season === 'All Seasons';
-        if (item._type === 'frag') matchSeason = Array.from(this.activeFilters.season).some(s => (item.seasons || []).includes(s));
+        if (item._type === 'frag') matchSeason = Array.from(this.activeFilters.season).some(s => item.seasons.includes(s));
       }
 
       if (this.activeFilters.time_of_day.size > 0) {
         if (item._type === 'combo') matchTime = this.activeFilters.time_of_day.has(item.time_of_day) || item.time_of_day === 'All';
         if (item._type === 'frag') {
-          const reqDay = this.activeFilters.time_of_day.has('Day') && (item.day_score >= 4.0);
-          const reqNight = this.activeFilters.time_of_day.has('Night') && (item.night_score >= 4.0);
+          const reqDay = this.activeFilters.time_of_day.has('Day') && item.day_score >= 4.0;
+          const reqNight = this.activeFilters.time_of_day.has('Night') && item.night_score >= 4.0;
           matchTime = reqDay || reqNight;
         }
       }
@@ -330,24 +276,22 @@ class FragranceExplorerCard extends HTMLElement {
       return matchSearch && matchRating && matchSeason && matchTime && matchOccasion;
     });
 
-    let listHtml = `<div class="results-count">${filtered.length} entries located</div>`;
-    
-    if (filtered.length === 0) {
-      listHtml += `<div class="empty-state">No individual profiles or blends align with criteria fields.</div>`;
-    } else {
+    let listHtml = `<div class="results-count">${filtered.length} matches found</div>`;
+
+    if (filtered.length === 0) listHtml += `<div class="empty-state">No blends or fragrances match your criteria.</div>`;
+    else {
       listHtml += `<div class="list-container">`;
       filtered.forEach(item => {
         const typeIcon = item._type === 'combo' ? '🧪' : '🧴';
-        const typeLabel = item._type === 'combo' ? 'Combination Blend' : 'Individual Fragrance';
-        const rawScore = item.rating !== undefined ? item.rating : item['projection rating'];
-        
+        const typeLabel = item._type === 'combo' ? 'Blend' : 'Fragrance';
+
         listHtml += `
           <button class="list-row list-row-clickable" data-type="${item._type}" data-id="${item.id}">
             <div class="row-meta">
               <span class="row-name">${typeIcon} ${item.name}</span>
-              <span class="row-rating">⭐ ${(rawScore || 0).toFixed(1)}</span>
+              <span class="row-rating">⭐ ${item.rating ? item.rating.toFixed(1) : (item['projection rating']).toFixed(1)}</span>
             </div>
-            <div class="row-tags">${item._type === 'combo' ? (item.tags || []).join(' • ') : item.fragrance_family}</div>
+            <div class="row-tags">${item._type === 'combo' ? item.tags.join(' • ') : item.fragrance_family}</div>
             <div class="row-context">${typeLabel}</div>
           </button>
         `;
@@ -370,16 +314,16 @@ class FragranceExplorerCard extends HTMLElement {
     const item = FRAGRANCE_DATA.find(f => f.id === id);
     if (!item) return div;
 
-    const sClass = `pill-${(item.season || '').toLowerCase().replace(' ', '-')}`;
-    const tClass = `pill-${(item.time_of_day || '').toLowerCase().replace(' ', '-')}`;
-    const oClass = `pill-${(item.occasion || '').toLowerCase().replace(' ', '-')}`;
+    const sClass = `pill-${item.season.toLowerCase().replace(' ', '-')}`;
+    const tClass = `pill-${item.time_of_day.toLowerCase().replace(' ', '-')}`;
+    const oClass = `pill-${item.occasion.toLowerCase().replace(' ', '-')}`;
 
     div.innerHTML = `
       <div class="detail-header">
         <div class="detail-title">🧪 ${item.name}</div>
-        <div class="detail-badge-rating">⭐ ${(item.rating || 0).toFixed(1)}</div>
+        <div class="detail-badge-rating">⭐ ${item.rating.toFixed(1)}</div>
       </div>
-      
+
       <div class="tag-pill-container">
         <span class="pill ${sClass}">${ICONS[item.season] || ''} ${item.season}</span>
         <span class="pill ${tClass}">${ICONS[item.time_of_day] || ''} ${item.time_of_day}</span>
@@ -387,33 +331,33 @@ class FragranceExplorerCard extends HTMLElement {
       </div>
 
       <div class="ratings-grid">
-        <div class="rating-box"><div class="rb-val">${(item['projection rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
-        <div class="rating-box"><div class="rb-val">${(item['longevity rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
-        <div class="rating-box"><div class="rb-val">${(item['compliment_factor rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
-        <div class="rating-box"><div class="rb-val">${(item['complexity rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Complexity</div></div>
+        <div class="rating-box"><div class="rb-val">${item['projection rating'].toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
+        <div class="rating-box"><div class="rb-val">${item['longevity rating'].toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
+        <div class="rating-box"><div class="rb-val">${item['compliment_factor rating'].toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
+        <div class="rating-box"><div class="rb-val">${item['complexity rating'].toFixed(1)}</div><div class="rb-lbl">Complexity</div></div>
       </div>
 
       <div class="detail-section">
         <div class="section-label">Composition Elements</div>
         <div class="ingredients-list">
-          ${(item.fragrances || []).map(f => `<div class="ingredient-item">🧴 ${this._autoLinkText(f)}</div>`).join('')}
+          ${item.fragrances.map(f => `<div class="ingredient-item">🧴 ${this._autoLinkText(f)}</div>`).join('')}
         </div>
       </div>
 
       <div class="detail-section">
         <div class="section-label">Olfactory Profile & Synergy</div>
         <p class="section-body-text">${this._autoLinkText(item.profile)}</p>
-        <p class="section-body-text synergy-text"><em>Synergy Profile:</em> ${this._autoLinkText(item.synergy)}</p>
+        <p class="section-body-text synergy-text"><em>Synergy:</em> ${this._autoLinkText(item.synergy)}</p>
       </div>
 
       <div class="detail-section">
         <div class="section-label">Application Mapping Sequence</div>
-        <div class="steps-box">${(item.steps || '').split('\n').map(step => `<div class="step-line">${this._autoLinkText(step)}</div>`).join('')}</div>
+        <div class="steps-box">${item.steps.split('\n').map(step => `<div class="step-line">${this._autoLinkText(step)}</div>`).join('')}</div>
       </div>
-      
+
       ${item.alternatives && item.alternatives.length > 0 ? `
       <div class="detail-section">
-        <div class="section-label">Alternative Fragrance Combinations</div>
+        <div class="section-label">Alternatives</div>
         <p class="section-body-text">${item.alternatives.map(alt => this._autoLinkText(alt)).join('<br>')}</p>
       </div>` : ''}
     `;
@@ -432,47 +376,47 @@ class FragranceExplorerCard extends HTMLElement {
       <div class="detail-header">
         <div class="detail-title">🧴 ${item.name}</div>
       </div>
-      
+
       <div class="frag-meta-row">
-        <strong>Family Base:</strong> ${item.fragrance_family} <br>
-        <strong>Formulation Style:</strong> ${item.clone_type} <br>
-        <strong>Olfactory Tribute:</strong> ${this._autoLinkText(item.inspiration)}
+        <strong>Family:</strong> ${item.fragrance_family} <br>
+        <strong>Type:</strong> ${item.clone_type} <br>
+        <strong>Inspiration:</strong> ${this._autoLinkText(item.inspiration)}
       </div>
 
       <div class="ratings-grid">
-        <div class="rating-box"><div class="rb-val">${(item['projection rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
-        <div class="rating-box"><div class="rb-val">${(item['longevity rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
-        <div class="rating-box"><div class="rb-val">${(item['compliment_factor rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
-        <div class="rating-box"><div class="rb-val">${(item['versatility rating'] || 0).toFixed(1)}</div><div class="rb-lbl">Versatility</div></div>
+        <div class="rating-box"><div class="rb-val">${item['projection rating'].toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
+        <div class="rating-box"><div class="rb-val">${item['longevity rating'].toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
+        <div class="rating-box"><div class="rb-val">${item['compliment_factor rating'].toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
+        <div class="rating-box"><div class="rb-val">${item['versatility rating'].toFixed(1)}</div><div class="rb-lbl">Versatility</div></div>
       </div>
 
       <div class="detail-section">
         <div class="section-label">Dominant Notes</div>
         <div class="tag-pill-container" style="margin-bottom:0;">
-          ${(item.dominant_notes || []).map(note => `<span class="pill pill-casual">${note}</span>`).join('')}
+          ${item.dominant_notes.map(note => `<span class="pill pill-casual">${note}</span>`).join('')}
         </div>
       </div>
 
       <div class="detail-section">
-        <div class="section-label">Performance Parameters Description</div>
+        <div class="section-label">Performance & Architecture</div>
         <p class="section-body-text">${this._autoLinkText(item.description)}</p>
       </div>
-      
+
       <div class="detail-section">
-        <div class="section-label">Target Scenarios Architecture</div>
+        <div class="section-label">Situation Scores</div>
         <div class="scores-grid">
-          <div>Day: <strong>${(item.day_score || 0).toFixed(1)}</strong></div>
-          <div>Night: <strong>${(item.night_score || 0).toFixed(1)}</strong></div>
-          <div>Office: <strong>${(item.office_score || 0).toFixed(1)}</strong></div>
-          <div>Formal: <strong>${(item.formal_score || 0).toFixed(1)}</strong></div>
-          <div>Casual: <strong>${(item.casual_score || 0).toFixed(1)}</strong></div>
-          <div>Evening: <strong>${(item.evening_score || 0).toFixed(1)}</strong></div>
+          <div>Day: <strong>${item.day_score.toFixed(1)}</strong></div>
+          <div>Night: <strong>${item.night_score.toFixed(1)}</strong></div>
+          <div>Office: <strong>${item.office_score.toFixed(1)}</strong></div>
+          <div>Formal: <strong>${item.formal_score.toFixed(1)}</strong></div>
+          <div>Casual: <strong>${item.casual_score.toFixed(1)}</strong></div>
+          <div>Evening: <strong>${item.evening_score.toFixed(1)}</strong></div>
         </div>
       </div>
 
       ${item.related_fragrances && item.related_fragrances.length > 0 ? `
       <div class="detail-section">
-        <div class="section-label">Related Collections Profiles</div>
+        <div class="section-label">Related Fragrances</div>
         <p class="section-body-text">${item.related_fragrances.map(rel => this._autoLinkText(rel)).join(', ')}</p>
       </div>` : ''}
     `;
@@ -499,8 +443,8 @@ class FragranceExplorerCard extends HTMLElement {
           position: relative; overflow: hidden; display: flex; flex-direction: column;
         }
         .header-title { font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px; }
-        
-        /* Interactive Input Wrappers */
+
+        /* Inputs & Filters */
         .search-container { margin-bottom: 8px; }
         .rating-filter-container { display: flex; gap: 8px; margin-bottom: 12px; }
         input[type="text"], input[type="number"], select {
@@ -508,15 +452,16 @@ class FragranceExplorerCard extends HTMLElement {
         }
         input[type="text"] { width: 100%; }
         select { flex: 2; } input[type="number"] { flex: 1; }
-        
-        /* Functional Tag Chips */
+
+        /* Chips */
         .filters-container { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
         .filter-group { margin-bottom: 12px; }
         .group-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8e8e93; margin-bottom: 6px; }
         .chip-container { display: flex; flex-wrap: wrap; gap: 6px; }
         .chip { background: #2c2c2e; border: 1px solid #3a3a3c; color: #fff; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
         .chip.active { border-color: currentColor; }
-        
+
+        /* Standard Chip Colors */
         .chip-spring.active { background: rgba(52, 199, 89, 0.15); color: #34c759; }
         .chip-summer.active { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
         .chip-autumn.active { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
@@ -528,7 +473,7 @@ class FragranceExplorerCard extends HTMLElement {
         .chip-evening.active { background: rgba(255, 45, 85, 0.15); color: #ff2d55; }
         .chip-formal.active { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
 
-        /* Render List Layouts */
+        /* List Items */
         .scrollable-list { flex: 1; overflow-y: auto; max-height: 400px; }
         .results-count { font-size: 11px; font-weight: 600; color: #8e8e93; text-align: right; margin-bottom: 8px; }
         .list-container { display: flex; flex-direction: column; gap: 8px; }
@@ -538,13 +483,13 @@ class FragranceExplorerCard extends HTMLElement {
         .row-tags { font-size: 12px; color: #8e8e93; }
         .row-context { font-size: 11px; color: #0076ff; font-weight: 600; text-transform: uppercase; }
 
-        /* Profile Detail Modals Elements */
+        /* Detail Views */
         .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
         .detail-title { font-size: 20px; font-weight: 800; line-height: 1.2; }
         .detail-badge-rating { background: rgba(255, 159, 10, 0.2); color: #ff9f0a; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 700; }
         .tag-pill-container { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
         .pill { background: #3a3a3c; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #fff; }
-        
+
         .ratings-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
         .rating-box { background: #2c2c2e; padding: 10px 4px; border-radius: 8px; text-align: center; border: 1px solid #3a3a3c; }
         .rb-val { font-size: 16px; font-weight: 800; color: #ff9f0a; margin-bottom: 2px; }
@@ -556,17 +501,17 @@ class FragranceExplorerCard extends HTMLElement {
         .synergy-text { margin-top: 6px; padding-left: 8px; border-left: 2px solid #5ac8fa; color: #ccc; }
         .frag-meta-row { background: #2c2c2e; padding: 10px; border-radius: 8px; font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
         .scores-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 12px; background: #2c2c2e; padding: 10px; border-radius: 8px; }
-        
+
         .ingredient-item { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
         .steps-box { background: rgba(0, 118, 255, 0.08); border-left: 3px solid #0076ff; padding: 10px; border-radius: 0 6px 6px 0; }
         .step-line { font-size: 13px; margin-bottom: 8px; line-height: 1.4; white-space: pre-wrap; }
         .empty-state { text-align: center; padding: 24px; color: #8e8e93; font-size: 13px; }
-        
-        /* Cross-Schema Global Anchors Styling */
+
+        /* Auto-Link Styling */
         .internal-link { color: #0076ff; text-decoration: underline; cursor: pointer; font-weight: 600; transition: opacity 0.2s; }
         .internal-link:active { opacity: 0.6; }
-        
-        /* System UI Notifications */
+
+        /* Toast Notifications */
         .toast { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(100px); background: #323232; color: #fff; padding: 10px 16px; border-radius: 24px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 99; white-space: nowrap; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         .fade-in { animation: fadeIn 0.2s ease-out forwards; }
