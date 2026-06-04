@@ -1,10 +1,10 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 5.0: Unified Database Schemas, Advanced History State Capturing, and Context Matrix Cross-Navigation
+ * Version 5.1: Unified Database Schemas, Advanced History State Capturing, Context Matrix Cross-Navigation & Robust Cross-Linking
  */
 
-import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=5.0';
-import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=5.0';
+import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=5.1';
+import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=5.1';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
@@ -169,6 +169,14 @@ class FragranceExplorerCard extends HTMLElement {
     }
   }
 
+  resetToHomeView() {
+    this.navStack = [{ view: 'browser', value: null }];
+    this.currentDepth = 1;
+    this.clearAllFilters();
+    window.history.pushState({ fragranceExplorer: true, depth: this.currentDepth }, '');
+    this.render();
+  }
+
   showToast(message) {
     const container = this.shadowRoot.getElementById('toast-container');
     if (!container) return;
@@ -216,6 +224,21 @@ class FragranceExplorerCard extends HTMLElement {
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
     this.render();
+  }
+
+  // Cross-Linking Smart Token Query Engine
+  _findItemBySmartToken(tokenName) {
+    if (!tokenName) return null;
+    const cleanToken = tokenName.trim().toLowerCase();
+    
+    return this.masterIndex.find(item => {
+      const cleanTarget = item.name.trim().toLowerCase();
+      if (cleanTarget === cleanToken) return true;
+      if (cleanTarget.startsWith(cleanToken + ' (')) return true;
+      if (cleanTarget.includes('(' + cleanToken + ')')) return true;
+      if (cleanToken.includes('(' + cleanTarget + ')')) return true;
+      return false;
+    });
   }
 
   getFilteredItems() {
@@ -267,13 +290,19 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   render() {
-    const currentViewObj = this.navStack[this.navStack.length - 1];
+    const currentFrame = this.navStack[this.navStack.length - 1];
     
-    let inlineContent = '';
-    if (currentViewObj.view === 'browser') {
-      inlineContent = this.renderBrowserView();
-    } else if (currentViewObj.view === 'details') {
-      inlineContent = this.renderDetailsView(currentViewObj.value);
+    let subContentLayout = '';
+    let viewIcon = '🧪';
+    let viewTitle = this._config?.title || 'Fragrance Explorer';
+
+    if (currentFrame.view === 'detail') {
+      const matchedItem = this.masterIndex.find(x => x.id === currentFrame.value.id && x.type === currentFrame.value.type);
+      viewIcon = matchedItem ? ICONS[matchedItem.type] : '🧴';
+      viewTitle = 'Details View';
+      subContentLayout = this._compileDetailsTemplate(currentFrame.value);
+    } else {
+      subContentLayout = this._compileBrowserTemplate();
     }
 
     this.shadowRoot.innerHTML = `
@@ -334,6 +363,7 @@ class FragranceExplorerCard extends HTMLElement {
         }
         .ui-nav-btn:hover { background: rgba(255,255,255,0.12); }
         .ui-nav-btn:active { transform: scale(0.97); }
+        .ui-nav-btn.danger { color: #ff453a; }
 
         /* Filtration Layout Systems */
         .search-row {
@@ -379,6 +409,21 @@ class FragranceExplorerCard extends HTMLElement {
           border-color: var(--primary-accent);
           color: #fff;
           font-weight: 600;
+        }
+
+        /* Counter Matrix Elements */
+        .dynamic-counter-row {
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          margin-bottom: 14px; 
+          padding: 0 4px;
+        }
+        .counter-text {
+          font-size: 13px; 
+          font-weight: 700; 
+          color: var(--primary-accent);
+          letter-spacing: 0.3px;
         }
 
         /* Data Grid Matrix Layouts */
@@ -434,6 +479,31 @@ class FragranceExplorerCard extends HTMLElement {
           overflow-y: auto;
           padding-right: 4px;
         }
+        
+        .details-core-header-pane {
+          padding-bottom: 4px;
+        }
+        .details-explicit-badge {
+          font-size: 10px;
+          text-transform: uppercase;
+          color: var(--primary-accent);
+          font-weight: 800;
+          letter-spacing: 1px;
+          margin-bottom: 6px;
+        }
+        .details-main-heading {
+          font-size: 20px;
+          font-weight: 800;
+          margin: 0 0 4px 0;
+          color: #fff;
+          line-height: 1.2;
+        }
+        .details-sub-heading-meta {
+          font-size: 12px;
+          color: var(--secondary-text);
+          margin: 0;
+        }
+
         .meta-pill-box {
           display: flex;
           flex-wrap: wrap;
@@ -564,21 +634,25 @@ class FragranceExplorerCard extends HTMLElement {
           opacity: 1;
           transform: translateY(0);
         }
+        .empty-state { text-align: center; padding: 24px; color: #8e8e93; font-size: 13px; }
       </style>
       
       <div class="main-shell">
         <div class="app-bar">
           <div class="header-title-container">
-            <span>${currentViewObj.view === 'details' ? ICONS[this.masterIndex.find(x => x.name === currentViewObj.value)?.type] || '🧴' : '🧪'}</span>
-            <h3>${currentViewObj.view === 'details' ? 'Details View' : (this._config?.title || 'Fragrance Explorer')}</h3>
+            <span style="font-size: 22px;">${viewIcon}</span>
+            <h3>${viewTitle}</h3>
           </div>
-          <button class="ui-nav-btn" id="global-back-trigger">
-            ${currentViewObj.view === 'details' ? '◀ Catalog' : '◀ Exit Card'}
-          </button>
+          <div style="display: flex; gap: 8px;">
+            <button class="ui-nav-btn" id="global-home-trigger">🏠 Home</button>
+            ${currentFrame.view === 'detail' ? `
+              <button class="ui-nav-btn" id="global-back-trigger">◀ Back</button>
+            ` : ''}
+          </div>
         </div>
         
         <div id="view-mount-point">
-          ${inlineContent}
+          ${subContentLayout}
         </div>
         
         <div id="toast-container"></div>
@@ -589,10 +663,20 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   attachInternalEventBindings() {
-    // Top App Bar Navigation Interceptor
-    this.shadowRoot.getElementById('global-back-trigger').addEventListener('click', () => {
-      this.handleBackAction();
-    });
+    // Top App Bar Navigation Interceptors
+    const homeBtn = this.shadowRoot.getElementById('global-home-trigger');
+    if (homeBtn) {
+      homeBtn.addEventListener('click', () => {
+        this.resetToHomeView();
+      });
+    }
+
+    const backBtn = this.shadowRoot.getElementById('global-back-trigger');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        this.handleBackAction();
+      });
+    }
 
     const currentView = this.navStack[this.navStack.length - 1].view;
 
@@ -625,12 +709,13 @@ class FragranceExplorerCard extends HTMLElement {
       // Card entry listeners
       this.shadowRoot.querySelectorAll('.catalog-card').forEach(card => {
         card.addEventListener('click', () => {
-          const targetName = card.getAttribute('data-name');
-          this.navigateInternal('details', targetName);
+          const id = parseInt(card.getAttribute('data-id'), 10);
+          const type = card.getAttribute('data-type');
+          this.navigateInternal('detail', { id, type });
         });
       });
 
-    } else if (currentView === 'details') {
+    } else if (currentView === 'detail') {
       // Dynamic internal cross matrix navigational filters
       this.shadowRoot.querySelectorAll('.interactive-badge[data-matrix-cat]').forEach(badge => {
         badge.addEventListener('click', () => {
@@ -640,11 +725,12 @@ class FragranceExplorerCard extends HTMLElement {
         });
       });
 
-      // Direct Related/Alternative Cross-Linking jumps
-      this.shadowRoot.querySelectorAll('.interactive-badge[data-jump-target]').forEach(badge => {
+      // Direct Related/Alternative Cross-Linking jumps leveraging embedded IDs directly
+      this.shadowRoot.querySelectorAll('.interactive-badge[data-jump-id]').forEach(badge => {
         badge.addEventListener('click', () => {
-          const dest = badge.getAttribute('data-jump-target');
-          this.navigateInternal('details', dest);
+          const id = parseInt(badge.getAttribute('data-jump-id'), 10);
+          const type = badge.getAttribute('data-jump-type');
+          this.navigateInternal('detail', { id, type });
         });
       });
     }
@@ -652,16 +738,23 @@ class FragranceExplorerCard extends HTMLElement {
 
   rebuildGridDynamically() {
     const mountPoint = this.shadowRoot.getElementById('grid-wrapper-mount');
+    const counterElement = this.shadowRoot.getElementById('dynamic-list-counter');
+    
     if (!mountPoint) return;
     
     const filtered = this.getFilteredItems();
+    
+    if (counterElement) {
+      counterElement.innerHTML = `Showing ${filtered.length} of ${this.masterIndex.length} items`;
+    }
+
     if (filtered.length === 0) {
-      mountPoint.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--secondary-text); padding: 32px; font-size: 13px;">No vault items matched parameters.</div>`;
+      mountPoint.innerHTML = `<div style="grid-column: 1/-1;" class="empty-state">No vault items matched parameters.</div>`;
       return;
     }
 
     mountPoint.innerHTML = filtered.map(item => `
-      <div class="catalog-card" data-name="${item.name}">
+      <div class="catalog-card" data-id="${item.id}" data-type="${item.type}">
         <div class="card-meta-header">
           <h4 class="card-title">${item.name}</h4>
           <span>${ICONS[item.type]}</span>
@@ -675,19 +768,24 @@ class FragranceExplorerCard extends HTMLElement {
     // Rebind direct event clicks on newly rendered cards
     mountPoint.querySelectorAll('.catalog-card').forEach(card => {
       card.addEventListener('click', () => {
-        const targetName = card.getAttribute('data-name');
-        this.navigateInternal('details', targetName);
+        const id = parseInt(card.getAttribute('data-id'), 10);
+        const type = card.getAttribute('data-type');
+        this.navigateInternal('detail', { id, type });
       });
     });
   }
 
-  renderBrowserView() {
-    const filteredItems = this.getFilteredItems();
+  _compileBrowserTemplate() {
+    const records = this.getFilteredItems();
     
     return `
       <div class="search-row">
         <input type="text" class="search-input" id="search-box" placeholder="Search collections, notes, descriptions..." value="${this.searchTerm}">
-        <button class="ui-nav-btn" id="clear-filters-trigger" style="padding: 8px 12px;">Clear</button>
+      </div>
+      
+      <div class="dynamic-counter-row">
+        <span class="counter-text" id="dynamic-list-counter">Showing ${records.length} of ${this.masterIndex.length} items</span>
+        <button class="ui-nav-btn danger" id="clear-filters-trigger" style="padding: 4px 10px; font-size: 11px;">🧹 Clear Filters</button>
       </div>
 
       <div class="filter-scroller-track">
@@ -720,10 +818,10 @@ class FragranceExplorerCard extends HTMLElement {
       </div>
 
       <div class="item-catalog-grid" id="grid-wrapper-mount">
-        ${filteredItems.length === 0 ? `
-          <div style="grid-column: 1/-1; text-align: center; color: var(--secondary-text); padding: 32px; font-size: 13px;">No vault items matched parameters.</div>
-        ` : filteredItems.map(item => `
-          <div class="catalog-card" data-name="${item.name}">
+        ${records.length === 0 ? `
+          <div style="grid-column: 1/-1;" class="empty-state">No vault items matched parameters.</div>
+        ` : records.map(item => `
+          <div class="catalog-card" data-id="${item.id}" data-type="${item.type}">
             <div class="card-meta-header">
               <h4 class="card-title">${item.name}</h4>
               <span>${ICONS[item.type]}</span>
@@ -737,16 +835,24 @@ class FragranceExplorerCard extends HTMLElement {
     `;
   }
 
-  renderDetailsView(itemName) {
-    const item = this.masterIndex.find(x => x.name === itemName);
-    if (!item) {
-      return `<div style="text-align:center; padding: 20px; color: var(--secondary-text);">Entity Error: Vault context reference broken.</div>`;
-    }
+  _compileDetailsTemplate(queryRef) {
+    // Explicit matching to guard against mismatched references
+    const item = this.masterIndex.find(x => x.id === queryRef.id && x.type === queryRef.type);
+    
+    if (!item) return `<div class="empty-state">Vault instance reference missing from storage files.</div>`;
 
     const isBlend = item.type === 'Blend';
 
     return `
       <div class="details-wrapper">
+        <div class="details-core-header-pane">
+          <div class="details-explicit-badge">${isBlend ? 'Blend Details' : 'Fragrance Details'}</div>
+          <h4 class="details-main-heading">${item.name}</h4>
+          <p class="details-sub-heading-meta">
+            ${isBlend ? `${item.fragrance_count}-Layer Complex Master Synergy` : `${item.fragrance_family} • ${item.clone_type} formulation`}
+          </p>
+        </div>
+
         <div class="meta-pill-box">
           <div class="info-label-block">Family / Class: <span>${item.fragrance_family || (isBlend ? 'Custom Synthesis' : 'Unknown')}</span></div>
           <div class="info-label-block">Inspiration Source: <span>${item.inspiration || 'Original Record'}</span></div>
@@ -784,7 +890,7 @@ class FragranceExplorerCard extends HTMLElement {
         </div>
 
         <div class="context-matrix-section">
-          <h5 class="matrix-title">Optimal Wear Seasons</h5>
+          <h5 class="matrix-title">Optimal Seasonal Periods</h5>
           <div class="matrix-badge-row">
             ${item.seasons.length > 0 ? item.seasons.map(season => `
               <span class="interactive-badge" data-matrix-cat="season" data-matrix-val="${season}">
@@ -795,7 +901,7 @@ class FragranceExplorerCard extends HTMLElement {
         </div>
 
         <div class="context-matrix-section" style="border-left-color: #5ac8fa;">
-          <h5 class="matrix-title">Optimal Time Matrix</h5>
+          <h5 class="matrix-title">Optimal Time</h5>
           <div class="matrix-badge-row">
             ${item.time_of_day.length > 0 ? item.time_of_day.map(tod => `
               <span class="interactive-badge" data-matrix-cat="time_of_day" data-matrix-val="${tod}">
@@ -806,7 +912,7 @@ class FragranceExplorerCard extends HTMLElement {
         </div>
 
         <div class="context-matrix-section" style="border-left-color: #4cd964;">
-          <h5 class="matrix-title">Optimal Occasion Frame</h5>
+          <h5 class="matrix-title">Optimal Occasion</h5>
           <div class="matrix-badge-row">
             ${item.occasion.length > 0 ? item.occasion.map(occ => `
               <span class="interactive-badge" data-matrix-cat="occasion" data-matrix-val="${occ}">
@@ -842,12 +948,13 @@ class FragranceExplorerCard extends HTMLElement {
         `}
 
         <div>
-          <h5 class="matrix-title" style="margin-left:2px; margin-bottom:6px;">${isBlend ? 'Alternative Options Owned' : 'Related Collection Links'}</h5>
+          <h5 class="matrix-title" style="margin-left:2px; margin-bottom:6px;">Related</h5>
           <div class="matrix-badge-row">
             ${((isBlend ? item.alternatives : item.related_fragrances) || []).map(name => {
-              const match = this.masterIndex.find(x => x.name === name);
+              const match = this._findItemBySmartToken(name);
               if (match) {
-                return `<span class="interactive-badge" data-jump-target="${name}" style="border-color: var(--primary-accent); font-weight:700;">${name}</span>`;
+                // Generates the perfectly matched robust button ensuring no string-path breakages
+                return `<span class="interactive-badge" data-jump-id="${match.id}" data-jump-type="${match.type}" style="border-color: var(--primary-accent); font-weight:700;">${match.type === 'Blend' ? ICONS.Blend : ICONS.Fragrance} ${name}</span>`;
               }
               return `<span class="interactive-badge" style="opacity:0.5; cursor:not-allowed;">${name}</span>`;
             }).join('') || '<span class="block-text-paragraph" style="padding-left:2px;">None mapped</span>'}
