@@ -9,6 +9,7 @@ export const fragranceCombinations = [
     "fragrances": ["Turathi Blue", "Jean Lowe Immortal"],
     "fragrance_count": 2,
     "profile": "Sparkling ginger-citrus.",
+    "dominant_notes": ["Grapefruit", "Ginger", "Ambroxan", "Citrus"],
     "synergy": "Perfect interlocking of blue ambroxan and sharp citrus.",
     "projection": 4.2,
     "longevity": 4.5,
@@ -30,6 +31,7 @@ export const fragranceCombinations = [
     "fragrances": ["Al Nashama Caprice", "Turathi Blue"],
     "fragrance_count": 2,
     "profile": "Deep amber powdery blue / Crowdspleasing fresh cardamom blue.",
+    "dominant_notes": ["Cardamom", "Lavender", "Ambroxan", "Grapefruit"],
     "synergy": "Caprice's cardamom softens the sharp edges of Turathi, creating a flawless interweaving of clean corporate lavender and high-projection ambroxan.",
     "projection": 4.8,
     "longevity": 4.7,
@@ -39,7 +41,7 @@ export const fragranceCombinations = [
     "best_temperature": "20°C",
     "tags": ["Al Nashama Caprice", "Turathi Blue", "Cardamom", "Lavender", "Ambroxan"],
     "steps": "Order 1 (Deep Amber Focus):\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shoulders\n\nOrder 2 (High-Projection Focus):\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Neck\n• Layer 2: Turathi Blue (3 sprays) - Clothes / Clothes",
-    "alternatives": ["Al Nashama Caprice", "Turathi Blue"]
+    "alternatives": ["Al Nashama Caprice", "Turathi Blue", "High-Heat Overlord"]
   },
   {
     "id": 3,
@@ -51,6 +53,7 @@ export const fragranceCombinations = [
     "fragrances": ["Jean Lowe Immortal", "Divin Asylum"],
     "fragrance_count": 2,
     "profile": "High-end effervescent lime/ginger.",
+    "dominant_notes": ["Ginger", "Lime", "Grapefruit", "Vetiver"],
     "synergy": "Immortal boosts the bright, sparkling opening of Divin Asylum.",
     "projection": 4.3,
     "longevity": 4.1,
@@ -60,7 +63,7 @@ export const fragranceCombinations = [
     "best_temperature": "26°C",
     "tags": ["Jean Lowe Immortal", "Divin Asylum", "Ginger", "Lime", "Elysium"],
     "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Neck\n• Layer 2: Divin Asylum (2 sprays) - Clothes / Collar",
-    "alternatives": ["Divin Asylum", "Jean Lowe Immortal"]
+    "alternatives": ["Divin Asylum", "Jean Lowe Immortal", "High-Heat Shield"]
   },
   {
     "id": 4,
@@ -69,9 +72,10 @@ export const fragranceCombinations = [
     "season": "Summer",
     "time_of_day": "Day",
     "occasion": "Casual",
-    "fragrances": ["Supremacy in Heaven", "CDNI Milestone"],
+    "fragrances": ["Supremacy In Heaven", "CDNI Milestone"],
     "fragrance_count": 2,
     "profile": "Metallic marine sea-salt air.",
+    "dominant_notes": ["Green Tea", "Blackcurrant", "Sea Salt", "Marine Notes"],
     "synergy": "Milestone adds crisp marine salt to the green tea of Heaven.",
     "projection": 4.0,
     "longevity": 3.9,
@@ -79,9 +83,9 @@ export const fragranceCombinations = [
     "complexity": 3.7,
     "best_weather": "Warm Sea Breeze",
     "best_temperature": "28°C",
-    "tags": ["Supremacy in Heaven", "CDNI Milestone", "Marine", "Sea Salt", "Green Tea"],
-    "steps": "Order 1:\n• Layer 1: Supremacy in Heaven (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy in Heaven", "CDNI Milestone"]
+    "tags": ["Supremacy In Heaven", "CDNI Milestone", "Marine", "Sea Salt", "Green Tea"],
+    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Shirt",
+    "alternatives": ["Supremacy In Heaven", "CDNI Milestone", "Midnight Metallic Ocean"]
   },
   {
     "id": 5,
@@ -93,6 +97,7 @@ export const fragranceCombinations = [
     "fragrances": ["Ash'aa Oud Noir", "Jean Lowe Immortal"],
     "fragrance_count": 2,
     "profile": "Sharp retro-modern green.",
+    "dominant_notes": ["Vetiver", "Oud", "Ginger", "Verbena"],
     "synergy": "Immortal updates the heavy, dark oud-vetiver base of Ash'aa.",
     "projection": 4.1,
     "longevity": 4.4,
@@ -102,7 +107,7 @@ export const fragranceCombinations = [
     "best_temperature": "19°C",
     "tags": ["Ash'aa Oud Noir", "Jean Lowe Immortal", "Vetiver", "Oud", "Ginger"],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Encre Noire l'Extreme"]
+    "alternatives": ["Encre Noire l'Extreme", "Executive Fresh"]
   },
   {
     "id": 6,
@@ -114,6 +119,7 @@ export const fragranceCombinations = [
     "fragrances": ["Encre Noire l'Extreme", "Turathi Blue"],
     "fragrance_count": 2,
     "profile": "Earthy dark grapefruit.",
+    "dominant_notes": ["Grapefruit", "Vetiver", "Cypress", "Ambroxan"],
     "synergy": "Turathi's bright grapefruit cuts through the damp ink of Encre Noire.",
     "projection": 4.2,
     "longevity": 4.3,
@@ -123,7 +129,7 @@ export const fragranceCombinations = [
     "best_temperature": "14°C",
     "tags": ["Encre Noire l'Extreme", "Turathi Blue", "Grapefruit", "Vetiver", "Ink"],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Encre Noire l'Extreme", "Turathi Blue"]
+    "alternatives": ["Encre Noire l'Extreme", "Turathi Blue", "Smoky Mountain Vetiver"]
   },
   {
     "id": 7,
@@ -135,6 +141,7 @@ export const fragranceCombinations = [
     "fragrances": ["Ash'aa Oud Noir", "CDNI Milestone"],
     "fragrance_count": 2,
     "profile": "Salty crisp ozonic green.",
+    "dominant_notes": ["Sea Salt", "Melon", "Verbena", "Violet Leaf"],
     "synergy": "Milestone adds a bright oceanic breeze to the dark green landscape.",
     "projection": 3.9,
     "longevity": 4.0,
@@ -144,7 +151,7 @@ export const fragranceCombinations = [
     "best_temperature": "18°C",
     "tags": ["Ash'aa Oud Noir", "CDNI Milestone", "Ozonic", "Sea Salt", "Green Notes"],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Jacket",
-    "alternatives": ["CDNI Milestone", "Midnight Metallic Ocean"]
+    "alternatives": ["CDNI Milestone", "Midnight Metallic Ocean", "Executive Creed Tribute"]
   },
   {
     "id": 8,
@@ -156,6 +163,7 @@ export const fragranceCombinations = [
     "fragrances": ["Liam Grey", "Divin Asylum"],
     "fragrance_count": 2,
     "profile": "Creamy fig and sharp vetiver.",
+    "dominant_notes": ["Fig", "Black Tea", "Cardamom", "Lime", "Vetiver"],
     "synergy": "Liam Grey's milky tea accord perfectly balances Divin Asylum's crispness.",
     "projection": 4.0,
     "longevity": 4.3,
@@ -177,6 +185,7 @@ export const fragranceCombinations = [
     "fragrances": ["Ash'aa Oud Noir", "Divin Asylum"],
     "fragrance_count": 2,
     "profile": "Elite fresh-cut grass and lime.",
+    "dominant_notes": ["Lime", "Grapefruit", "Vetiver", "Verbena", "Violet Leaf"],
     "synergy": "A highly clean, professional aura with a hint of dark wood depth.",
     "projection": 4.2,
     "longevity": 4.4,
@@ -186,7 +195,7 @@ export const fragranceCombinations = [
     "best_temperature": "20°C",
     "tags": ["Ash'aa Oud Noir", "Divin Asylum", "Lime", "Green Grass", "Woody"],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Divin Asylum", "Modernized Emerald Vetiver"]
+    "alternatives": ["Divin Asylum", "Modernized Emerald Vetiver", "Executive Creed Tribute"]
   },
   {
     "id": 10,
@@ -198,6 +207,7 @@ export const fragranceCombinations = [
     "fragrances": ["Spectre Ghost", "Jean Lowe Immortal"],
     "fragrance_count": 2,
     "profile": "Sparkling gourmand vanilla.",
+    "dominant_notes": ["Vanilla", "Ginger", "Bergamot", "Benzoin"],
     "synergy": "Ghost's rich vanilla gourmand structure is uplifted by Immortal's ginger.",
     "projection": 4.6,
     "longevity": 4.8,
@@ -207,7 +217,7 @@ export const fragranceCombinations = [
     "best_temperature": "13°C",
     "tags": ["Spectre Ghost", "Jean Lowe Immortal", "Vanilla", "Gourmand", "Ginger"],
     "steps": "Order 1:\n• Layer 1: Spectre Ghost (2 sprays) - Skin / Neck\n• Layer 2: Jean Lowe Immortal (3 sprays) - Clothes / Sweater",
-    "alternatives": ["Spectre Ghost", "Jean Lowe Immortal"]
+    "alternatives": ["Spectre Ghost", "Jean Lowe Immortal", "Seductive Vanilla Leather"]
   },
   {
     "id": 11,
@@ -216,9 +226,10 @@ export const fragranceCombinations = [
     "season": "Spring",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Supremacy in Heaven", "Liam Grey"],
+    "fragrances": ["Supremacy In Heaven", "Liam Grey"],
     "fragrance_count": 2,
     "profile": "Luxury green and black tea lounge / Green tea smoothed by milky fig.",
+    "dominant_notes": ["Green Tea", "Black Tea", "Fig", "Cardamom", "Sandalwood"],
     "synergy": "Liam Grey adds a dense black tea and fig richness to Heaven's silver mountain air, completely smoothing out its sharp ink and tea edges.",
     "projection": 4.1,
     "longevity": 4.4,
@@ -226,9 +237,9 @@ export const fragranceCombinations = [
     "complexity": 4.4,
     "best_weather": "Mild / Overcast",
     "best_temperature": "17°C",
-    "tags": ["Supremacy in Heaven", "Liam Grey", "Green Tea", "Black Tea", "Fig"],
-    "steps": "Order 1 (Rich Dense Focus):\n• Layer 1: Supremacy in Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Shirt\n\nOrder 2 (Smoothed Out Balance):\n• Layer 1: Supremacy in Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy in Heaven", "Liam Grey"]
+    "tags": ["Supremacy In Heaven", "Liam Grey", "Green Tea", "Black Tea", "Fig"],
+    "steps": "Order 1 (Rich Dense Focus):\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Shirt\n\nOrder 2 (Smoothed Out Balance):\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Shirt",
+    "alternatives": ["Supremacy In Heaven", "Liam Grey", "Professional Comfort"]
   },
   {
     "id": 12,
@@ -240,6 +251,7 @@ export const fragranceCombinations = [
     "fragrances": ["Encre Noire l'Extreme", "Liam Grey"],
     "fragrance_count": 2,
     "profile": "Niche woody shield.",
+    "dominant_notes": ["Vetiver", "Cypress", "Fig", "Black Tea", "Incense"],
     "synergy": "Encre Noire adds an earthy framework to the soft, powdery tea of Liam Grey.",
     "projection": 4.3,
     "longevity": 4.7,
@@ -249,7 +261,7 @@ export const fragranceCombinations = [
     "best_temperature": "8°C",
     "tags": ["Encre Noire l'Extreme", "Liam Grey", "Cashmere", "Vetiver", "Tea"],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Sweater",
-    "alternatives": ["Liam Grey", "Encre Noire l'Extreme"]
+    "alternatives": ["Liam Grey", "Encre Noire l'Extreme", "Sovereign Niche Overlord"]
   },
   {
     "id": 13,
@@ -261,6 +273,7 @@ export const fragranceCombinations = [
     "fragrances": ["Supremacy Collector's Edition", "Al Nashama Caprice"],
     "fragrance_count": 2,
     "profile": "Romantic fruity pineapple spice.",
+    "dominant_notes": ["Pineapple", "Cardamom", "Lavender", "Ginger", "Oakmoss"],
     "synergy": "Caprice introduces a sensual cardamom cloud over the bright pineapple base.",
     "projection": 4.4,
     "longevity": 4.3,
@@ -270,7 +283,7 @@ export const fragranceCombinations = [
     "best_temperature": "18°C",
     "tags": ["Supremacy Collector's Edition", "Al Nashama Caprice", "Pineapple", "Cardamom", "Spicy"],
     "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Shirt",
-    "alternatives": ["SNOI", "Al Nashama Caprice"]
+    "alternatives": ["SNOI", "Al Nashama Caprice", "Emperor's Sovereign"]
   },
   {
     "id": 14,
@@ -282,6 +295,7 @@ export const fragranceCombinations = [
     "fragrances": ["Costume National I", "Al Nashama Caprice"],
     "fragrance_count": 2,
     "profile": "Rugged leather and clean powder.",
+    "dominant_notes": ["Saffron", "Leather", "Cardamom", "Lavender", "Amber"],
     "synergy": "The masculine spice of Costume National I meets the clean powder of Caprice.",
     "projection": 4.7,
     "longevity": 4.8,
@@ -291,7 +305,7 @@ export const fragranceCombinations = [
     "best_temperature": "10°C",
     "tags": ["Costume National I", "Al Nashama Caprice", "Leather", "Powdery", "Spice"],
     "steps": "Order 1:\n• Layer 1: Costume National I (2 sprays) - Skin / Neck\n• Layer 2: Al Nashama Caprice (3 sprays) - Clothes / Jacket",
-    "alternatives": ["Costume National I", "Al Nashama Caprice"]
+    "alternatives": ["Costume National I", "Al Nashama Caprice", "Seductive Vanilla Leather"]
   },
   {
     "id": 15,
@@ -303,6 +317,7 @@ export const fragranceCombinations = [
     "fragrances": ["Hercules", "Spectre Ghost"],
     "fragrance_count": 2,
     "profile": "Smoky spicy tobacco vanilla.",
+    "dominant_notes": ["Tobacco", "Vanilla", "Cinnamon", "Incense", "Ginger"],
     "synergy": "Hercules provides a heavy tobacco base that anchors the airy vanilla of Ghost.",
     "projection": 4.9,
     "longevity": 5.0,
@@ -312,7 +327,7 @@ export const fragranceCombinations = [
     "best_temperature": "4°C",
     "tags": ["Hercules", "Spectre Ghost", "Tobacco", "Vanilla", "Smoky"],
     "steps": "Order 1:\n• Layer 1: Hercules (2 sprays) - Skin / Chest\n• Layer 2: Spectre Ghost (2 sprays) - Clothes / Heavy Coat",
-    "alternatives": ["Hercules", "Spectre Ghost"]
+    "alternatives": ["Hercules", "Spectre Ghost", "Gothic Vanilla Incense"]
   },
   {
     "id": 16,
@@ -324,6 +339,7 @@ export const fragranceCombinations = [
     "fragrances": ["Hercules", "Liam Grey"],
     "fragrance_count": 2,
     "profile": "Ultra-cozy spiced gourmand.",
+    "dominant_notes": ["Tobacco", "Vanilla", "Cinnamon", "Fig", "Black Tea"],
     "synergy": "Hercules injects a warm cinnamon tobacco note into Liam Grey's fig-milk tea.",
     "projection": 4.2,
     "longevity": 4.6,
@@ -333,7 +349,7 @@ export const fragranceCombinations = [
     "best_temperature": "12°C",
     "tags": ["Hercules", "Liam Grey", "Chai", "Tobacco", "Cinnamon"],
     "steps": "Order 1:\n• Layer 1: Hercules (2 sprays) - Skin / Neck\n• Layer 2: Liam Grey (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Hercules", "Liam Grey"]
+    "alternatives": ["Hercules", "Liam Grey", "Luxury Cashmere"]
   },
   {
     "id": 17,
@@ -345,6 +361,7 @@ export const fragranceCombinations = [
     "fragrances": ["Costume National I", "SNOI"],
     "fragrance_count": 2,
     "profile": "Alpha dark fruit and leather.",
+    "dominant_notes": ["Saffron", "Leather", "Pineapple", "Blackcurrant", "Oakmoss"],
     "synergy": "SNOI's intense smoky performance perfectly overlays the rich saffron of National I.",
     "projection": 4.8,
     "longevity": 4.9,
@@ -354,7 +371,7 @@ export const fragranceCombinations = [
     "best_temperature": "9°C",
     "tags": ["Costume National I", "SNOI", "Leather", "Pineapple", "Saffron"],
     "steps": "Order 1:\n• Layer 1: Costume National I (2 sprays) - Skin / Chest\n• Layer 2: SNOI (2 sprays) - Clothes / Leather Jacket",
-    "alternatives": ["SNOI", "Costume National I"]
+    "alternatives": ["SNOI", "Costume National I", "Aromatic Ink & Leather"]
   },
   {
     "id": 18,
@@ -366,6 +383,7 @@ export const fragranceCombinations = [
     "fragrances": ["Costume National I", "Spectre Ghost"],
     "fragrance_count": 2,
     "profile": "Sweet rugged luxury leather.",
+    "dominant_notes": ["Saffron", "Leather", "Vanilla", "Ginger", "Benzoin"],
     "synergy": "The spicy, structural amber of National I is sweetened beautifully by Spectre Ghost.",
     "projection": 4.6,
     "longevity": 4.8,
@@ -375,7 +393,7 @@ export const fragranceCombinations = [
     "best_temperature": "7°C",
     "tags": ["Costume National I", "Spectre Ghost", "Leather", "Vanilla", "Amber"],
     "steps": "Order 1:\n• Layer 1: Costume National I (2 sprays) - Skin / Neck\n• Layer 2: Spectre Ghost (2 sprays) - Coat",
-    "alternatives": ["Costume National I", "Spectre Ghost"]
+    "alternatives": ["Costume National I", "Spectre Ghost", "Bad Boy in a Clean Suit"]
   },
   {
     "id": 19,
@@ -387,6 +405,7 @@ export const fragranceCombinations = [
     "fragrances": ["Hercules", "Al Nashama Caprice"],
     "fragrance_count": 2,
     "profile": "Powdery warm tobacco lavender.",
+    "dominant_notes": ["Tobacco", "Vanilla", "Cardamom", "Lavender", "Cinnamon"],
     "synergy": "Caprice introduces a clean clean lavender note directly to Hercules' dark tobacco.",
     "projection": 4.3,
     "longevity": 4.5,
@@ -396,7 +415,7 @@ export const fragranceCombinations = [
     "best_temperature": "14°C",
     "tags": ["Hercules", "Al Nashama Caprice", "Tobacco", "Lavender", "Powdery"],
     "steps": "Order 1:\n• Layer 1: Hercules (2 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Hercules", "Al Nashama Caprice"]
+    "alternatives": ["Hercules", "Al Nashama Caprice", "Spiced Chai & Tobacco"]
   },
   {
     "id": 20,
@@ -408,6 +427,7 @@ export const fragranceCombinations = [
     "fragrances": ["Hercules", "CDNI Milestone"],
     "fragrance_count": 2,
     "profile": "Experimental sweet-salty ozonic tobacco.",
+    "dominant_notes": ["Tobacco", "Vanilla", "Sea Salt", "Melon", "Cinnamon"],
     "synergy": "Milestone's ocean salt completely transforms the heavy sweet tobacco notes.",
     "projection": 4.1,
     "longevity": 4.2,
@@ -417,7 +437,7 @@ export const fragranceCombinations = [
     "best_temperature": "16°C",
     "tags": ["Hercules", "CDNI Milestone", "Tobacco", "Sea Salt", "Watermelon"],
     "steps": "Order 1:\n• Layer 1: Hercules (2 sprays) - Skin / Neck\n• Layer 2: CDNI Milestone (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Hercules", "CDNI Milestone"]
+    "alternatives": ["Hercules", "CDNI Milestone", "Spiced Chai & Tobacco"]
   },
   {
     "id": 21,
@@ -429,6 +449,7 @@ export const fragranceCombinations = [
     "fragrances": ["Costume National I", "Turathi Blue"],
     "fragrance_count": 2,
     "profile": "Exotic leathery blue amber.",
+    "dominant_notes": ["Saffron", "Leather", "Grapefruit", "Ambroxan", "Thyme"],
     "synergy": "National I creates an elite amber base that anchors Turathi's projecting blue notes.",
     "projection": 4.5,
     "longevity": 4.6,
@@ -438,7 +459,7 @@ export const fragranceCombinations = [
     "best_temperature": "15°C",
     "tags": ["Costume National I", "Turathi Blue", "Saffron", "Amber", "Blue"],
     "steps": "Order 1:\n• Layer 1: Costume National I (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Costume National I", "Turathi Blue"]
+    "alternatives": ["Costume National I", "Turathi Blue", "Bad Boy in a Clean Suit"]
   },
   {
     "id": 22,
@@ -450,6 +471,7 @@ export const fragranceCombinations = [
     "fragrances": ["SNOI", "CDNI Milestone"],
     "fragrance_count": 2,
     "profile": "Dark fruity metallic marine.",
+    "dominant_notes": ["Pineapple", "Blackcurrant", "Sea Salt", "Melon", "Oakmoss"],
     "synergy": "Milestone adds crisp ozonic sea air to the heavy oakmoss/pineapple of SNOI.",
     "projection": 4.3,
     "longevity": 4.3,
@@ -459,7 +481,7 @@ export const fragranceCombinations = [
     "best_temperature": "24°C",
     "tags": ["SNOI", "CDNI Milestone", "Marine", "Pineapple", "Oakmoss"],
     "steps": "Order 1:\n• Layer 1: SNOI (2 sprays) - Skin / Neck\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["SNOI", "CDNI Milestone"]
+    "alternatives": ["SNOI", "CDNI Milestone", "Alpine Ocean Breeze"]
   },
   {
     "id": 23,
@@ -468,9 +490,10 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Encre Noire l'Extreme", "Supremacy in Heaven"],
+    "fragrances": ["Encre Noire l'Extreme", "Supremacy In Heaven"],
     "fragrance_count": 2,
     "profile": "Dark ink vetiver meeting clean tea.",
+    "dominant_notes": ["Vetiver", "Cypress", "Green Tea", "Blackcurrant", "Incense"],
     "synergy": "Heaven provides a clean, metallic airiness that ventilates the dark Encre Noire core.",
     "projection": 4.0,
     "longevity": 4.2,
@@ -478,9 +501,9 @@ export const fragranceCombinations = [
     "complexity": 4.5,
     "best_weather": "Damp / Foggy",
     "best_temperature": "13°C",
-    "tags": ["Encre Noire l'Extreme", "Supremacy in Heaven", "Vetiver", "Ink", "Green Tea"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Neck\n• Layer 2: Supremacy in Heaven (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Encre Noire l'Extreme", "Supremacy in Heaven"]
+    "tags": ["Encre Noire l'Extreme", "Supremacy In Heaven", "Vetiver", "Ink", "Green Tea"],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Neck\n• Layer 2: Supremacy In Heaven (3 sprays) - Clothes / Shirt",
+    "alternatives": ["Encre Noire l'Extreme", "Supremacy In Heaven", "Inky Citrus Bomb"]
   },
   {
     "id": 24,
@@ -492,6 +515,7 @@ export const fragranceCombinations = [
     "fragrances": ["Encre Noire l'Extreme", "Costume National I"],
     "fragrance_count": 2,
     "profile": "Intense ultra-masculine dark niche wood.",
+    "dominant_notes": ["Cypress", "Incense", "Saffron", "Leather", "Vetiver"],
     "synergy": "Pure dark art. Earthy cypress and heavy incense clashing with spiced saffron leather.",
     "projection": 4.6,
     "longevity": 4.9,
@@ -501,7 +525,7 @@ export const fragranceCombinations = [
     "best_temperature": "5°C",
     "tags": ["Encre Noire l'Extreme", "Costume National I", "Cypress", "Incense", "Leather"],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Costume National I (2 sprays) - Clothes / Jacket",
-    "alternatives": ["Costume National I", "Encre Noire l'Extreme"]
+    "alternatives": ["Costume National I", "Encre Noire l'Extreme", "Sovereign Niche Overlord"]
   },
   {
     "id": 25,
@@ -513,6 +537,7 @@ export const fragranceCombinations = [
     "fragrances": ["Costume National I", "Jean Lowe Immortal"],
     "fragrance_count": 2,
     "profile": "Leathery zesty ginger.",
+    "dominant_notes": ["Saffron", "Leather", "Ginger", "Grapefruit", "Ambroxan"],
     "synergy": "Immortal's ginger top note introduces a bright opening to the dry leather base.",
     "projection": 4.2,
     "longevity": 4.5,
@@ -522,7 +547,7 @@ export const fragranceCombinations = [
     "best_temperature": "14°C",
     "tags": ["Costume National I", "Jean Lowe Immortal", "Leather", "Ginger", "Saffron"],
     "steps": "Order 1:\n• Layer 1: Costume National I (2 sprays) - Skin / Neck\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Costume National I", "Jean Lowe Immortal"]
+    "alternatives": ["Costume National I", "Jean Lowe Immortal", "Imperial Saffron Blue"]
   },
   {
     "id": 26,
@@ -534,6 +559,7 @@ export const fragranceCombinations = [
     "fragrances": ["Supremacy Collector's Edition", "Divin Asylum"],
     "fragrance_count": 2,
     "profile": "Premium sharp tropical pineapple.",
+    "dominant_notes": ["Pineapple", "Grapefruit", "Lime", "Vetiver", "Ginger"],
     "synergy": "Divin Asylum supercharges the fruity traits of the collector's edition.",
     "projection": 4.4,
     "longevity": 4.2,
@@ -543,7 +569,7 @@ export const fragranceCombinations = [
     "best_temperature": "26°C",
     "tags": ["Supremacy Collector's Edition", "Divin Asylum", "Pineapple", "Tropical", "Citrus"],
     "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy Collector's Edition", "Divin Asylum"]
+    "alternatives": ["Supremacy Collector's Edition", "Divin Asylum", "Emperor's Sovereign"]
   },
   {
     "id": 27,
@@ -555,6 +581,7 @@ export const fragranceCombinations = [
     "fragrances": ["SNOI", "Supremacy Collector's Edition", "Divin Asylum"],
     "fragrance_count": 3,
     "profile": "[3-LAYER] Deep multi-dimensional smoky pineapple.",
+    "dominant_notes": ["Pineapple", "Blackcurrant", "Lime", "Vetiver", "Oakmoss"],
     "synergy": "SNOI anchors the bottom while Divin Asylum adds high-end niche sparkle to the top.",
     "projection": 4.7,
     "longevity": 4.8,
@@ -564,7 +591,7 @@ export const fragranceCombinations = [
     "best_temperature": "18°C",
     "tags": ["SNOI", "Supremacy Collector's Edition", "Divin Asylum", "Pineapple", "Smoky"],
     "steps": "Order 1:\n• Layer 1: SNOI (1 spray) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 3: Divin Asylum (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["SNOI", "Supremacy Collector's Edition"]
+    "alternatives": ["SNOI", "Supremacy Collector's Edition", "Golden Pineapple Breeze"]
   },
   {
     "id": 28,
@@ -576,6 +603,7 @@ export const fragranceCombinations = [
     "fragrances": ["Encre Noire l'Extreme", "Hercules", "Spectre Ghost"],
     "fragrance_count": 3,
     "profile": "[3-LAYER] Mysterious dark woody vanilla.",
+    "dominant_notes": ["Vetiver", "Tobacco", "Vanilla", "Incense", "Cypress"],
     "synergy": "Encre Noire adds an inky darkness to Hercules' tobacco and Ghost's rich vanilla.",
     "projection": 4.4,
     "longevity": 4.8,
@@ -585,7 +613,7 @@ export const fragranceCombinations = [
     "best_temperature": "6°C",
     "tags": ["Encre Noire l'Extreme", "Hercules", "Spectre Ghost", "Vanilla", "Incense"],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Hercules (2 sprays) - Skin / Neck\n• Layer 3: Spectre Ghost (2 sprays) - Clothes / Coat",
-    "alternatives": ["Hercules", "Spectre Ghost"]
+    "alternatives": ["Hercules", "Spectre Ghost", "Sovereign Niche Overlord"]
   },
   {
     "id": 29,
@@ -597,6 +625,7 @@ export const fragranceCombinations = [
     "fragrances": ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone"],
     "fragrance_count": 3,
     "profile": "[3-LAYER] Advanced aquatic-spicy fusion.",
+    "dominant_notes": ["Grapefruit", "Ambroxan", "Cardamom", "Lavender", "Sea Salt"],
     "synergy": "Turathi provides deep blue weight, Caprice adds spicy mid-tier fluff, Milestone freshens the top.",
     "projection": 4.5,
     "longevity": 4.4,
@@ -606,7 +635,7 @@ export const fragranceCombinations = [
     "best_temperature": "27°C",
     "tags": ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Aquatic", "Cardamom"],
     "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Neck\n• Layer 2: Al Nashama Caprice (1 spray) - Skin / Chest\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Collar",
-    "alternatives": ["Turathi Blue", "Al Nashama Caprice"]
+    "alternatives": ["Turathi Blue", "Al Nashama Caprice", "High-Heat Overlord"]
   },
   {
     "id": 30,
@@ -618,6 +647,7 @@ export const fragranceCombinations = [
     "fragrances": ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal"],
     "fragrance_count": 3,
     "profile": "[3-LAYER] Extreme hot weather defense.",
+    "dominant_notes": ["Grapefruit", "Ambroxan", "Sea Salt", "Melon", "Ginger"],
     "synergy": "Unstoppable high-heat projection matrix using triple citrus-ambroxan layers.",
     "projection": 4.7,
     "longevity": 4.6,
@@ -627,7 +657,7 @@ export const fragranceCombinations = [
     "best_temperature": "32°C",
     "tags": ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal", "Aquatic", "Citrus"],
     "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Neck\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Chest\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Turathi Blue", "CDNI Milestone"]
+    "alternatives": ["Turathi Blue", "CDNI Milestone", "High-Heat Overlord"]
   },
   {
     "id": 31,
@@ -639,6 +669,7 @@ export const fragranceCombinations = [
     "fragrances": ["Ash'aa Oud Noir", "Supremacy Collector's Edition", "CDNI Milestone"],
     "fragrance_count": 3,
     "profile": "[3-LAYER] Green violet leaf, pineapple, salt-air.",
+    "dominant_notes": ["Verbena", "Violet Leaf", "Pineapple", "Sea Salt", "Melon"],
     "synergy": "Classic masculine contours enhanced by modern oceanics and direct fruit sweetness.",
     "projection": 4.3,
     "longevity": 4.4,
@@ -648,7 +679,7 @@ export const fragranceCombinations = [
     "best_temperature": "19°C",
     "tags": ["Ash'aa Oud Noir", "Supremacy Collector's Edition", "CDNI Milestone", "Violet Leaf", "Pineapple"],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: Supremacy Collector's Edition (1 spray) - Skin / Chest\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy Collector's Edition", "CDNI Milestone"]
+    "alternatives": ["Supremacy Collector's Edition", "CDNI Milestone", "Executive Fresh"]
   },
   {
     "id": 32,
@@ -660,6 +691,7 @@ export const fragranceCombinations = [
     "fragrances": ["Encre Noire l'Extreme", "Costume National I", "Liam Grey", "Spectre Ghost"],
     "fragrance_count": 4,
     "profile": "[4-LAYER] Ultimate niche symphony of leather, tea, vetiver, vanilla.",
+    "dominant_notes": ["Vetiver", "Leather", "Black Tea", "Vanilla", "Saffron"],
     "synergy": "Masterclass arrangement. Heavy, dense base elements shifting smoothly into sweet and powdery layers over time.",
     "projection": 4.8,
     "longevity": 5.0,
@@ -669,7 +701,7 @@ export const fragranceCombinations = [
     "best_temperature": "4°C",
     "tags": ["Encre Noire l'Extreme", "Costume National I", "Liam Grey", "Spectre Ghost", "Leather"],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Lower Back\n• Layer 2: Costume National I (2 sprays) - Skin / Chest\n• Layer 3: Liam Grey (2 sprays) - Skin / Neck\n• Layer 4: Spectre Ghost (2 sprays) - Clothes / Coat",
-    "alternatives": ["Encre Noire l'Extreme", "Costume National I"]
+    "alternatives": ["Encre Noire l'Extreme", "Costume National I", "Gothic Vanilla Incense"]
   },
   {
     "id": 33,
@@ -681,6 +713,7 @@ export const fragranceCombinations = [
     "fragrances": ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Jean Lowe Immortal"],
     "fragrance_count": 4,
     "profile": "[4-LAYER] Blockbuster summer shield of ambroxan, spice, marine salt, ginger.",
+    "dominant_notes": ["Grapefruit", "Ambroxan", "Cardamom", "Sea Salt", "Ginger"],
     "synergy": "Absolute armor against sweat. Designed to sequentially boil off over an 8-hour period.",
     "projection": 5.0,
     "longevity": 4.9,
@@ -690,6 +723,6 @@ export const fragranceCombinations = [
     "best_temperature": "35°C",
     "tags": ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Jean Lowe Immortal", "Ambroxan"],
     "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Neck\n• Layer 2: Al Nashama Caprice (1 spray) - Skin / Chest\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Left Shoulder\n• Layer 4: Jean Lowe Immortal (2 sprays) - Clothes / Right Shoulder",
-    "alternatives": ["Turathi Blue", "Jean Lowe Immortal"]
+    "alternatives": ["Turathi Blue", "Jean Lowe Immortal", "Ultimate Zesty Aquatic"]
   }
 ];

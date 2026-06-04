@@ -1,10 +1,10 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 4.4: Type Filtering, Note Filtering, Corrected Metric Binding, Global Home Actions
+ * Version 5.0: Hardware Back Button Navigation, Unified Cross-Links, Dynamic Counting
  */
 
-import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.4';
-import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.4';
+import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=5.0';
+import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=5.0';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
@@ -18,13 +18,11 @@ class FragranceExplorerCard extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     
-    // Navigation and state configuration
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
     this.searchTerm = '';
     this.ratingFilter = { type: '', min: '' };
     
-    // Refactored Multi-Select state machine
     this.activeFilters = {
       type: new Set(),
       note: new Set(),
@@ -33,7 +31,6 @@ class FragranceExplorerCard extends HTMLElement {
       occasion: new Set()
     };
     
-    // Ingest data dynamically with normalization mapping definitions
     const rawCombos = Array.isArray(fragranceCombinations) ? fragranceCombinations : [];
     const rawIndivs = Array.isArray(individualFragrances) ? individualFragrances : [];
     
@@ -42,7 +39,6 @@ class FragranceExplorerCard extends HTMLElement {
       ...rawCombos.map(c => ({ ...c, type: 'Blend' }))
     ];
 
-    // Harvest unique notes automatically across datasets
     const extractedNotes = new Set();
     this.masterIndex.forEach(item => {
       if (Array.isArray(item.dominant_notes)) {
@@ -52,9 +48,26 @@ class FragranceExplorerCard extends HTMLElement {
       }
     });
     this.uniqueNotes = Array.from(extractedNotes).sort();
+
+    // Hardware back button integration pipeline
+    this._popstateHandler = (e) => {
+      if (this.navStack.length > 1) {
+        this.navStack.pop();
+        this.currentDepth = this.navStack.length;
+        this.render();
+      }
+    };
   }
 
-  set hass(hass) {
+  connectedCallback() {
+    window.addEventListener('popstate', this._popstateHandler);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('popstate', this._popstateHandler);
+  }
+
+  setHass(hass) {
     this._hass = hass;
     if (!this.hasRendered) {
       this.render();
@@ -70,7 +83,6 @@ class FragranceExplorerCard extends HTMLElement {
     return 3;
   }
 
-  // Intercept data requests safely, resolving the 0.0 display issue across types
   getMetricValue(item, metricKey) {
     let rawVal = 0.0;
     if (metricKey === 'compliments') {
@@ -83,7 +95,6 @@ class FragranceExplorerCard extends HTMLElement {
     return parseFloat(rawVal).toFixed(1);
   }
 
-  // Resets filters, sets the specific targets, and kicks navigation safely back to top root
   applyContextualFilter(category, value) {
     this.searchTerm = '';
     this.ratingFilter = { type: '', min: '' };
@@ -92,13 +103,13 @@ class FragranceExplorerCard extends HTMLElement {
       this.activeFilters[key].clear();
     }
     
-    if (this.activeFilters[category]) {
+    if (category === 'search') {
+      this.searchTerm = value;
+    } else if (this.activeFilters[category]) {
       this.activeFilters[category].add(value);
     }
     
-    this.navStack = [{ view: 'browser', value: null }];
-    this.currentDepth = 1;
-    this.render();
+    this.resetToHomeView();
   }
 
   resetAllFilters() {
@@ -113,21 +124,24 @@ class FragranceExplorerCard extends HTMLElement {
   navigateTo(view, value) {
     this.navStack.push({ view, value });
     this.currentDepth = this.navStack.length;
+    window.history.pushState({ depth: this.currentDepth }, '');
     this.render();
   }
 
   navigateBack() {
     if (this.navStack.length > 1) {
-      this.navStack.pop();
-      this.currentDepth = this.navStack.length;
-      this.render();
+      window.history.back();
     }
   }
 
   resetToHomeView() {
-    this.navStack = [{ view: 'browser', value: null }];
-    this.currentDepth = 1;
-    this.render();
+    if (this.navStack.length > 1) {
+      const backCount = this.navStack.length - 1;
+      this.navStack = [{ view: 'browser', value: null }];
+      this.currentDepth = 1;
+      window.history.go(-backCount);
+      this.render();
+    }
   }
 
   toggleFilter(category, value) {
@@ -139,7 +153,6 @@ class FragranceExplorerCard extends HTMLElement {
     this.render();
   }
 
-  // Core filtration pipeline evaluating types, text constraints, arrays, and notes
   getFilteredItems() {
     return this.masterIndex.filter(item => {
       if (this.searchTerm) {
@@ -147,7 +160,8 @@ class FragranceExplorerCard extends HTMLElement {
         const matchName = item.name?.toLowerCase().includes(search);
         const matchFam = item.fragrance_family?.toLowerCase().includes(search);
         const matchNotes = item.dominant_notes?.some(n => String(n).toLowerCase().includes(search));
-        if (!matchName && !matchFam && !matchNotes) return false;
+        const matchTags = item.tags?.some(t => String(t).toLowerCase().includes(search));
+        if (!matchName && !matchFam && !matchNotes && !matchTags) return false;
       }
       
       if (this.ratingFilter.min) {
@@ -160,19 +174,17 @@ class FragranceExplorerCard extends HTMLElement {
       if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
       if (this.activeFilters.season.size > 0) {
-        const seasons = Array.isArray(item.seasons) ? item.seasons : [item.season];
+        const seasons = Array.isArray(item.seasons) ? item.seasons : (item.season ? [item.season] : []);
         if (!seasons.some(s => this.activeFilters.season.has(s) || s === 'All Seasons')) return false;
       }
 
       if (this.activeFilters.time_of_day.size > 0) {
-        const times = Array.isArray(item.time_of_day) ? [item.time_of_day] : [item.time_of_day];
-        // Handle explicit combinations or "All" wildcards
-        if (item.time_of_day === 'All') return true;
-        if (!times.some(t => this.activeFilters.time_of_day.has(t))) return false;
+        const times = Array.isArray(item.time_of_day) ? item.time_of_day : (item.time_of_day ? [item.time_of_day] : []);
+        if (!times.some(t => this.activeFilters.time_of_day.has(t) || t === 'All')) return false;
       }
 
       if (this.activeFilters.occasion.size > 0) {
-        const occasions = Array.isArray(item.occasion) ? [item.occasion] : [item.occasion];
+        const occasions = Array.isArray(item.occasion) ? item.occasion : (item.occasion ? [item.occasion] : []);
         if (!occasions.some(o => this.activeFilters.occasion.has(o))) return false;
       }
 
@@ -192,7 +204,6 @@ class FragranceExplorerCard extends HTMLElement {
     });
   }
 
-  // Generates precise star paths matching the requested 0.1 incremental resolutions
   renderStars(rating) {
     const parsed = parseFloat(rating || 0.0);
     let starsHTML = '';
@@ -211,7 +222,6 @@ class FragranceExplorerCard extends HTMLElement {
 
   render() {
     const currentNav = this.navStack[this.navStack.length - 1];
-    
     let activeContentHTML = '';
     if (currentNav.view === 'browser') {
       activeContentHTML = this.renderBrowserView();
@@ -223,61 +233,45 @@ class FragranceExplorerCard extends HTMLElement {
       <style>
         :host { --card-padding: 16px; font-family: var(--paper-font-body1_-_font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif); color: var(--primary-text-color, #212121); }
         .card-container { background: var(--ha-card-background, var(--card-background-color, #ffffff)); border-radius: var(--ha-card-border-radius, 12px); box-shadow: var(--ha-card-box-shadow, 0px 2px 4px rgba(0,0,0,0.1)); padding: var(--card-padding); border: var(--ha-card-border, 1px solid var(--divider-color, #e0e0e0)); position: relative; overflow: hidden; }
-        
-        /* Navigation Elements Styles */
         .header-navigation-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; border-bottom: 1px solid var(--divider-color, #e0e0e0); padding-bottom: 10px; }
         .navigation-actions-group { display: flex; align-items: center; gap: 8px; }
         .nav-btn { background: var(--secondary-background-color, #f5f5f5); border: 1px solid var(--divider-color, #e0e0e0); border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--primary-text-color); display: inline-flex; align-items: center; gap: 4px; transition: background 0.2s; }
         .nav-btn:hover { background: var(--table-row-alternative-background-color, #eee); }
         .card-title-text { font-size: 18px; font-weight: 700; margin: 0; flex-grow: 1; text-align: right; color: var(--primary-text-color); }
-        
-        /* Interactive Filter Layouts */
-        .search-input-field { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--divider-color, #ccc); background: var(--first-background-color, #fff); color: var(--primary-text-color); font-size: 14px; margin-bottom: 12px; }
+        .search-input-field { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--divider-color, #ccc); background: var(--first-background-color, #fff); color: var(--primary-text-color); font-size: 14px; margin-bottom: 6px; }
+        .list-counter-badge { font-size: 12px; font-weight: 700; color: var(--secondary-text-color, #666); margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
         .filter-section-wrapper { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; background: var(--secondary-background-color, #fafafa); padding: 10px; border-radius: 8px; border: 1px solid var(--divider-color, #eaeaea); }
         .filter-row-container { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
         .filter-row-label { font-size: 12px; font-weight: 700; width: 65px; color: var(--secondary-text-color, #666); text-transform: uppercase; }
         .filter-interactive-tag { background: var(--card-background-color, #fff); border: 1px solid var(--divider-color, #dcdcdc); border-radius: 16px; padding: 4px 10px; font-size: 12px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 2px; color: var(--primary-text-color); }
         .filter-interactive-tag.active { background: var(--accent-color, #0076ff); color: #fff; border-color: var(--accent-color, #0076ff); font-weight: 600; }
         .clear-filters-btn { margin-top: 4px; border: 1px dashed var(--accent-color, #0076ff); background: transparent; color: var(--accent-color, #0076ff); font-weight: 600; }
-        
-        /* Select Dropdowns */
         .custom-filter-select { background: var(--card-background-color, #fff); color: var(--primary-text-color); border: 1px solid var(--divider-color, #ccc); border-radius: 6px; padding: 4px 8px; font-size: 12px; max-width: 150px; cursor: pointer; }
-
-        /* Listing Grid Views */
         .collection-items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
         .grid-item-card { background: var(--card-background-color, #ffffff); border: 1px solid var(--divider-color, #e0e0e0); border-radius: 8px; padding: 10px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
         .grid-item-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); border-color: var(--accent-color, #0076ff); }
         .item-type-badge { position: absolute; top: 6px; right: 6px; font-size: 10px; padding: 2px 5px; border-radius: 4px; background: var(--secondary-background-color, #eee); font-weight: bold; opacity: 0.8; }
         .grid-item-title { font-size: 13px; font-weight: 700; margin: 0 0 4px 0; line-height: 1.3; padding-right: 24px; color: var(--primary-text-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .grid-item-subtitle { font-size: 11px; color: var(--secondary-text-color, #757575); margin: 0 0 8px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        
-        /* Core Functional Star Vectors */
         .star-rating-container { display: inline-flex; align-items: center; gap: 1px; font-size: 13px; line-height: 1; }
         .star { color: #ccc; position: relative; display: inline-block; }
         .star.filled { color: #ffb400; }
         .star.partial { color: #ccc; }
         .star.partial::before { content: '★'; position: absolute; top: 0; left: 0; width: var(--fill-width, 0%); overflow: hidden; color: #ffb400; }
         .rating-numeric { font-size: 11px; font-weight: bold; margin-left: 4px; color: var(--secondary-text-color); }
-
-        /* Complete Contextual Detail Engine Styles */
         .detail-view-layout { display: flex; flex-direction: column; gap: 12px; animation: fadeIn 0.2s ease-out; }
         .detail-hero-block { background: var(--secondary-background-color, #f9f9f9); border: 1px solid var(--divider-color, #eee); padding: 12px; border-radius: 8px; }
         .detail-main-title { font-size: 20px; font-weight: 800; margin: 0 0 4px 0; color: var(--primary-text-color); }
         .detail-family-sub { font-size: 13px; color: var(--secondary-text-color); margin-bottom: 8px; font-style: italic; }
-        
-        /* Metric Blocks Row */
         .metrics-flex-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px 0; }
         .metric-score-card { background: var(--card-background-color, #fff); border: 1px solid var(--divider-color, #e0e0e0); padding: 8px 4px; border-radius: 6px; text-align: center; }
         .metric-score-label { font-size: 10px; font-weight: 700; color: var(--secondary-text-color); text-transform: uppercase; margin-bottom: 2px; }
         .metric-score-num { font-size: 15px; font-weight: 800; color: var(--accent-color, #0076ff); }
-        
-        /* Contextual Linked Tags and Badges */
         .contextual-filter-link { color: var(--accent-color, #0076ff); text-decoration: none; font-weight: 600; cursor: pointer; border-bottom: 1px dashed var(--accent-color, #0076ff); transition: opacity 0.2s; }
         .contextual-filter-link:hover { opacity: 0.7; }
         .details-badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-        .clickable-badge { background: var(--secondary-background-color, #f0f0f0); color: var(--primary-text-color); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; transition: background 0.2s; border: 1px solid var(--divider-color, #e0e0e0); }
+        .clickable-badge { background: var(--secondary-background-color, #f0f0f0); color: var(--primary-text-color); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; transition: background 0.2s; border: 1px solid var(--divider-color, #e0e0e0); display: inline-flex; align-items: center; gap: 4px; }
         .clickable-badge:hover { background: var(--accent-color, #0076ff); color: #fff; border-color: var(--accent-color, #0076ff); }
-
         .content-block-section { border-left: 3px solid var(--accent-color, #0076ff); background: rgba(0, 118, 255, 0.03); padding: 10px; border-radius: 0 8px 8px 0; margin-top: 4px; }
         .section-header-inline { font-size: 13px; font-weight: 700; margin: 0 0 6px 0; text-transform: uppercase; color: var(--secondary-text-color); }
         .block-text-paragraph { font-size: 13px; line-height: 1.45; margin: 0; white-space: pre-wrap; color: var(--primary-text-color); }
@@ -295,107 +289,78 @@ class FragranceExplorerCard extends HTMLElement {
         </div>
         
         <div class="card-content-viewport">
-          ${activeContentHTML}
+          activeContentHTML
         </div>
       </div>
-    `;
+    `.replace('activeContentHTML', activeContentHTML);
 
     this.bindEvents();
   }
 
   bindEvents() {
     const backBtn = this.shadowRoot.getElementById('back-nav-trigger');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => this.navigateBack());
-    }
+    if (backBtn) backBtn.addEventListener('click', () => this.navigateBack());
 
     const homeBtn = this.shadowRoot.getElementById('home-nav-trigger');
-    if (homeBtn) {
-      homeBtn.addEventListener('click', () => this.resetToHomeView());
-    }
+    if (homeBtn) homeBtn.addEventListener('click', () => this.resetToHomeView());
 
-    // Attach search engine listeners
     const searchField = this.shadowRoot.getElementById('search-core-field');
     if (searchField) {
       searchField.addEventListener('input', (e) => {
         this.searchTerm = e.target.value;
         this.render();
         const sf = this.shadowRoot.getElementById('search-core-field');
-        if (sf) sf.focus();
+        if (sf) {
+          sf.focus();
+          sf.setSelectionRange(sf.value.length, sf.value.length);
+        }
       });
     }
 
-    // Bind browser item interaction click matrices
-    const items = this.shadowRoot.querySelectorAll('.grid-item-card');
-    items.forEach(card => {
-      card.addEventListener('click', () => {
+    this.shadowRoot.querySelectorAll('.grid-item-card, .direct-navigate-link').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
         const itemId = parseInt(card.getAttribute('data-id'));
         const itemType = card.getAttribute('data-type');
         const target = this.masterIndex.find(x => x.id === itemId && x.type === itemType);
-        if (target) {
-          this.navigateTo('detail', target);
-        }
+        if (target) this.navigateTo('detail', target);
       });
     });
 
-    // Bind interactive tag parameters dynamically
-    const tags = this.shadowRoot.querySelectorAll('.filter-interactive-tag:not(.clear-filters-btn)');
-    tags.forEach(tag => {
+    this.shadowRoot.querySelectorAll('.filter-interactive-tag:not(.clear-filters-btn)').forEach(tag => {
       tag.addEventListener('click', () => {
-        const category = tag.getAttribute('data-category');
-        const val = tag.getAttribute('data-value');
-        this.toggleFilter(category, val);
+        this.toggleFilter(tag.getAttribute('data-category'), tag.getAttribute('data-value'));
       });
     });
 
-    // Note Selector dropdown pipeline binding
     const noteSelect = this.shadowRoot.getElementById('note-dropdown-selector');
     if (noteSelect) {
       noteSelect.addEventListener('change', (e) => {
         const val = e.target.value;
         this.activeFilters.note.clear();
-        if (val) {
-          this.activeFilters.note.add(val);
-        }
+        if (val) this.activeFilters.note.add(val);
         this.render();
       });
     }
 
     const clearBtn = this.shadowRoot.querySelector('.clear-filters-btn');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => this.resetAllFilters());
-    }
+    if (clearBtn) clearBtn.addEventListener('click', () => this.resetAllFilters());
 
-    // Detail view direct contextual reset triggers
-    const contextualLinks = this.shadowRoot.querySelectorAll('.contextual-filter-link');
-    contextualLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
+    this.shadowRoot.querySelectorAll('.contextual-filter-link, .clickable-badge:not(.direct-navigate-link)').forEach(element => {
+      element.addEventListener('click', (e) => {
         e.stopPropagation();
-        const cat = link.getAttribute('data-category');
-        const val = link.getAttribute('data-value');
-        this.applyContextualFilter(cat, val);
-      });
-    });
-
-    const contextualBadges = this.shadowRoot.querySelectorAll('.clickable-badge');
-    contextualBadges.forEach(badge => {
-      badge.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const cat = badge.getAttribute('data-category');
-        const val = badge.getAttribute('data-value');
-        this.applyContextualFilter(cat, val);
+        this.applyContextualFilter(element.getAttribute('data-category'), element.getAttribute('data-value'));
       });
     });
   }
 
   renderBrowserView() {
     const filteredItems = this.getFilteredItems();
-    
-    // Determine active tag helper flags
     const hasActiveFilters = Object.values(this.activeFilters).some(set => set.size > 0) || this.searchTerm;
 
     return `
-      <input type="text" id="search-core-field" class="search-input-field" placeholder="Search by name, notes, family..." value="${this.searchTerm}">
+      <input type="text" id="search-core-field" class="search-input-field" placeholder="Search by name, notes, tags, family..." value="${this.searchTerm}">
+      <span class="list-counter-badge">Showing ${filteredItems.length} of ${this.masterIndex.length} items</span>
       
       <div class="filter-section-wrapper">
         <div class="filter-row-container" style="margin-bottom: 4px;">
@@ -461,16 +426,22 @@ class FragranceExplorerCard extends HTMLElement {
   renderDetailView(item) {
     const isBlend = item.type === 'Blend';
     
-    // Fallbacks resolve structural calculations mapping errors safely
     const proj = this.getMetricValue(item, 'projection');
     const longev = this.getMetricValue(item, 'longevity');
     const compl = this.getMetricValue(item, 'compliments');
     const complex = this.getMetricValue(item, 'complexity');
 
-    // Parse note references into isolated link components
+    const seasons = Array.isArray(item.seasons) ? item.seasons : (item.season ? [item.season] : []);
+    const times = Array.isArray(item.time_of_day) ? item.time_of_day : (item.time_of_day ? [item.time_of_day] : []);
+    const occasions = Array.isArray(item.occasion) ? item.occasion : (item.occasion ? [item.occasion] : []);
+
     const notesHTML = Array.isArray(item.dominant_notes)
       ? item.dominant_notes.flat().map(note => `<span class="clickable-badge" data-category="note" data-value="${note.trim()}">🧪 ${note.trim()}</span>`).join(' ')
       : '<span class="block-text-paragraph">N/A</span>';
+
+    const tagsHTML = Array.isArray(item.tags)
+      ? item.tags.map(tag => `<span class="clickable-badge" data-category="search" data-value="${tag.trim()}">🏷️ ${tag.trim()}</span>`).join(' ')
+      : '';
 
     return `
       <div class="detail-view-layout">
@@ -479,17 +450,16 @@ class FragranceExplorerCard extends HTMLElement {
             <h3 class="detail-main-title">${item.name}</h3>
             <span class="clickable-badge" data-category="type" data-value="${item.type}" style="background: var(--accent-color); color:#fff;">${isBlend ? '🧪 Blend' : '🧴 Fragrance'}</span>
           </div>
-          <div class="detail-family-sub">${item.fragrance_family || 'Custom Accords'} · ${item.inspiration || 'Original Record'}</div>
+          <div class="detail-family-sub">
+            <span class="contextual-filter-link" data-category="search" data-value="${item.fragrance_family || ''}">${item.fragrance_family || 'Custom Accords'}</span> 
+            · ${item.inspiration || 'Original Record'}
+          </div>
           ${this.renderStars(item.rating)}
           
           <div class="details-badge-row">
-            ${isBlend ? `
-              <span class="clickable-badge" data-category="season" data-value="${item.season}">${ICONS[item.season] || '🌍'} ${item.season}</span>
-              <span class="clickable-badge" data-category="time_of_day" data-value="${item.time_of_day}">${ICONS[item.time_of_day] || '🌗'} ${item.time_of_day}</span>
-              <span class="clickable-badge" data-category="occasion" data-value="${item.occasion}">${ICONS[item.occasion] || '👕'} ${item.occasion}</span>
-            ` : `
-              ${item.seasons?.map(s => `<span class="clickable-badge" data-category="season" data-value="${s}">${ICONS[s] || ''} ${s}</span>`).join('') || ''}
-            `}
+            ${seasons.map(s => `<span class="clickable-badge" data-category="season" data-value="${s}">${ICONS[s] || '🌍'} ${s}</span>`).join('')}
+            ${times.map(t => `<span class="clickable-badge" data-category="time_of_day" data-value="${t}">${ICONS[t] || '🌗'} ${t}</span>`).join('')}
+            ${occasions.map(o => `<span class="clickable-badge" data-category="occasion" data-value="${o}">${ICONS[o] || '👕'} ${o}</span>`).join('')}
           </div>
         </div>
 
@@ -504,6 +474,27 @@ class FragranceExplorerCard extends HTMLElement {
           <h5 class="section-header-inline">Dominant Notes Profile</h5>
           <div class="details-badge-row" style="margin-top:2px;">${notesHTML}</div>
         </div>
+
+        ${tagsHTML ? `
+          <div>
+            <h5 class="section-header-inline">Associated Tags</h5>
+            <div class="details-badge-row" style="margin-top:2px;">${tagsHTML}</div>
+          </div>
+        ` : ''}
+
+        ${isBlend && Array.isArray(item.fragrances) ? `
+          <div>
+            <h5 class="section-header-inline">Formula Components</h5>
+            <div class="details-badge-row">
+              ${item.fragrances.map(fName => {
+                const match = this.masterIndex.find(x => x.name === fName && x.type === 'Fragrance');
+                return match 
+                  ? `<span class="clickable-badge direct-navigate-link" data-id="${match.id}" data-type="Fragrance" style="border-color: var(--accent-color); font-weight: bold;">🧴 ${fName}</span>`
+                  : `<span class="clickable-badge" style="opacity:0.5; cursor:not-allowed;">🧴 ${fName}</span>`;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
 
         ${isBlend ? `
           <div class="content-block-section">
@@ -527,12 +518,10 @@ class FragranceExplorerCard extends HTMLElement {
           <h5 class="section-header-inline">${isBlend ? 'Alternative Options Owned' : 'Related Vault Entities'}</h5>
           <div class="details-badge-row">
             ${(isBlend ? item.alternatives : item.related_fragrances)?.map(name => {
-              // Locate match record to preserve cross-navigation mechanics
               const match = this.masterIndex.find(x => x.name === name);
-              if (match) {
-                return `<span class="clickable-badge" data-category="type" data-value="${match.type}" style="border-color: var(--accent-color);">${name}</span>`;
-              }
-              return `<span class="clickable-badge" style="opacity:0.6; cursor:not-allowed;">${name}</span>`;
+              return match 
+                ? `<span class="clickable-badge direct-navigate-link" data-id="${match.id}" data-type="${match.type}" style="border-color: var(--accent-color); font-weight: bold;">${match.type === 'Blend' ? '🧪' : '🧴'} ${name}</span>`
+                : `<span class="clickable-badge" data-category="search" data-value="${name}">${name}</span>`;
             }).join('') || '<span class="block-text-paragraph">None tracked</span>'}
           </div>
         </div>
