@@ -1,10 +1,10 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 4.3: Added Notes Filter, Isolated Fixes, Cross-Linking Filters, and Dual Home Engine
+ * Version 4.4: Type Filtering, Note Filtering, Corrected Metric Binding, Global Home Actions
  */
 
-import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.35';
-import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.35';
+import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.4';
+import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.4';
 
 const ICONS = {
   'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
@@ -18,1173 +18,524 @@ class FragranceExplorerCard extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     
-    // Core state tracking arrays
+    // Navigation and state configuration
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
-    this.exitTimer = null;
-    this.backPressedOnce = false;
-
-    // Filter state
     this.searchTerm = '';
     this.ratingFilter = { type: '', min: '' };
-    this.activeFilters = { type: new Set(), note: new Set(), season: new Set(), time_of_day: new Set(), occasion: new Set() };
     
-    // Defensive initialization to prevent spreading crashes
+    // Refactored Multi-Select state machine
+    this.activeFilters = {
+      type: new Set(),
+      note: new Set(),
+      season: new Set(),
+      time_of_day: new Set(),
+      occasion: new Set()
+    };
+    
+    // Ingest data dynamically with normalization mapping definitions
     const rawCombos = Array.isArray(fragranceCombinations) ? fragranceCombinations : [];
-    const rawFrags = Array.isArray(individualFragrances) ? individualFragrances : [];
-
-    this.masterData = [
-      ...rawCombos.map(item => ({ ...item, _type: 'combo' })),
-      ...rawFrags.map(item => ({ ...item, _type: 'frag' }))
+    const rawIndivs = Array.isArray(individualFragrances) ? individualFragrances : [];
+    
+    this.masterIndex = [
+      ...rawIndivs.map(f => ({ ...f, type: 'Fragrance' })),
+      ...rawCombos.map(c => ({ ...c, type: 'Blend' }))
     ];
 
-    // Dynamically compile a complete list of dominant notes and tags
-    const allNotes = new Set();
-    this.masterData.forEach(item => {
-      const targetArr = item._type === 'frag' ? (item.dominant_notes || []) : (item.tags || []);
-      targetArr.forEach(n => allNotes.add(n));
+    // Harvest unique notes automatically across datasets
+    const extractedNotes = new Set();
+    this.masterIndex.forEach(item => {
+      if (Array.isArray(item.dominant_notes)) {
+        item.dominant_notes.flat().forEach(n => {
+          if (n && typeof n === 'string') extractedNotes.add(n.trim());
+        });
+      }
     });
-
-    this.filterCategories = {
-      type: ['Blend', 'Fragrance'],
-      season: ['Spring', 'Summer', 'Autumn', 'Winter', 'All Seasons'],
-      time_of_day: ['Day', 'Night', 'All'],
-      occasion: ['Casual', 'Office', 'Evening', 'Formal'],
-      note: Array.from(allNotes).sort()
-    };
-
-    this._handlePopState = this._handlePopState.bind(this);
+    this.uniqueNotes = Array.from(extractedNotes).sort();
   }
 
-  set hass(hass) { this._hass = hass; }
-  setConfig(config) { this._config = config; }
-
-  connectedCallback() {
-    this._renderSkeleton();
-    this._initNavigationEngine();
-    window.addEventListener('popstate', this._handlePopState);
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener('popstate', this._handlePopState);
-    if (this.exitTimer) clearTimeout(this.exitTimer);
-  }
-
-  /* --- Navigation Engine --- */
-  _initNavigationEngine() {
-    const uniqueStateId = 'fragrance_explorer_' + Date.now();
-    this.sessionStateKey = uniqueStateId;
-    window.history.replaceState({ app: this.sessionStateKey, depth: 0 }, '');
-    window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
-    this.currentDepth = 1;
-    this._renderCurrentView();
-  }
-
-  _navigateForward(nextView, value = null) {
-    this.navStack.push({ view: nextView, value: value });
-    this.currentDepth = this.navStack.length;
-    window.history.pushState({ app: this.sessionStateKey, depth: this.currentDepth }, '');
-    this._renderCurrentView();
-  }
-
-  _navigateHome() {
-    this.navStack = [{ view: 'browser', value: null }];
-    this.currentDepth = 1;
-    window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
-    this._renderCurrentView();
-  }
-
-  _resetAndFilter(category, value) {
-    for (const cat in this.activeFilters) {
-      this.activeFilters[cat].clear();
+  set hass(hass) {
+    this._hass = hass;
+    if (!this.hasRendered) {
+      this.render();
+      this.hasRendered = true;
     }
+  }
+
+  setConfig(config) {
+    this._config = config;
+  }
+
+  getCardSize() {
+    return 3;
+  }
+
+  // Intercept data requests safely, resolving the 0.0 display issue across types
+  getMetricValue(item, metricKey) {
+    let rawVal = 0.0;
+    if (metricKey === 'compliments') {
+      rawVal = item.compliment_factor !== undefined ? item.compliment_factor : (item.compliments !== undefined ? item.compliments : 0.0);
+    } else if (metricKey === 'complexity') {
+      rawVal = item.complexity !== undefined ? item.complexity : (item.versatility !== undefined ? item.versatility : 0.0);
+    } else {
+      rawVal = item[metricKey] !== undefined ? item[metricKey] : 0.0;
+    }
+    return parseFloat(rawVal).toFixed(1);
+  }
+
+  // Resets filters, sets the specific targets, and kicks navigation safely back to top root
+  applyContextualFilter(category, value) {
     this.searchTerm = '';
     this.ratingFilter = { type: '', min: '' };
+    
+    for (const key in this.activeFilters) {
+      this.activeFilters[key].clear();
+    }
     
     if (this.activeFilters[category]) {
       this.activeFilters[category].add(value);
     }
-    this._navigateHome();
-  }
-
-  _handlePopState(event) {
-    if (!event.state || event.state.app !== this.sessionStateKey) return;
-    const targetDepth = event.state.depth;
-
-    if (targetDepth < this.currentDepth) {
-      if (this.navStack.length > 1) {
-        this.navStack.pop();
-        this.currentDepth = this.navStack.length;
-        this.backPressedOnce = false; 
-        this._renderCurrentView();
-      } else {
-        if (!this.backPressedOnce) {
-          this.backPressedOnce = true;
-          this._showToastMessage("Press back again to exit");
-          window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
-          this.currentDepth = 1;
-          this.exitTimer = setTimeout(() => { this.backPressedOnce = false; }, 4000);
-        } else {
-          if (this.exitTimer) clearTimeout(this.exitTimer);
-          window.history.go(-2); 
-        }
-      }
-    } else if (targetDepth > this.currentDepth) {
-      this.currentDepth = targetDepth;
-    }
-  }
-
-  _renderCurrentView() {
-    const activeState = this.navStack[this.navStack.length - 1];
-    const container = this.shadowRoot.getElementById('view-port');
-    if (!container) return;
     
-    container.innerHTML = '';
-
-    if (activeState.view === 'browser') {
-      container.appendChild(this._buildBrowserView());
-    } else if (activeState.view === 'combo-detail') {
-      container.appendChild(this._buildComboDetailView(activeState.value));
-    } else if (activeState.view === 'frag-detail') {
-      container.appendChild(this._buildFragDetailView(activeState.value));
-    }
-  }
-
-  /* --- Two-Pass Token Isolation Hyperlink Engine --- */
-  _autoLinkText(text) {
-    if (!text || typeof text !== 'string') return text || '';
-    let linkedText = text;
-    
-    const rawCombos = Array.isArray(fragranceCombinations) ? fragranceCombinations : [];
-    const rawFrags = Array.isArray(individualFragrances) ? individualFragrances : [];
-
-    const allEntities = [
-      ...rawFrags.map(f => ({ name: f.name, id: f.id, type: 'frag' })),
-      ...rawCombos.map(c => ({ name: c.name, id: c.id, type: 'combo' }))
-    ].filter(e => e.name).sort((a, b) => b.name.length - a.name.length);
-
-    const tokens = [];
-
-    allEntities.forEach(entity => {
-      const escapedName = entity.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escapedName, 'gi');
-      
-      linkedText = linkedText.replace(regex, (match) => {
-        const token = `##FRAG_TOKEN_${tokens.length}##`;
-        tokens.push({
-          token: token,
-          html: `<span class="internal-link" data-type="${entity.type}" data-id="${entity.id}">${match}</span>`
-        });
-        return token;
-      });
-    });
-
-    for (let i = tokens.length - 1; i >= 0; i--) {
-      linkedText = linkedText.replace(tokens[i].token, tokens[i].html);
-    }
-
-    return linkedText;
-  }
-
-  _attachLinkListeners(container) {
-    if (!container) return;
-    
-    container.querySelectorAll('.internal-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const type = e.currentTarget.getAttribute('data-type');
-        const id = parseInt(e.currentTarget.getAttribute('data-id'), 10);
-        if (type && !isNaN(id)) {
-          this._navigateForward(`${type}-detail`, id);
-        }
-      });
-    });
-
-    container.querySelectorAll('.filter-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const cat = e.currentTarget.getAttribute('data-cat');
-        const val = e.currentTarget.getAttribute('data-val');
-        this._resetAndFilter(cat, val);
-      });
-    });
-
-    container.querySelectorAll('.home-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this._navigateHome();
-      });
-    });
-  }
-
-  /* --- View Builders --- */
-  _buildBrowserView() {
-    const div = document.createElement('div');
-    div.className = 'fade-in';
-    
-    let html = `
-      <div class="header-title">
-        <span>Fragrance Database</span>
-        <button class="home-btn">🏠</button>
-      </div>
-      
-      <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search brands, notes, families..." value="${this.searchTerm}">
-      </div>
-
-      <div class="rating-filter-container">
-        <select id="rating-type">
-          <option value="" ${this.ratingFilter.type === '' ? 'selected' : ''}>Filter by Rating...</option>
-          <option value="rating" ${this.ratingFilter.type === 'rating' ? 'selected' : ''}>Overall</option>
-          <option value="projection" ${this.ratingFilter.type === 'projection' ? 'selected' : ''}>Projection</option>
-          <option value="longevity" ${this.ratingFilter.type === 'longevity' ? 'selected' : ''}>Longevity</option>
-          <option value="compliment_factor" ${this.ratingFilter.type === 'compliment_factor' ? 'selected' : ''}>Compliments</option>
-          <option value="complexity" ${this.ratingFilter.type === 'complexity' ? 'selected' : ''}>Complexity (Blends)</option>
-          <option value="versatility" ${this.ratingFilter.type === 'versatility' ? 'selected' : ''}>Versatility (Frags)</option>
-        </select>
-        <input type="number" id="rating-min" step="0.1" min="0" max="5" placeholder="Min (e.g. 4.3)" value="${this.ratingFilter.min}">
-      </div>
-
-      <div class="filters-container">`;
-    
-    for (const [category, options] of Object.entries(this.filterCategories)) {
-      const isNotes = category === 'note';
-      const maxH = isNotes ? 'style="max-height: 120px; overflow-y: auto;"' : '';
-      
-      html += `<div class="filter-group"><div class="group-label">${category.replace('_', ' ')}</div><div class="chip-container" ${maxH}>`;
-      options.forEach(opt => {
-        const isActive = this.activeFilters[category].has(opt) ? 'active' : '';
-        const colorClass = isNotes ? 'chip-casual' : `chip-${opt.toLowerCase().replace(' ', '-')}`;
-        html += `<button class="chip ${colorClass} ${isActive}" data-category="${category}" data-val="${opt}">
-          <span class="chip-icon">${ICONS[opt] || ''}</span> ${opt}
-        </button>`;
-      });
-      html += `</div></div>`;
-    }
-    html += `</div><div id="results-list" class="scrollable-list"></div>`;
-    div.innerHTML = html;
-
-    div.querySelector('#search-input').addEventListener('input', (e) => {
-      this.searchTerm = e.target.value.toLowerCase();
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelector('#rating-type').addEventListener('change', (e) => {
-      this.ratingFilter.type = e.target.value;
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelector('#rating-min').addEventListener('input', (e) => {
-      this.ratingFilter.min = parseFloat(e.target.value) || '';
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelectorAll('.chip').forEach(chip => {
-      chip.addEventListener('click', (e) => {
-        const btn = e.currentTarget;
-        const cat = btn.getAttribute('data-category');
-        const val = btn.getAttribute('data-val');
-        if (this.activeFilters[cat].has(val)) { this.activeFilters[cat].delete(val); btn.classList.remove('active'); }
-        else { this.activeFilters[cat].add(val); btn.classList.add('active'); }
-        this._updateResultsList(div.querySelector('#results-list'));
-      });
-    });
-
-    this._attachLinkListeners(div);
-    this._updateResultsList(div.querySelector('#results-list'));
-    return div;
-  }
-
-  _updateResultsList(containerElement) {
-    if (!containerElement) return;
-
-    const filtered = (this.masterData || []).filter(item => {
-      if (!item) return false;
-
-      let matchSearch = false;
-      if (this.searchTerm === '') { matchSearch = true; } 
-      else {
-        const needle = this.searchTerm;
-        if (item._type === 'combo') {
-          matchSearch = (item.name || '').toLowerCase().includes(needle) || 
-                        (item.tags || []).some(t => String(t).toLowerCase().includes(needle)) ||
-                        (item.fragrances || []).some(f => String(f).toLowerCase().includes(needle));
-        } else {
-          matchSearch = (item.name || '').toLowerCase().includes(needle) || 
-                        (item.fragrance_family || '').toLowerCase().includes(needle) ||
-                        (item.dominant_notes || []).some(n => String(n).toLowerCase().includes(needle));
-        }
-      }
-
-      let matchRating = true;
-      if (this.ratingFilter.type && this.ratingFilter.min !== '') {
-        const val = parseFloat(item[this.ratingFilter.type]);
-        if (isNaN(val) || val < this.ratingFilter.min) { matchRating = false; }
-      }
-
-      let matchType = true;
-      if (this.activeFilters.type.size > 0) {
-        matchType = this.activeFilters.type.has(item._type === 'combo' ? 'Blend' : 'Fragrance');
-      }
-
-      let matchNote = true;
-      if (this.activeFilters.note.size > 0) {
-        const itemNotes = item._type === 'combo' ? (item.tags || []) : (item.dominant_notes || []);
-        matchNote = Array.from(this.activeFilters.note).some(n => itemNotes.includes(n));
-      }
-
-      let matchSeason = true, matchTime = true, matchOccasion = true;
-      
-      if (this.activeFilters.season.size > 0) {
-        if (item._type === 'combo') matchSeason = this.activeFilters.season.has(item.season) || item.season === 'All Seasons';
-        if (item._type === 'frag') matchSeason = Array.from(this.activeFilters.season).some(s => (item.seasons || []).includes(s));
-      }
-
-      if (this.activeFilters.time_of_day.size > 0) {
-        if (item._type === 'combo') matchTime = this.activeFilters.time_of_day.has(item.time_of_day) || item.time_of_day === 'All';
-        if (item._type === 'frag') {
-          const reqDay = this.activeFilters.time_of_day.has('Day') && parseFloat(item.day_score || 0) >= 4.0;
-          const reqNight = this.activeFilters.time_of_day.has('Night') && parseFloat(item.night_score || 0) >= 4.0;
-          matchTime = reqDay || reqNight;
-        }
-      }
-
-      if (this.activeFilters.occasion.size > 0) {
-        if (item._type === 'combo') matchOccasion = this.activeFilters.occasion.has(item.occasion);
-        if (item._type === 'frag') {
-          matchOccasion = Array.from(this.activeFilters.occasion).some(occ => {
-            return parseFloat(item[`${occ.toLowerCase()}_score`] || 0) >= 4.0;
-          });
-        }
-      }
-
-      return matchSearch && matchRating && matchType && matchNote && matchSeason && matchTime && matchOccasion;
-    });
-
-    let listHtml = `<div class="results-count">${filtered.length} matches verified</div>`;
-    
-    if (filtered.length === 0) {
-      listHtml += `<div class="empty-state">No profiles or combination layouts match selected filters.</div>`;
-    } else {
-      listHtml += `<div class="list-container">`;
-      filtered.forEach(item => {
-        const typeIcon = item._type === 'combo' ? '🧪' : '🧴';
-        const typeLabel = item._type === 'combo' ? 'Blend' : 'Fragrance';
-        const rawScore = item.rating !== undefined ? item.rating : item.projection;
-        const formattedScore = typeof rawScore === 'number' ? rawScore.toFixed(1) : parseFloat(rawScore || 0).toFixed(1);
-        
-        listHtml += `
-          <button class="list-row list-row-clickable" data-type="${item._type}" data-id="${item.id}">
-            <div class="row-meta">
-              <span class="row-name">${typeIcon} ${(item.name || 'Unnamed')}</span>
-              <span class="row-rating">⭐ ${formattedScore}</span>
-            </div>
-            <div class="row-tags">${item._type === 'combo' ? (item.tags || []).join(' • ') : (item.fragrance_family || 'Unclassified')}</div>
-            <div class="row-context">${typeLabel}</div>
-          </button>
-        `;
-      });
-      listHtml += `</div>`;
-    }
-
-    containerElement.innerHTML = listHtml;
-
-    containerElement.querySelectorAll('.list-row-clickable').forEach(row => {
-      row.addEventListener('click', () => {
-        this._navigateForward(`${row.getAttribute('data-type')}-detail`, parseInt(row.getAttribute('data-id'), 10));
-      });
-    });
-  }
-
-  _buildComboDetailView(id) {
-    const div = document.createElement('div');
-    div.className = 'fade-in';
-    const item = this.masterData.find(f => f.id === id && f._type === 'combo');
-    if (!item) return div;
-
-    const sClass = `pill-${(item.season || '').toLowerCase().replace(' ', '-')}`;
-    const tClass = `pill-${(item.time_of_day || '').toLowerCase().replace(' ', '-')}`;
-    const oClass = `pill-${(item.occasion || '').toLowerCase().replace(' ', '-')}`;
-
-    div.innerHTML = `
-      <div class="detail-header">
-        <button class="home-btn">🏠</button>
-        <div style="text-align: right;">
-          <div class="detail-title">🧪 ${(item.name || 'Unnamed Blend')}</div>
-          <div class="detail-badge-rating">⭐ ${parseFloat(item.rating || 0).toFixed(1)}</div>
-        </div>
-      </div>
-      
-      <div class="tag-pill-container">
-        <span class="pill filter-link ${sClass}" data-cat="season" data-val="${item.season}">${ICONS[item.season] || ''} ${item.season || 'Any'}</span>
-        <span class="pill filter-link ${tClass}" data-cat="time_of_day" data-val="${item.time_of_day}">${ICONS[item.time_of_day] || ''} ${item.time_of_day || 'Any'}</span>
-        <span class="pill filter-link ${oClass}" data-cat="occasion" data-val="${item.occasion}">${ICONS[item.occasion] || ''} ${item.occasion || 'Casual'}</span>
-      </div>
-
-      <div class="ratings-grid">
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.projection || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.longevity || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.compliment_factor || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.complexity || 0).toFixed(1)}</div><div class="rb-lbl">Complexity</div></div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Composition Elements</div>
-        <div class="ingredients-list">
-          ${(item.fragrances || []).map(f => `<div class="ingredient-item">🧴 ${this._autoLinkText(f)}</div>`).join('')}
-        </div>
-      </div>
-      
-      <div class="detail-section">
-        <div class="section-label">Synergy Tags</div>
-        <div class="tag-pill-container" style="margin-bottom:0;">
-          ${(item.tags || []).map(note => `<span class="pill pill-casual filter-link" data-cat="note" data-val="${note}">${note}</span>`).join('')}
-        </div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Olfactory Profile & Synergy</div>
-        <p class="section-body-text">${this._autoLinkText(item.profile || '')}</p>
-        <p class="section-body-text synergy-text"><em>Synergy Profile:</em> ${this._autoLinkText(item.synergy || '')}</p>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Application Mapping Sequence</div>
-        <div class="steps-box">${(item.steps || '').split('\n').map(step => `<div class="step-line">${this._autoLinkText(step)}</div>`).join('')}</div>
-      </div>
-      
-      ${item.alternatives && item.alternatives.length > 0 ? `
-      <div class="detail-section">
-        <div class="section-label">Alternatives</div>
-        <p class="section-body-text">${item.alternatives.map(alt => this._autoLinkText(alt)).join('<br>')}</p>
-      </div>` : ''}
-    `;
-
-    this._attachLinkListeners(div);
-    return div;
-  }
-
-  _buildFragDetailView(id) {
-    const div = document.createElement('div');
-    div.className = 'fade-in';
-    const item = this.masterData.find(f => f.id === id && f._type === 'frag');
-    if (!item) return div;
-
-    div.innerHTML = `
-      <div class="detail-header">
-        <button class="home-btn">🏠</button>
-        <div style="text-align: right;">
-          <div class="detail-title">🧴 ${(item.name || 'Unknown Item')}</div>
-          <div class="detail-badge-rating">⭐ ${parseFloat(item.rating || 0).toFixed(1)}</div>
-        </div>
-      </div>
-      
-      <div class="frag-meta-row">
-        <strong>Family:</strong> ${(item.fragrance_family || 'Unmapped')} <br>
-        <strong>Type:</strong> ${(item.clone_type || 'Original Formulation')} <br>
-        <strong>Inspiration:</strong> ${this._autoLinkText(item.inspiration || '')}
-      </div>
-
-      <div class="ratings-grid">
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.projection || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.longevity || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.compliment_factor || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.versatility || 0).toFixed(1)}</div><div class="rb-lbl">Versatility</div></div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Dominant Notes</div>
-        <div class="tag-pill-container" style="margin-bottom:0;">
-          ${(item.dominant_notes || []).map(note => `<span class="pill pill-casual filter-link" data-cat="note" data-val="${note}">${note}</span>`).join('')}
-        </div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Performance & Architecture Analysis</div>
-        <p class="section-body-text">${this._autoLinkText(item.description || '')}</p>
-      </div>
-      
-      <div class="detail-section">
-        <div class="section-label">Situation Scenario Target Values</div>
-        <div class="scores-grid">
-          <div>Day: <strong>${parseFloat(item.day_score || 0).toFixed(1)}</strong></div>
-          <div>Night: <strong>${parseFloat(item.night_score || 0).toFixed(1)}</strong></div>
-          <div>Office: <strong>${parseFloat(item.office_score || 0).toFixed(1)}</strong></div>
-          <div>Formal: <strong>${parseFloat(item.formal_score || 0).toFixed(1)}</strong></div>
-          <div>Casual: <strong>${parseFloat(item.casual_score || 0).toFixed(1)}</strong></div>
-          <div>Evening: <strong>${parseFloat(item.evening_score || 0).toFixed(1)}</strong></div>
-        </div>
-      </div>
-
-      ${item.related_fragrances && item.related_fragrances.length > 0 ? `
-      <div class="detail-section">
-        <div class="section-label">Related Fragrances</div>
-        <p class="section-body-text">${item.related_fragrances.map(rel => this._autoLinkText(rel)).join(', ')}</p>
-      </div>` : ''}
-    `;
-
-    this._attachLinkListeners(div);
-    return div;
-  }
-
-  _showToastMessage(msg) {
-    let container = this.shadowRoot.getElementById('toast-box');
-    if (!container) return;
-    container.textContent = msg;
-    container.className = "toast show";
-    setTimeout(() => { container.className = "toast"; }, 2500);
-  }
-
-  _renderSkeleton() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host { display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .main-card-frame {
-          background: var(--ha-card-background, #1c1c1e); border-radius: 12px;
-          color: var(--primary-text-color, #ffffff); padding: 16px; min-height: 450px;
-          position: relative; overflow: hidden; display: flex; flex-direction: column;
-        }
-        .header-title { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px; }
-        
-        /* Inputs & Filters */
-        .search-container { margin-bottom: 8px; }
-        .rating-filter-container { display: flex; gap: 8px; margin-bottom: 12px; }
-        input[type="text"], input[type="number"], select {
-          padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2c2c2e; color: #fff; font-size: 13px; box-sizing: border-box; outline: none;
-        }
-        input[type="text"] { width: 100%; }
-        select { flex: 2; } input[type="number"] { flex: 1; }
-        
-        /* Chips */
-        .filters-container { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
-        .filter-group { margin-Here are the updated files implementing your requested changes. 
-
-The scores have been fixed to reference the correct underlying object keys, the type filter has been added, all internal references/links now act as search filters to navigate you back to the filtered main screen, dominant notes and tags are now clickable filters, and a unified home button has been added that safely unwinds the history stack down to the top level (enabling double-tap to exit). Ratings have also been strictly formatted to `0.0` - `5.0` ranges.
-
-### 1. `fragrance-explorer.js`
-
-```javascript
-/**
- * Fragrance Explorer Custom Lovelace Card
- * Version 4.3: Unified Index, Isolated Cross-Linking, and Filter Navigation
- */
-
-import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=4.3';
-import { individualFragrances } from '/local/community/fragrance-explorer-card/individual_fragrances.js?v=4.3';
-
-const ICONS = {
-  'Spring': '🌸', 'Summer': '☀️', 'Autumn': '🍂', 'Winter': '❄️', 'All Seasons': '🌍',
-  'Day': '🌅', 'Night': '🌃', 'All': '🌗',
-  'Casual': '👕', 'Office': '💼', 'Evening': '🍸', 'Formal': '👔'
-};
-
-const FILTER_CATEGORIES = {
-  season: ['Spring', 'Summer', 'Autumn', 'Winter'],
-  time_of_day: ['Day', 'Night'],
-  occasion: ['Casual', 'Office', 'Evening', 'Formal']
-};
-
-class FragranceExplorerCard extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    
-    // Core state tracking arrays
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
-    this.exitTimer = null;
-    this.backPressedOnce = false;
+    this.render();
+  }
 
-    // Filter state
+  resetAllFilters() {
     this.searchTerm = '';
-    this.typeFilter = 'all';
     this.ratingFilter = { type: '', min: '' };
-    this.activeFilters = { season: new Set(), time_of_day: new Set(), occasion: new Set() };
-    
-    // Defensive initialization to prevent spreading crashes
-    const rawCombos = Array.isArray(fragranceCombinations) ? fragranceCombinations : [];
-    const rawFrags = Array.isArray(individualFragrances) ? individualFragrances : [];
-
-    this.masterData = [
-      ...rawCombos.map(item => ({ ...item, _type: 'combo' })),
-      ...rawFrags.map(item => ({ ...item, _type: 'frag' }))
-    ];
-
-    this._handlePopState = this._handlePopState.bind(this);
+    for (const key in this.activeFilters) {
+      this.activeFilters[key].clear();
+    }
+    this.render();
   }
 
-  set hass(hass) { this._hass = hass; }
-  setConfig(config) { this._config = config; }
-
-  connectedCallback() {
-    this._renderSkeleton();
-    this._initNavigationEngine();
-    window.addEventListener('popstate', this._handlePopState);
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener('popstate', this._handlePopState);
-    if (this.exitTimer) clearTimeout(this.exitTimer);
-  }
-
-  /* --- Navigation Engine --- */
-  _initNavigationEngine() {
-    const uniqueStateId = 'fragrance_explorer_' + Date.now();
-    this.sessionStateKey = uniqueStateId;
-    window.history.replaceState({ app: this.sessionStateKey, depth: 0 }, '');
-    window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
-    this.currentDepth = 1;
-    this._renderCurrentView();
-  }
-
-  _navigateForward(nextView, value = null) {
-    this.navStack.push({ view: nextView, value: value });
+  navigateTo(view, value) {
+    this.navStack.push({ view, value });
     this.currentDepth = this.navStack.length;
-    window.history.pushState({ app: this.sessionStateKey, depth: this.currentDepth }, '');
-    this._renderCurrentView();
+    this.render();
   }
 
-  _goHome() {
-    if (this.currentDepth > 1) {
-      window.history.go(-(this.currentDepth - 1));
-    } else {
-      this._renderCurrentView();
-    }
-  }
-
-  _handlePopState(event) {
-    if (!event.state || event.state.app !== this.sessionStateKey) {
-      // Out of app bounds - handle double tap to exit
-      if (!this.backPressedOnce) {
-        this.backPressedOnce = true;
-        this._showToastMessage("Press back again to exit");
-        window.history.pushState({ app: this.sessionStateKey, depth: 1 }, '');
-        this.currentDepth = 1;
-        this.exitTimer = setTimeout(() => { this.backPressedOnce = false; }, 4000);
-      } else {
-        if (this.exitTimer) clearTimeout(this.exitTimer);
-        window.history.go(-2); 
-      }
-      return;
-    }
-
-    const targetDepth = event.state.depth;
-
-    if (targetDepth < this.currentDepth) {
-      while (this.navStack.length > targetDepth) {
-        this.navStack.pop();
-      }
+  navigateBack() {
+    if (this.navStack.length > 1) {
+      this.navStack.pop();
       this.currentDepth = this.navStack.length;
-      this.backPressedOnce = false; 
-      this._renderCurrentView();
-    } else if (targetDepth > this.currentDepth) {
-      this.currentDepth = targetDepth;
+      this.render();
     }
   }
 
-  _renderCurrentView() {
-    const activeState = this.navStack[this.navStack.length - 1];
-    const container = this.shadowRoot.getElementById('view-port');
-    if (!container) return;
-    
-    container.innerHTML = '';
-
-    if (activeState.view === 'browser') {
-      container.appendChild(this._buildBrowserView());
-    } else if (activeState.view === 'combo-detail') {
-      container.appendChild(this._buildComboDetailView(activeState.value));
-    } else if (activeState.view === 'frag-detail') {
-      container.appendChild(this._buildFragDetailView(activeState.value));
-    }
+  resetToHomeView() {
+    this.navStack = [{ view: 'browser', value: null }];
+    this.currentDepth = 1;
+    this.render();
   }
 
-  _applyFilterAndGoHome(filterType, filterVal) {
-    this.activeFilters = { season: new Set(), time_of_day: new Set(), occasion: new Set() };
-    this.searchTerm = '';
-    this.typeFilter = 'all';
-
-    if (['season', 'time_of_day', 'occasion'].includes(filterType)) {
-      this.activeFilters[filterType].add(filterVal);
-    } else if (filterType === 'search') {
-      this.searchTerm = filterVal.toLowerCase();
+  toggleFilter(category, value) {
+    if (this.activeFilters[category].has(value)) {
+      this.activeFilters[category].delete(value);
+    } else {
+      this.activeFilters[category].add(value);
     }
-
-    this._goHome();
+    this.render();
   }
 
-  /* --- Token Isolation Hyperlink Engine (Filter Triggers) --- */
-  _autoLinkText(text) {
-    if (!text || typeof text !== 'string') return text || '';
-    let linkedText = text;
-    
-    const allEntities = [...this.masterData]
-      .filter(e => e.name)
-      .sort((a, b) => b.name.length - a.name.length);
-
-    const tokens = [];
-
-    allEntities.forEach(entity => {
-      const escapedName = entity.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escapedName, 'gi');
+  // Core filtration pipeline evaluating types, text constraints, arrays, and notes
+  getFilteredItems() {
+    return this.masterIndex.filter(item => {
+      if (this.searchTerm) {
+        const search = this.searchTerm.toLowerCase();
+        const matchName = item.name?.toLowerCase().includes(search);
+        const matchFam = item.fragrance_family?.toLowerCase().includes(search);
+        const matchNotes = item.dominant_notes?.some(n => String(n).toLowerCase().includes(search));
+        if (!matchName && !matchFam && !matchNotes) return false;
+      }
       
-      linkedText = linkedText.replace(regex, (match) => {
-        const token = `##FRAG_TOKEN_${tokens.length}##`;
-        tokens.push({
-          token: token,
-          html: `<span class="internal-link" data-search="${entity.name}">${match}</span>`
-        });
-        return token;
-      });
-    });
-
-    for (let i = tokens.length - 1; i >= 0; i--) {
-      linkedText = linkedText.replace(tokens[i].token, tokens[i].html);
-    }
-
-    return linkedText;
-  }
-
-  _attachGlobalListeners(container) {
-    if (!container) return;
-    
-    container.querySelectorAll('.internal-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const searchVal = e.currentTarget.getAttribute('data-search') || e.currentTarget.textContent;
-        this._applyFilterAndGoHome('search', searchVal);
-      });
-    });
-
-    container.querySelectorAll('.clickable-filter').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const type = e.currentTarget.getAttribute('data-type');
-        const val = e.currentTarget.getAttribute('data-val');
-        this._applyFilterAndGoHome(type, val);
-      });
-    });
-
-    container.querySelectorAll('.home-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this._goHome();
-      });
-    });
-  }
-
-  /* --- View Builders --- */
-  _buildBrowserView() {
-    const div = document.createElement('div');
-    div.className = 'fade-in';
-    
-    let html = `
-      <div class="header-title">
-        <span>Fragrance Database</span>
-        <button class="icon-btn home-btn" title="Home">🏠</button>
-      </div>
-      
-      <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search brands, notes, families..." value="${this.searchTerm}">
-      </div>
-
-      <div class="rating-filter-container">
-        <select id="type-filter">
-          <option value="all" ${this.typeFilter === 'all' ? 'selected' : ''}>All Types</option>
-          <option value="combo" ${this.typeFilter === 'combo' ? 'selected' : ''}>Blends Only</option>
-          <option value="frag" ${this.typeFilter === 'frag' ? 'selected' : ''}>Frags Only</option>
-        </select>
-        <select id="rating-type">
-          <option value="" ${this.ratingFilter.type === '' ? 'selected' : ''}>Rating Type...</option>
-          <option value="rating" ${this.ratingFilter.type === 'rating' ? 'selected' : ''}>Overall</option>
-          <option value="projection" ${this.ratingFilter.type === 'projection' ? 'selected' : ''}>Projection</option>
-          <option value="longevity" ${this.ratingFilter.type === 'longevity' ? 'selected' : ''}>Longevity</option>
-          <option value="compliment_factor" ${this.ratingFilter.type === 'compliment_factor' ? 'selected' : ''}>Compliments</option>
-          <option value="complexity" ${this.ratingFilter.type === 'complexity' ? 'selected' : ''}>Complexity</option>
-          <option value="versatility" ${this.ratingFilter.type === 'versatility' ? 'selected' : ''}>Versatility</option>
-        </select>
-        <input type="number" id="rating-min" step="0.1" min="0" max="5" placeholder="Min (e.g. 4.0)" value="${this.ratingFilter.min}">
-      </div>
-
-      <div class="filters-container">`;
-    
-    for (const [category, options] of Object.entries(FILTER_CATEGORIES)) {
-      html += `<div class="filter-group"><div class="group-label">${category.replace('_', ' ')}</div><div class="chip-container">`;
-      options.forEach(opt => {
-        const isActive = this.activeFilters[category].has(opt) ? 'active' : '';
-        const colorClass = `chip-${opt.toLowerCase().replace(' ', '-')}`;
-        html += `<button class="chip ${colorClass} ${isActive}" data-category="${category}" data-val="${opt}">
-          <span class="chip-icon">${ICONS[opt] || ''}</span> ${opt}
-        </button>`;
-      });
-      html += `</div></div>`;
-    }
-    html += `</div><div id="results-list" class="scrollable-list"></div>`;
-    div.innerHTML = html;
-
-    div.querySelector('#search-input').addEventListener('input', (e) => {
-      this.searchTerm = e.target.value.toLowerCase();
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelector('#type-filter').addEventListener('change', (e) => {
-      this.typeFilter = e.target.value;
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelector('#rating-type').addEventListener('change', (e) => {
-      this.ratingFilter.type = e.target.value;
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelector('#rating-min').addEventListener('input', (e) => {
-      this.ratingFilter.min = parseFloat(e.target.value) || '';
-      this._updateResultsList(div.querySelector('#results-list'));
-    });
-
-    div.querySelectorAll('.chip').forEach(chip => {
-      chip.addEventListener('click', (e) => {
-        const btn = e.currentTarget;
-        const cat = btn.getAttribute('data-category');
-        const val = btn.getAttribute('data-val');
-        if (this.activeFilters[cat].has(val)) { this.activeFilters[cat].delete(val); btn.classList.remove('active'); }
-        else { this.activeFilters[cat].add(val); btn.classList.add('active'); }
-        this._updateResultsList(div.querySelector('#results-list'));
-      });
-    });
-
-    div.querySelector('.home-btn').addEventListener('click', () => this._goHome());
-
-    this._updateResultsList(div.querySelector('#results-list'));
-    return div;
-  }
-
-  _updateResultsList(containerElement) {
-    if (!containerElement) return;
-
-    const filtered = (this.masterData || []).filter(item => {
-      if (!item) return false;
-
-      // 1. Type Match
-      let matchType = true;
-      if (this.typeFilter === 'combo') matchType = item._type === 'combo';
-      if (this.typeFilter === 'frag') matchType = item._type === 'frag';
-      if (!matchType) return false;
-
-      // 2. Search Parameters
-      let matchSearch = false;
-      if (this.searchTerm === '') { matchSearch = true; } 
-      else {
-        const needle = this.searchTerm;
-        if (item._type === 'combo') {
-          matchSearch = (item.name || '').toLowerCase().includes(needle) || 
-                        (item.tags || []).some(t => String(t).toLowerCase().includes(needle)) ||
-                        (item.fragrances || []).some(f => String(f).toLowerCase().includes(needle));
-        } else {
-          matchSearch = (item.name || '').toLowerCase().includes(needle) || 
-                        (item.fragrance_family || '').toLowerCase().includes(needle) ||
-                        (item.dominant_notes || []).some(n => String(n).toLowerCase().includes(needle));
-        }
+      if (this.ratingFilter.min) {
+        const itemRating = parseFloat(item.rating || 0.0);
+        const minRating = parseFloat(this.ratingFilter.min);
+        if (this.ratingFilter.type === 'exact' && itemRating !== minRating) return false;
+        if (this.ratingFilter.type === 'min' && itemRating < minRating) return false;
       }
 
-      // 3. Rating Bounds
-      let matchRating = true;
-      if (this.ratingFilter.type && this.ratingFilter.min !== '') {
-        const val = parseFloat(item[this.ratingFilter.type]);
-        if (isNaN(val) || val < this.ratingFilter.min) { matchRating = false; }
-      }
+      if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
-      // 4. Category Matrix
-      let matchSeason = true, matchTime = true, matchOccasion = true;
-      
       if (this.activeFilters.season.size > 0) {
-        if (item._type === 'combo') matchSeason = this.activeFilters.season.has(item.season) || item.season === 'All Seasons';
-        if (item._type === 'frag') matchSeason = Array.from(this.activeFilters.season).some(s => (item.seasons || []).includes(s));
+        const seasons = Array.isArray(item.seasons) ? item.seasons : [item.season];
+        if (!seasons.some(s => this.activeFilters.season.has(s) || s === 'All Seasons')) return false;
       }
 
       if (this.activeFilters.time_of_day.size > 0) {
-        if (item._type === 'combo') matchTime = this.activeFilters.time_of_day.has(item.time_of_day) || item.time_of_day === 'All';
-        if (item._type === 'frag') {
-          const reqDay = this.activeFilters.time_of_day.has('Day') && parseFloat(item.day_score || 0) >= 4.0;
-          const reqNight = this.activeFilters.time_of_day.has('Night') && parseFloat(item.night_score || 0) >= 4.0;
-          matchTime = reqDay || reqNight;
-        }
+        const times = Array.isArray(item.time_of_day) ? [item.time_of_day] : [item.time_of_day];
+        // Handle explicit combinations or "All" wildcards
+        if (item.time_of_day === 'All') return true;
+        if (!times.some(t => this.activeFilters.time_of_day.has(t))) return false;
       }
 
       if (this.activeFilters.occasion.size > 0) {
-        if (item._type === 'combo') matchOccasion = this.activeFilters.occasion.has(item.occasion);
-        if (item._type === 'frag') {
-          matchOccasion = Array.from(this.activeFilters.occasion).some(occ => {
-            return parseFloat(item[`${occ.toLowerCase()}_score`] || 0) >= 4.0;
-          });
-        }
+        const occasions = Array.isArray(item.occasion) ? [item.occasion] : [item.occasion];
+        if (!occasions.some(o => this.activeFilters.occasion.has(o))) return false;
       }
 
-      return matchSearch && matchRating && matchSeason && matchTime && matchOccasion;
-    });
+      if (this.activeFilters.note.size > 0) {
+        const normalizedItemNotes = Array.isArray(item.dominant_notes) ? item.dominant_notes.flat().map(n => String(n).trim()) : [];
+        let hasNoteMatch = false;
+        for (let requestedNote of this.activeFilters.note) {
+          if (normalizedItemNotes.includes(requestedNote)) {
+            hasNoteMatch = true;
+            break;
+          }
+        }
+        if (!hasNoteMatch) return false;
+      }
 
-    let listHtml = `<div class="results-count">${filtered.length} matches verified</div>`;
+      return true;
+    });
+  }
+
+  // Generates precise star paths matching the requested 0.1 incremental resolutions
+  renderStars(rating) {
+    const parsed = parseFloat(rating || 0.0);
+    let starsHTML = '';
+    for (let i = 1; i <= 5; i++) {
+      if (parsed >= i) {
+        starsHTML += `<span class="star filled">★</span>`;
+      } else if (parsed > i - 1) {
+        const percentage = Math.round((parsed - (i - 1)) * 100);
+        starsHTML += `<span class="star partial" style="--fill-width: ${percentage}%">★</span>`;
+      } else {
+        starsHTML += `<span class="star empty">★</span>`;
+      }
+    }
+    return `<div class="star-rating-container" title="${parsed.toFixed(1)} / 5.0">${starsHTML} <span class="rating-numeric">${parsed.toFixed(1)}</span></div>`;
+  }
+
+  render() {
+    const currentNav = this.navStack[this.navStack.length - 1];
     
-    if (filtered.length === 0) {
-      listHtml += `<div class="empty-state">No profiles or combination layouts match selected filters.</div>`;
-    } else {
-      listHtml += `<div class="list-container">`;
-      filtered.forEach(item => {
-        const typeIcon = item._type === 'combo' ? '🧪' : '🧴';
-        const typeLabel = item._type === 'combo' ? 'Blend' : 'Fragrance';
-        const formattedScore = parseFloat(item.rating || 0).toFixed(1);
-        
-        listHtml += `
-          <button class="list-row list-row-clickable" data-type="${item._type}" data-id="${item.id}">
-            <div class="row-meta">
-              <span class="row-name">${typeIcon} ${(item.name || 'Unnamed')}</span>
-              <span class="row-rating">⭐ ${formattedScore}</span>
-            </div>
-            <div class="row-tags">${item._type === 'combo' ? (item.tags || []).join(' • ') : (item.fragrance_family || 'Unclassified')}</div>
-            <div class="row-context">${typeLabel}</div>
-          </button>
-        `;
-      });
-      listHtml += `</div>`;
+    let activeContentHTML = '';
+    if (currentNav.view === 'browser') {
+      activeContentHTML = this.renderBrowserView();
+    } else if (currentNav.view === 'detail') {
+      activeContentHTML = this.renderDetailView(currentNav.value);
     }
 
-    containerElement.innerHTML = listHtml;
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host { --card-padding: 16px; font-family: var(--paper-font-body1_-_font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif); color: var(--primary-text-color, #212121); }
+        .card-container { background: var(--ha-card-background, var(--card-background-color, #ffffff)); border-radius: var(--ha-card-border-radius, 12px); box-shadow: var(--ha-card-box-shadow, 0px 2px 4px rgba(0,0,0,0.1)); padding: var(--card-padding); border: var(--ha-card-border, 1px solid var(--divider-color, #e0e0e0)); position: relative; overflow: hidden; }
+        
+        /* Navigation Elements Styles */
+        .header-navigation-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; border-bottom: 1px solid var(--divider-color, #e0e0e0); padding-bottom: 10px; }
+        .navigation-actions-group { display: flex; align-items: center; gap: 8px; }
+        .nav-btn { background: var(--secondary-background-color, #f5f5f5); border: 1px solid var(--divider-color, #e0e0e0); border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--primary-text-color); display: inline-flex; align-items: center; gap: 4px; transition: background 0.2s; }
+        .nav-btn:hover { background: var(--table-row-alternative-background-color, #eee); }
+        .card-title-text { font-size: 18px; font-weight: 700; margin: 0; flex-grow: 1; text-align: right; color: var(--primary-text-color); }
+        
+        /* Interactive Filter Layouts */
+        .search-input-field { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--divider-color, #ccc); background: var(--first-background-color, #fff); color: var(--primary-text-color); font-size: 14px; margin-bottom: 12px; }
+        .filter-section-wrapper { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; background: var(--secondary-background-color, #fafafa); padding: 10px; border-radius: 8px; border: 1px solid var(--divider-color, #eaeaea); }
+        .filter-row-container { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+        .filter-row-label { font-size: 12px; font-weight: 700; width: 65px; color: var(--secondary-text-color, #666); text-transform: uppercase; }
+        .filter-interactive-tag { background: var(--card-background-color, #fff); border: 1px solid var(--divider-color, #dcdcdc); border-radius: 16px; padding: 4px 10px; font-size: 12px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 2px; color: var(--primary-text-color); }
+        .filter-interactive-tag.active { background: var(--accent-color, #0076ff); color: #fff; border-color: var(--accent-color, #0076ff); font-weight: 600; }
+        .clear-filters-btn { margin-top: 4px; border: 1px dashed var(--accent-color, #0076ff); background: transparent; color: var(--accent-color, #0076ff); font-weight: 600; }
+        
+        /* Select Dropdowns */
+        .custom-filter-select { background: var(--card-background-color, #fff); color: var(--primary-text-color); border: 1px solid var(--divider-color, #ccc); border-radius: 6px; padding: 4px 8px; font-size: 12px; max-width: 150px; cursor: pointer; }
 
-    containerElement.querySelectorAll('.list-row-clickable').forEach(row => {
-      row.addEventListener('click', () => {
-        this._navigateForward(`${row.getAttribute('data-type')}-detail`, parseInt(row.getAttribute('data-id'), 10));
+        /* Listing Grid Views */
+        .collection-items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        .grid-item-card { background: var(--card-background-color, #ffffff); border: 1px solid var(--divider-color, #e0e0e0); border-radius: 8px; padding: 10px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .grid-item-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); border-color: var(--accent-color, #0076ff); }
+        .item-type-badge { position: absolute; top: 6px; right: 6px; font-size: 10px; padding: 2px 5px; border-radius: 4px; background: var(--secondary-background-color, #eee); font-weight: bold; opacity: 0.8; }
+        .grid-item-title { font-size: 13px; font-weight: 700; margin: 0 0 4px 0; line-height: 1.3; padding-right: 24px; color: var(--primary-text-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .grid-item-subtitle { font-size: 11px; color: var(--secondary-text-color, #757575); margin: 0 0 8px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        /* Core Functional Star Vectors */
+        .star-rating-container { display: inline-flex; align-items: center; gap: 1px; font-size: 13px; line-height: 1; }
+        .star { color: #ccc; position: relative; display: inline-block; }
+        .star.filled { color: #ffb400; }
+        .star.partial { color: #ccc; }
+        .star.partial::before { content: '★'; position: absolute; top: 0; left: 0; width: var(--fill-width, 0%); overflow: hidden; color: #ffb400; }
+        .rating-numeric { font-size: 11px; font-weight: bold; margin-left: 4px; color: var(--secondary-text-color); }
+
+        /* Complete Contextual Detail Engine Styles */
+        .detail-view-layout { display: flex; flex-direction: column; gap: 12px; animation: fadeIn 0.2s ease-out; }
+        .detail-hero-block { background: var(--secondary-background-color, #f9f9f9); border: 1px solid var(--divider-color, #eee); padding: 12px; border-radius: 8px; }
+        .detail-main-title { font-size: 20px; font-weight: 800; margin: 0 0 4px 0; color: var(--primary-text-color); }
+        .detail-family-sub { font-size: 13px; color: var(--secondary-text-color); margin-bottom: 8px; font-style: italic; }
+        
+        /* Metric Blocks Row */
+        .metrics-flex-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px 0; }
+        .metric-score-card { background: var(--card-background-color, #fff); border: 1px solid var(--divider-color, #e0e0e0); padding: 8px 4px; border-radius: 6px; text-align: center; }
+        .metric-score-label { font-size: 10px; font-weight: 700; color: var(--secondary-text-color); text-transform: uppercase; margin-bottom: 2px; }
+        .metric-score-num { font-size: 15px; font-weight: 800; color: var(--accent-color, #0076ff); }
+        
+        /* Contextual Linked Tags and Badges */
+        .contextual-filter-link { color: var(--accent-color, #0076ff); text-decoration: none; font-weight: 600; cursor: pointer; border-bottom: 1px dashed var(--accent-color, #0076ff); transition: opacity 0.2s; }
+        .contextual-filter-link:hover { opacity: 0.7; }
+        .details-badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .clickable-badge { background: var(--secondary-background-color, #f0f0f0); color: var(--primary-text-color); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; transition: background 0.2s; border: 1px solid var(--divider-color, #e0e0e0); }
+        .clickable-badge:hover { background: var(--accent-color, #0076ff); color: #fff; border-color: var(--accent-color, #0076ff); }
+
+        .content-block-section { border-left: 3px solid var(--accent-color, #0076ff); background: rgba(0, 118, 255, 0.03); padding: 10px; border-radius: 0 8px 8px 0; margin-top: 4px; }
+        .section-header-inline { font-size: 13px; font-weight: 700; margin: 0 0 6px 0; text-transform: uppercase; color: var(--secondary-text-color); }
+        .block-text-paragraph { font-size: 13px; line-height: 1.45; margin: 0; white-space: pre-wrap; color: var(--primary-text-color); }
+        .empty-state-card { text-align: center; padding: 32px; color: var(--secondary-text-color); font-size: 13px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+      </style>
+      
+      <div class="card-container">
+        <div class="header-navigation-bar">
+          <div class="navigation-actions-group">
+            ${this.currentDepth > 1 ? `<button class="nav-btn" id="back-nav-trigger">⬅ Back</button>` : ''}
+            <button class="nav-btn" id="home-nav-trigger" title="Jump to top-level overview">🏠 Home</button>
+          </div>
+          <div class="card-title-text">Fragrance Vault</div>
+        </div>
+        
+        <div class="card-content-viewport">
+          ${activeContentHTML}
+        </div>
+      </div>
+    `;
+
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    const backBtn = this.shadowRoot.getElementById('back-nav-trigger');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => this.navigateBack());
+    }
+
+    const homeBtn = this.shadowRoot.getElementById('home-nav-trigger');
+    if (homeBtn) {
+      homeBtn.addEventListener('click', () => this.resetToHomeView());
+    }
+
+    // Attach search engine listeners
+    const searchField = this.shadowRoot.getElementById('search-core-field');
+    if (searchField) {
+      searchField.addEventListener('input', (e) => {
+        this.searchTerm = e.target.value;
+        this.render();
+        const sf = this.shadowRoot.getElementById('search-core-field');
+        if (sf) sf.focus();
+      });
+    }
+
+    // Bind browser item interaction click matrices
+    const items = this.shadowRoot.querySelectorAll('.grid-item-card');
+    items.forEach(card => {
+      card.addEventListener('click', () => {
+        const itemId = parseInt(card.getAttribute('data-id'));
+        const itemType = card.getAttribute('data-type');
+        const target = this.masterIndex.find(x => x.id === itemId && x.type === itemType);
+        if (target) {
+          this.navigateTo('detail', target);
+        }
+      });
+    });
+
+    // Bind interactive tag parameters dynamically
+    const tags = this.shadowRoot.querySelectorAll('.filter-interactive-tag:not(.clear-filters-btn)');
+    tags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        const category = tag.getAttribute('data-category');
+        const val = tag.getAttribute('data-value');
+        this.toggleFilter(category, val);
+      });
+    });
+
+    // Note Selector dropdown pipeline binding
+    const noteSelect = this.shadowRoot.getElementById('note-dropdown-selector');
+    if (noteSelect) {
+      noteSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        this.activeFilters.note.clear();
+        if (val) {
+          this.activeFilters.note.add(val);
+        }
+        this.render();
+      });
+    }
+
+    const clearBtn = this.shadowRoot.querySelector('.clear-filters-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => this.resetAllFilters());
+    }
+
+    // Detail view direct contextual reset triggers
+    const contextualLinks = this.shadowRoot.querySelectorAll('.contextual-filter-link');
+    contextualLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const cat = link.getAttribute('data-category');
+        const val = link.getAttribute('data-value');
+        this.applyContextualFilter(cat, val);
+      });
+    });
+
+    const contextualBadges = this.shadowRoot.querySelectorAll('.clickable-badge');
+    contextualBadges.forEach(badge => {
+      badge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const cat = badge.getAttribute('data-category');
+        const val = badge.getAttribute('data-value');
+        this.applyContextualFilter(cat, val);
       });
     });
   }
 
-  _buildComboDetailView(id) {
-    const div = document.createElement('div');
-    div.className = 'fade-in';
-    const item = this.masterData.find(f => f.id === id && f._type === 'combo');
-    if (!item) return div;
+  renderBrowserView() {
+    const filteredItems = this.getFilteredItems();
+    
+    // Determine active tag helper flags
+    const hasActiveFilters = Object.values(this.activeFilters).some(set => set.size > 0) || this.searchTerm;
 
-    const sClass = `pill-${(item.season || '').toLowerCase().replace(' ', '-')}`;
-    const tClass = `pill-${(item.time_of_day || '').toLowerCase().replace(' ', '-')}`;
-    const oClass = `pill-${(item.occasion || '').toLowerCase().replace(' ', '-')}`;
-
-    div.innerHTML = `
-      <div class="detail-header">
-        <div class="detail-title">🧪 ${(item.name || 'Unnamed Blend')}</div>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <div class="detail-badge-rating">⭐ ${parseFloat(item.rating || 0).toFixed(1)}</div>
-          <button class="icon-btn home-btn">🏠</button>
-        </div>
-      </div>
+    return `
+      <input type="text" id="search-core-field" class="search-input-field" placeholder="Search by name, notes, family..." value="${this.searchTerm}">
       
-      <div class="tag-pill-container">
-        <button class="pill ${sClass} clickable-filter" data-type="season" data-val="${item.season}">${ICONS[item.season] || ''} ${item.season || 'Any'}</button>
-        <button class="pill ${tClass} clickable-filter" data-type="time_of_day" data-val="${item.time_of_day}">${ICONS[item.time_of_day] || ''} ${item.time_of_day || 'Any'}</button>
-        <button class="pill ${oClass} clickable-filter" data-type="occasion" data-val="${item.occasion}">${ICONS[item.occasion] || ''} ${item.occasion || 'Casual'}</button>
-      </div>
-
-      <div class="ratings-grid">
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.projection || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.longevity || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.compliment_factor || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.complexity || 0).toFixed(1)}</div><div class="rb-lbl">Complexity</div></div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Composition Elements</div>
-        <div class="ingredients-list">
-          ${(item.fragrances || []).map(f => `<div class="ingredient-item">🧴 ${this._autoLinkText(f)}</div>`).join('')}
+      <div class="filter-section-wrapper">
+        <div class="filter-row-container" style="margin-bottom: 4px;">
+          <div class="filter-row-label">Type:</div>
+          <button class="filter-interactive-tag ${this.activeFilters.type.has('Fragrance') ? 'active' : ''}" data-category="type" data-value="Fragrance">${ICONS['Fragrance']} Fragrances</button>
+          <button class="filter-interactive-tag ${this.activeFilters.type.has('Blend') ? 'active' : ''}" data-category="type" data-value="Blend">${ICONS['Blend']} Blends</button>
         </div>
-      </div>
-      
-      <div class="detail-section">
-        <div class="section-label">Dominant Notes & Tags</div>
-        <div class="tag-pill-container" style="margin-bottom:0;">
-          ${(item.tags || []).map(tag => `<button class="pill pill-casual clickable-filter" data-type="search" data-val="${tag}">${tag}</button>`).join('')}
+
+        <div class="filter-row-container" style="margin-bottom: 4px;">
+          <div class="filter-row-label">Note:</div>
+          <select class="custom-filter-select" id="note-dropdown-selector">
+            <option value="">All Notes Dropdown</option>
+            ${this.uniqueNotes.map(note => `
+              <option value="${note}" ${this.activeFilters.note.has(note) ? 'selected' : ''}>🧪 ${note}</option>
+            `).join('')}
+          </select>
+          ${this.activeFilters.note.size > 0 ? Array.from(this.activeFilters.note).map(n => `<span class="filter-interactive-tag active" data-category="note" data-value="${n}">${n} ×</span>`).join('') : ''}
         </div>
+
+        <div class="filter-row-container" style="margin-bottom: 4px;">
+          <div class="filter-row-label">Season:</div>
+          ${['Spring', 'Summer', 'Autumn', 'Winter'].map(s => `
+            <button class="filter-interactive-tag ${this.activeFilters.season.has(s) ? 'active' : ''}" data-category="season" data-value="${s}">${ICONS[s] || ''} ${s}</button>
+          `).join('')}
+        </div>
+
+        <div class="filter-row-container" style="margin-bottom: 4px;">
+          <div class="filter-row-label">Time:</div>
+          ${['Day', 'Night'].map(t => `
+            <button class="filter-interactive-tag ${this.activeFilters.time_of_day.has(t) ? 'active' : ''}" data-category="time_of_day" data-value="${t}">${ICONS[t] || ''} ${t}</button>
+          `).join('')}
+        </div>
+
+        <div class="filter-row-container">
+          <div class="filter-row-label">Occasion:</div>
+          ${['Casual', 'Office', 'Evening', 'Formal'].map(o => `
+            <button class="filter-interactive-tag ${this.activeFilters.occasion.has(o) ? 'active' : ''}" data-category="occasion" data-value="${o}">${ICONS[o] || ''} ${o}</button>
+          `).join('')}
+        </div>
+
+        ${hasActiveFilters ? `<button class="filter-interactive-tag clear-filters-btn">Clear All Active Filters</button>` : ''}
       </div>
 
-      <div class="detail-section">
-        <div class="section-label">Olfactory Profile & Synergy</div>
-        <p class="section-body-text">${this._autoLinkText(item.profile || '')}</p>
-        <p class="section-body-text synergy-text"><em>Synergy Profile:</em> ${this._autoLinkText(item.synergy || '')}</p>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Application Mapping Sequence</div>
-        <div class="steps-box">${(item.steps || '').split('\n').map(step => `<div class="step-line">${this._autoLinkText(step)}</div>`).join('')}</div>
-      </div>
-      
-      ${item.alternatives && item.alternatives.length > 0 ? `
-      <div class="detail-section">
-        <div class="section-label">Alternative Options</div>
-        <p class="section-body-text">${item.alternatives.map(alt => this._autoLinkText(alt)).join('<br>')}</p>
-      </div>` : ''}
+      ${filteredItems.length === 0 ? `
+        <div class="empty-state-card">No dynamic collection records match your criteria.</div>
+      ` : `
+        <div class="collection-items-grid">
+          ${filteredItems.map(item => `
+            <div class="grid-item-card" data-id="${item.id}" data-type="${item.type}">
+              <span class="item-type-badge" style="color: ${item.type === 'Blend' ? '#0076ff' : '#2e7d32'}">${item.type === 'Blend' ? '🧪' : '🧴'}</span>
+              <div>
+                <h4 class="grid-item-title">${item.name}</h4>
+                <p class="grid-item-subtitle">${item.type === 'Blend' ? `${item.fragrance_count} Layers` : (item.inspiration || 'Original')}</p>
+              </div>
+              ${this.renderStars(item.rating)}
+            </div>
+          `).join('')}
+        </div>
+      `}
     `;
-
-    this._attachGlobalListeners(div);
-    return div;
   }
 
-  _buildFragDetailView(id) {
-    const div = document.createElement('div');
-    div.className = 'fade-in';
-    const item = this.masterData.find(f => f.id === id && f._type === 'frag');
-    if (!item) return div;
+  renderDetailView(item) {
+    const isBlend = item.type === 'Blend';
+    
+    // Fallbacks resolve structural calculations mapping errors safely
+    const proj = this.getMetricValue(item, 'projection');
+    const longev = this.getMetricValue(item, 'longevity');
+    const compl = this.getMetricValue(item, 'compliments');
+    const complex = this.getMetricValue(item, 'complexity');
 
-    div.innerHTML = `
-      <div class="detail-header">
-        <div class="detail-title">🧴 ${(item.name || 'Unknown Item')}</div>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <div class="detail-badge-rating">⭐ ${parseFloat(item.rating || 0).toFixed(1)}</div>
-          <button class="icon-btn home-btn">🏠</button>
+    // Parse note references into isolated link components
+    const notesHTML = Array.isArray(item.dominant_notes)
+      ? item.dominant_notes.flat().map(note => `<span class="clickable-badge" data-category="note" data-value="${note.trim()}">🧪 ${note.trim()}</span>`).join(' ')
+      : '<span class="block-text-paragraph">N/A</span>';
+
+    return `
+      <div class="detail-view-layout">
+        <div class="detail-hero-block">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <h3 class="detail-main-title">${item.name}</h3>
+            <span class="clickable-badge" data-category="type" data-value="${item.type}" style="background: var(--accent-color); color:#fff;">${isBlend ? '🧪 Blend' : '🧴 Fragrance'}</span>
+          </div>
+          <div class="detail-family-sub">${item.fragrance_family || 'Custom Accords'} · ${item.inspiration || 'Original Record'}</div>
+          ${this.renderStars(item.rating)}
+          
+          <div class="details-badge-row">
+            ${isBlend ? `
+              <span class="clickable-badge" data-category="season" data-value="${item.season}">${ICONS[item.season] || '🌍'} ${item.season}</span>
+              <span class="clickable-badge" data-category="time_of_day" data-value="${item.time_of_day}">${ICONS[item.time_of_day] || '🌗'} ${item.time_of_day}</span>
+              <span class="clickable-badge" data-category="occasion" data-value="${item.occasion}">${ICONS[item.occasion] || '👕'} ${item.occasion}</span>
+            ` : `
+              ${item.seasons?.map(s => `<span class="clickable-badge" data-category="season" data-value="${s}">${ICONS[s] || ''} ${s}</span>`).join('') || ''}
+            `}
+          </div>
         </div>
-      </div>
-      
-      <div class="frag-meta-row">
-        <strong>Family:</strong> <span class="internal-link clickable-filter" data-type="search" data-val="${item.fragrance_family}">${(item.fragrance_family || 'Unmapped')}</span> <br>
-        <strong>Type:</strong> ${(item.clone_type || 'Original Formulation')} <br>
-        <strong>Inspiration:</strong> ${this._autoLinkText(item.inspiration || '')}
-      </div>
 
-      <div class="ratings-grid">
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.projection || 0).toFixed(1)}</div><div class="rb-lbl">Projection</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.longevity || 0).toFixed(1)}</div><div class="rb-lbl">Longevity</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.compliment_factor || 0).toFixed(1)}</div><div class="rb-lbl">Compliments</div></div>
-        <div class="rating-box"><div class="rb-val">${parseFloat(item.versatility || 0).toFixed(1)}</div><div class="rb-lbl">Versatility</div></div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-label">Dominant Notes</div>
-        <div class="tag-pill-container" style="margin-bottom:0;">
-          ${(item.dominant_notes || []).map(note => `<button class="pill pill-casual clickable-filter" data-type="search" data-val="${note}">${note}</button>`).join('')}
+        <div class="metrics-flex-row">
+          <div class="metric-score-card"><div class="metric-score-label">Projection</div><div class="metric-score-num">${proj}</div></div>
+          <div class="metric-score-card"><div class="metric-score-label">Longevity</div><div class="metric-score-num">${longev}</div></div>
+          <div class="metric-score-card"><div class="metric-score-label">Compliments</div><div class="metric-score-num">${compl}</div></div>
+          <div class="metric-score-card"><div class="metric-score-label">${isBlend ? 'Complexity' : 'Versatility'}</div><div class="metric-score-num">${complex}</div></div>
         </div>
-      </div>
 
-      <div class="detail-section">
-        <div class="section-label">Performance & Architecture Analysis</div>
-        <p class="section-body-text">${this._autoLinkText(item.description || '')}</p>
-      </div>
-      
-      <div class="detail-section">
-        <div class="section-label">Situation Scenario Target Values</div>
-        <div class="scores-grid">
-          <div>Day: <strong>${parseFloat(item.day_score || 0).toFixed(1)}</strong></div>
-          <div>Night: <strong>${parseFloat(item.night_score || 0).toFixed(1)}</strong></div>
-          <div>Office: <strong>${parseFloat(item.office_score || 0).toFixed(1)}</strong></div>
-          <div>Formal: <strong>${parseFloat(item.formal_score || 0).toFixed(1)}</strong></div>
-          <div>Casual: <strong>${parseFloat(item.casual_score || 0).toFixed(1)}</strong></div>
-          <div>Evening: <strong>${parseFloat(item.evening_score || 0).toFixed(1)}</strong></div>
+        <div>
+          <h5 class="section-header-inline">Dominant Notes Profile</h5>
+          <div class="details-badge-row" style="margin-top:2px;">${notesHTML}</div>
         </div>
-      </div>
 
-      ${item.related_fragrances && item.related_fragrances.length > 0 ? `
-      <div class="detail-section">
-        <div class="section-label">Related Fragrances</div>
-        <p class="section-body-text">${item.related_fragrances.map(rel => this._autoLinkText(rel)).join(', ')}</p>
-      </div>` : ''}
-    `;
+        ${isBlend ? `
+          <div class="content-block-section">
+            <h5 class="section-header-inline">Synergy Formula & Recipe</h5>
+            <p class="block-text-paragraph" style="font-weight: 600; color: var(--accent-color); margin-bottom: 6px;">${item.profile || ''}</p>
+            <p class="block-text-paragraph">${item.synergy || ''}</p>
+          </div>
+          
+          <div class="content-block-section" style="background: rgba(255,180,0,0.04); border-left-color: #ffb400;">
+            <h5 class="section-header-inline">Application Steps</h5>
+            <p class="block-text-paragraph">${item.steps || 'No custom tracking routine step registered.'}</p>
+          </div>
+        ` : `
+          <div class="content-block-section">
+            <h5 class="section-header-inline">Character Description</h5>
+            <p class="block-text-paragraph">${item.description || 'No descriptive background log provided.'}</p>
+          </div>
+        `}
 
-    this._attachGlobalListeners(div);
-    return div;
-  }
-
-  _showToastMessage(msg) {
-    let container = this.shadowRoot.getElementById('toast-box');
-    if (!container) return;
-    container.textContent = msg;
-    container.className = "toast show";
-    setTimeout(() => { container.className = "toast"; }, 2500);
-  }
-
-  _renderSkeleton() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host { display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .main-card-frame {
-          background: var(--ha-card-background, #1c1c1e); border-radius: 12px;
-          color: var(--primary-text-color, #ffffff); padding: 16px; min-height: 450px;
-          position: relative; overflow: hidden; display: flex; flex-direction: column;
-        }
-        .header-title { font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .icon-btn { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; padding: 4px; transition: transform 0.1s; }
-        .icon-btn:active { transform: scale(0.9); }
-        
-        /* Inputs & Filters */
-        .search-container { margin-bottom: 8px; }
-        .rating-filter-container { display: flex; gap: 8px; margin-bottom: 12px; }
-        input[type="text"], input[type="number"], select {
-          padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2c2c2e; color: #fff; font-size: 13px; box-sizing: border-box; outline: none; flex: 1; min-width: 0;
-        }
-        input[type="text"] { width: 100%; flex: auto; }
-        
-        /* Chips */
-        .filters-container { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
-        .filter-group { margin-bottom: 12px; }
-        .group-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8e8e93; margin-bottom: 6px; }
-        .chip-container { display: flex; flex-wrap: wrap; gap: 6px; }
-        .chip { background: #2c2c2e; border: 1px solid #3a3a3c; color: #fff; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-        .chip.active { border-color: currentColor; }
-        
-        .chip-spring.active { background: rgba(52, 199, 89, 0.15); color: #34c759; }
-        .chip-summer.active { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .chip-autumn.active { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
-        .chip-winter.active { background: rgba(88, 86, 214, 0.15); color: #5856d6; }
-        .chip-day.active { background: rgba(90, 200, 250, 0.15); color: #5ac8fa; }
-        .chip-night.active { background: rgba(142, 142, 147, 0.15); color: #aeaeb2; }
-        .chip-casual.active { background: rgba(50, 173, 230, 0.15); color: #32ade6; }
-        .chip-office.active { background: rgba(175, 82, 222, 0.15); color: #af52de; }
-        .chip-evening.active { background: rgba(255, 45, 85, 0.15); color: #ff2d55; }
-        .chip-formal.active { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
-
-        /* List Items */
-        .scrollable-list { flex: 1; overflow-y: auto; max-height: 400px; }
-        .results-count { font-size: 11px; font-weight: 600; color: #8e8e93; text-align: right; margin-bottom: 8px; }
-        .list-container { display: flex; flex-direction: column; gap: 8px; }
-        .list-row { background: #2c2c2e; border: none; border-radius: 6px; padding: 12px 16px; text-align: left; color: #fff; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
-        .list-row:active { background: #3a3a3c; }
-        .row-meta { display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
-        .row-tags { font-size: 12px; color: #8e8e93; }
-        .row-context { font-size: 11px; color: #0076ff; font-weight: 600; text-transform: uppercase; }
-
-        /* Detail Views */
-        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .detail-title { font-size: 20px; font-weight: 800; line-height: 1.2; flex:1; padding-right:8px; }
-        .detail-badge-rating { background: rgba(255, 159, 10, 0.2); color: #ff9f0a; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 700; }
-        .tag-pill-container { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-        .pill { background: #3a3a3c; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #fff; border: none; }
-        .clickable-filter { cursor: pointer; transition: opacity 0.2s; }
-        .clickable-filter:hover { opacity: 0.8; }
-        .clickable-filter:active { opacity: 0.5; }
-        
-        .ratings-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-        .rating-box { background: #2c2c2e; padding: 10px 4px; border-radius: 8px; text-align: center; border: 1px solid #3a3a3c; }
-        .rb-val { font-size: 16px; font-weight: 800; color: #ff9f0a; margin-bottom: 2px; }
-        .rb-lbl { font-size: 9px; text-transform: uppercase; font-weight: 700; color: #8e8e93; }
-
-        .detail-section { margin-bottom: 14px; }
-        .section-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8e8e93; margin-bottom: 6px; }
-        .section-body-text { margin: 0; font-size: 13px; line-height: 1.5; color: #eee; }
-        .synergy-text { margin-top: 6px; padding-left: 8px; border-left: 2px solid #5ac8fa; color: #ccc; }
-        .frag-meta-row { background: #2c2c2e; padding: 10px; border-radius: 8px; font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
-        .scores-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 12px; background: #2c2c2e; padding: 10px; border-radius: 8px; }
-        
-        .ingredient-item { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-        .steps-box { background: rgba(0, 118, 255, 0.08); border-left: 3px solid #0076ff; padding: 10px; border-radius: 0 6px 6px 0; }
-        .step-line { font-size: 13px; margin-bottom: 8px; line-height: 1.4; white-space: pre-wrap; }
-        .empty-state { text-align: center; padding: 24px; color: #8e8e93; font-size: 13px; }
-        
-        /* Auto-Link Styling */
-        .internal-link { color: #0076ff; text-decoration: underline; cursor: pointer; font-weight: 600; transition: opacity 0.2s; }
-        .internal-link:active { opacity: 0.6; }
-        
-        /* Toast Notifications */
-        .toast { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(100px); background: #323232; color: #fff; padding: 10px 16px; border-radius: 24px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 99; white-space: nowrap; }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .fade-in { animation: fadeIn 0.2s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-      </style>
-      <div class="main-card-frame">
-        <div id="view-port"></div>
-        <div id="toast-box" class="toast"></div>
+        <div>
+          <h5 class="section-header-inline">${isBlend ? 'Alternative Options Owned' : 'Related Vault Entities'}</h5>
+          <div class="details-badge-row">
+            ${(isBlend ? item.alternatives : item.related_fragrances)?.map(name => {
+              // Locate match record to preserve cross-navigation mechanics
+              const match = this.masterIndex.find(x => x.name === name);
+              if (match) {
+                return `<span class="clickable-badge" data-category="type" data-value="${match.type}" style="border-color: var(--accent-color);">${name}</span>`;
+              }
+              return `<span class="clickable-badge" style="opacity:0.6; cursor:not-allowed;">${name}</span>`;
+            }).join('') || '<span class="block-text-paragraph">None tracked</span>'}
+          </div>
+        </div>
       </div>
     `;
   }
