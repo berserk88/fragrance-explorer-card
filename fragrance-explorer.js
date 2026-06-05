@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 7.0: Ironclad Double-Tap Exit, Dynamic Blend Subheadings, & Viewport Hardening
+ * Version 8.0: Rating Filter, Note Dropdown Matrix, and Fortified HA Exit Defense
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -47,6 +47,7 @@ class FragranceExplorerCard extends HTMLElement {
   connectedCallback() {
     // Intercept physical browser and mobile hardware back navigation
     this.currentDepth = 1;
+    // Push an initial anchor state to prevent instant dashboard exits
     window.history.pushState({ fragAppDepth: this.currentDepth }, '');
     window.addEventListener('popstate', this._handlePopState);
     
@@ -99,7 +100,7 @@ class FragranceExplorerCard extends HTMLElement {
     const normalizedCombos = (Array.isArray(fragranceCombinations) ? fragranceCombinations : []).map(item => ({
       ...item,
       type: 'Blend',
-      fragrances: normalizeToArray(item.fragrances), // Guarantees array structure for Blend naming
+      fragrances: normalizeToArray(item.fragrances),
       seasons: normalizeToArray(item.seasons || item.season),
       time_of_day: normalizeToArray(item.time_of_day),
       occasion: normalizeToArray(item.occasion),
@@ -116,22 +117,16 @@ class FragranceExplorerCard extends HTMLElement {
     // Synthesize unique global notes for active cross-filtering panel
     this.allUniqueNotes = Array.from(
       new Set(this.masterIndex.flatMap(item => item.dominant_notes))
-    ).sort();
+    ).sort((a, b) => a.localeCompare(b));
   }
 
   _handlePopState(event) {
-    const state = event.state;
-    const targetDepth = state && state.fragAppDepth ? state.fragAppDepth : 0;
-    
-    if (targetDepth < this.currentDepth && this.navStack.length > 1) {
-      // User pressed hardware back button, navigating internal views
-      const diff = this.currentDepth - targetDepth;
-      for (let i = 0; i < diff && this.navStack.length > 1; i++) {
-        this.navStack.pop();
-      }
-      this.currentDepth = this.navStack.length;
+    if (this.navStack.length > 1) {
+      // User navigating internal application views
+      this.navStack.pop();
+      this.currentDepth--;
       this.render();
-    } else if (targetDepth === 0 || !state) {
+    } else {
       // User hit the top-level anchor. Execute Ironclad Exit Defense.
       const now = Date.now();
       
@@ -212,8 +207,16 @@ class FragranceExplorerCard extends HTMLElement {
 
   clearAllFilters() {
     this.searchTerm = '';
-    Object.keys(this.activeFilters).forEach(key => this.activeFilters[key].clear());
     this.ratingFilter = { type: '', min: '' };
+    Object.keys(this.activeFilters).forEach(key => this.activeFilters[key].clear());
+    
+    // Reset DOM inputs if they exist in view
+    const ratingInput = this.shadowRoot.getElementById('rating-filter-input');
+    if (ratingInput) ratingInput.value = '';
+    
+    const noteSelect = this.shadowRoot.getElementById('note-filter-select');
+    if (noteSelect) noteSelect.value = '';
+
     this.render();
   }
 
@@ -267,10 +270,16 @@ class FragranceExplorerCard extends HTMLElement {
         if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile) return false;
       }
 
-      // 2. Type Filter Selection Matching
+      // 2. Exact Minimum Rating Engine
+      if (this.ratingFilter.min) {
+        const minRating = parseFloat(this.ratingFilter.min);
+        if (!isNaN(minRating) && item.rating < minRating) return false;
+      }
+
+      // 3. Type Filter Selection Matching
       if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
-      // 3. Matrix context checking operations (Supports uniform database schemas)
+      // 4. Matrix context checking operations
       if (this.activeFilters.season.size > 0) {
         const matchesSeason = item.seasons.some(s => this.activeFilters.season.has(s));
         if (!matchesSeason) return false;
@@ -286,16 +295,10 @@ class FragranceExplorerCard extends HTMLElement {
         if (!matchesOccasion) return false;
       }
 
-      // 4. Notes Array Filtering Matching
+      // 5. Explicit Notes Array Filter Match
       if (this.activeFilters.note.size > 0) {
         const matchesNotesArray = item.dominant_notes.some(n => this.activeFilters.note.has(n));
         if (!matchesNotesArray) return false;
-      }
-
-      // 5. Explicit Rating Bound Calculations
-      if (this.ratingFilter.min) {
-        const minRating = parseFloat(this.ratingFilter.min);
-        if (item.rating < minRating) return false;
       }
 
       return true;
@@ -393,8 +396,10 @@ class FragranceExplorerCard extends HTMLElement {
           border-radius: 8px;
           font-size: 14px;
           outline: none;
+          box-sizing: border-box;
         }
         .search-input:focus { border-color: var(--primary-accent); }
+        select.search-input option { background: #1c1c1e; color: #fff; }
         
         .filter-scroller-track {
           display: flex;
@@ -444,7 +449,7 @@ class FragranceExplorerCard extends HTMLElement {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
           gap: 12px;
-          max-height: calc(100dvh - 280px);
+          max-height: calc(100dvh - 300px);
           min-height: 350px;
           overflow-y: auto;
           padding-right: 2px;
@@ -490,7 +495,6 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
-          /* Matches the catalog full-screen bounds closely so UI scale stays unified */
           max-height: calc(100dvh - 140px);
           min-height: 350px;
           overflow-y: auto;
@@ -624,13 +628,13 @@ class FragranceExplorerCard extends HTMLElement {
           white-space: pre-wrap;
         }
         
-        /* Toast Alerts */
+        /* Fortified Toast Alerts */
         #toast-container {
           position: absolute;
-          bottom: 24px;
+          top: 65px; /* Safely placed directly below the app bar */
           left: 50%;
           transform: translateX(-50%);
-          z-index: 10000;
+          z-index: 2147483647;
           display: flex;
           flex-direction: column;
           gap: 6px;
@@ -639,17 +643,17 @@ class FragranceExplorerCard extends HTMLElement {
           align-items: center;
         }
         .toast {
-          background: rgba(30, 30, 32, 0.95);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: rgba(20, 20, 22, 0.98);
+          border: 1px solid rgba(255,255,255,0.15);
           color: #fff;
           padding: 12px 20px;
           border-radius: 30px;
           font-size: 13px;
           font-weight: 600;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.6);
           opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transform: translateY(-15px);
+          transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           white-space: nowrap;
         }
         .toast.visible {
@@ -703,12 +707,36 @@ class FragranceExplorerCard extends HTMLElement {
     const currentView = this.navStack[this.navStack.length - 1].view;
 
     if (currentView === 'browser') {
-      // Input filtration listeners
+      // General String Search
       const searchBox = this.shadowRoot.getElementById('search-box');
       if (searchBox) {
         searchBox.addEventListener('input', (e) => {
           this.searchTerm = e.target.value;
-          // Re-evaluate without re-rendering entire structure shell to keep keyboard context
+          this.rebuildGridDynamically();
+        });
+      }
+
+      // Exact Number Rating Input Listener
+      const ratingInput = this.shadowRoot.getElementById('rating-filter-input');
+      if (ratingInput) {
+        ratingInput.addEventListener('input', (e) => {
+          this.ratingFilter.min = e.target.value;
+          this.rebuildGridDynamically();
+        });
+      }
+
+      // Dropdown Note List Selection
+      const noteSelect = this.shadowRoot.getElementById('note-filter-select');
+      if (noteSelect) {
+        noteSelect.addEventListener('change', (e) => {
+          this.activeFilters.note.clear();
+          if (e.target.value) {
+            this.activeFilters.note.add(e.target.value);
+          }
+          // Update visual active state of the select drop down
+          noteSelect.style.color = this.activeFilters.note.size > 0 ? '#0076ff' : '#ffffff';
+          noteSelect.style.fontWeight = this.activeFilters.note.size > 0 ? '700' : 'normal';
+          
           this.rebuildGridDynamically();
         });
       }
@@ -802,7 +830,21 @@ class FragranceExplorerCard extends HTMLElement {
     
     return `
       <div class="search-row">
-        <input type="text" class="search-input" id="search-box" placeholder="Search collections, notes, descriptions..." value="${this.searchTerm}">
+        <input type="text" class="search-input" id="search-box" placeholder="Search collections, descriptions..." value="${this.searchTerm}">
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <div style="flex: 0.35;">
+          <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Min Rating</div>
+          <input type="number" id="rating-filter-input" class="search-input" style="width: 100%;" placeholder="e.g. 4.0" step="0.1" min="0" max="5" value="${this.ratingFilter.min}">
+        </div>
+        <div style="flex: 0.65;">
+          <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Fragrance Notes</div>
+          <select id="note-filter-select" class="search-input" style="width: 100%; appearance: auto; cursor: pointer; color: ${this.activeFilters.note.size > 0 ? '#0076ff' : '#ffffff'}; font-weight: ${this.activeFilters.note.size > 0 ? '700' : 'normal'};">
+            <option value="" style="color: #000;">-- View All Notes --</option>
+            ${this.allUniqueNotes.map(note => `<option value="${note}" style="color: #000;" ${this.activeFilters.note.has(note) ? 'selected' : ''}>${note}</option>`).join('')}
+          </select>
+        </div>
       </div>
       
       <div class="dynamic-counter-row">
