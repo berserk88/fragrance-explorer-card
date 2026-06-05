@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 6.1: Hardened Timestamp Exit Defense, Viewport-Responsive Scaling, & Persistent Actions
+ * Version 7.0: Ironclad Double-Tap Exit, Dynamic Blend Subheadings, & Viewport Hardening
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -23,7 +23,8 @@ class FragranceExplorerCard extends HTMLElement {
     this.currentDepth = 1;
     
     // Hardened Timestamp Defense Variables
-    this.lastBackPress = 0; 
+    this.lastBackPress = 0;
+    this.exitTimer = null;
 
     // Search and Filtering State Engine
     this.searchTerm = '';
@@ -54,6 +55,7 @@ class FragranceExplorerCard extends HTMLElement {
 
   disconnectedCallback() {
     window.removeEventListener('popstate', this._handlePopState);
+    if (this.exitTimer) clearTimeout(this.exitTimer);
   }
 
   setConfig(config) {
@@ -97,6 +99,7 @@ class FragranceExplorerCard extends HTMLElement {
     const normalizedCombos = (Array.isArray(fragranceCombinations) ? fragranceCombinations : []).map(item => ({
       ...item,
       type: 'Blend',
+      fragrances: normalizeToArray(item.fragrances), // Guarantees array structure for Blend naming
       seasons: normalizeToArray(item.seasons || item.season),
       time_of_day: normalizeToArray(item.time_of_day),
       occasion: normalizeToArray(item.occasion),
@@ -129,21 +132,21 @@ class FragranceExplorerCard extends HTMLElement {
       this.currentDepth = this.navStack.length;
       this.render();
     } else if (targetDepth === 0 || !state) {
-      // User hit the top-level anchor. Execute Hardened Timestamp Defense Protocol.
+      // User hit the top-level anchor. Execute Ironclad Exit Defense.
       const now = Date.now();
       
-      // Require the second back press to happen within exactly 2000ms
       if (now - this.lastBackPress > 2000) {
-        // PREVENT HA EXIT: Instantly push a new anchor state back onto the stack
+        // PREVENT HA EXIT (1st Press): Push trap state back onto stack and alert user
         window.history.pushState({ fragAppDepth: 1 }, '');
         this.currentDepth = 1;
         this.lastBackPress = now;
         
         this.showToast('Press Back again to exit Home Assistant');
       } else {
-        // ALLOW HA EXIT: User double-tapped within the required 2-second timeframe
-        this.lastBackPress = 0; // Reset state
-        // By doing nothing here, we allow the native browser behavior to pop the state and exit
+        // ALLOW HA EXIT (2nd Press within 2 seconds):
+        this.lastBackPress = 0; 
+        // Actively command history.back() to break out of the trap and signal HA to exit
+        window.history.back();
       }
     }
   }
@@ -178,17 +181,24 @@ class FragranceExplorerCard extends HTMLElement {
     const container = this.shadowRoot.getElementById('toast-container');
     if (!container) return;
     
+    // Purge queue to prevent overlap
+    container.innerHTML = '';
+    
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
     container.appendChild(toast);
     
-    // Animate view layout
-    setTimeout(() => { toast.classList.add('visible'); }, 50);
-    setTimeout(() => {
+    // Force a synchronous browser layout engine calculation to ensure transition plays
+    void toast.offsetWidth;
+    toast.classList.add('visible');
+    
+    if (this.exitTimer) clearTimeout(this.exitTimer);
+    
+    this.exitTimer = setTimeout(() => {
       toast.classList.remove('visible');
-      setTimeout(() => { toast.remove(); }, 300);
-    }, 2200);
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300);
+    }, 2000);
   }
 
   toggleFilter(category, value) {
@@ -434,7 +444,6 @@ class FragranceExplorerCard extends HTMLElement {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
           gap: 12px;
-          /* Utilizing full dynamic viewport height while reserving space for filters */
           max-height: calc(100dvh - 280px);
           min-height: 350px;
           overflow-y: auto;
@@ -481,8 +490,9 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
-          /* Replaced static 520px with dynamic viewport scale to prevent clipping */
+          /* Matches the catalog full-screen bounds closely so UI scale stays unified */
           max-height: calc(100dvh - 140px);
+          min-height: 350px;
           overflow-y: auto;
           padding-right: 4px;
           padding-bottom: 24px;
@@ -507,8 +517,9 @@ class FragranceExplorerCard extends HTMLElement {
           line-height: 1.2;
         }
         .details-sub-heading-meta {
-          font-size: 12px;
-          color: var(--secondary-text);
+          font-size: 13px;
+          color: #fff;
+          font-weight: 500;
           margin: 0;
         }
 
@@ -616,26 +627,29 @@ class FragranceExplorerCard extends HTMLElement {
         /* Toast Alerts */
         #toast-container {
           position: absolute;
-          bottom: 16px;
+          bottom: 24px;
           left: 50%;
           transform: translateX(-50%);
-          z-index: 999;
+          z-index: 10000;
           display: flex;
           flex-direction: column;
           gap: 6px;
           pointer-events: none;
+          width: 90%;
+          align-items: center;
         }
         .toast {
-          background: #323232;
+          background: rgba(30, 30, 32, 0.95);
+          border: 1px solid rgba(255,255,255,0.1);
           color: #fff;
-          padding: 8px 14px;
-          border-radius: 20px;
-          font-size: 12px;
+          padding: 12px 20px;
+          border-radius: 30px;
+          font-size: 13px;
           font-weight: 600;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.5);
           opacity: 0;
           transform: translateY(20px);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           white-space: nowrap;
         }
         .toast.visible {
@@ -850,15 +864,20 @@ class FragranceExplorerCard extends HTMLElement {
     if (!item) return `<div class="empty-state">Vault instance reference missing from storage files.</div>`;
 
     const isBlend = item.type === 'Blend';
+    
+    // Dynamic Subheading Assembly for Custom Blends
+    const dynamicSubHeading = isBlend 
+      ? (item.fragrances && item.fragrances.length > 0 
+          ? item.fragrances.join(' <span style="opacity:0.4; font-size: 0.9em; margin:0 4px;">➕</span> ') 
+          : 'Custom Synergy Blend')
+      : `<span style="color:var(--secondary-text); font-size:12px;">${item.fragrance_family} • ${item.clone_type} formulation</span>`;
 
     return `
       <div class="details-wrapper">
         <div class="details-core-header-pane">
           <div class="details-explicit-badge">${isBlend ? 'Blend Details' : 'Fragrance Details'}</div>
           <h4 class="details-main-heading">${item.name}</h4>
-          <p class="details-sub-heading-meta">
-            ${isBlend ? `${item.fragrance_count}-Layer Complex Master Synergy` : `${item.fragrance_family} • ${item.clone_type} formulation`}
-          </p>
+          <p class="details-sub-heading-meta">${dynamicSubHeading}</p>
         </div>
 
         <div class="meta-pill-box">
