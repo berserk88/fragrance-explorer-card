@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 6.0: Hardened Double-Tap Exit Defense, Universal Data Matrix Schemas, & Persistent Global Actions
+ * Version 8.0: Rating Filter, Note Dropdown Matrix, and Fortified HA Exit Defense
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -21,8 +21,10 @@ class FragranceExplorerCard extends HTMLElement {
     // Core Navigation Stack & Hardware Defense State
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
+    
+    // Hardened Timestamp Defense Variables
+    this.lastBackPress = 0;
     this.exitTimer = null;
-    this.backPressedOnce = false;
 
     // Search and Filtering State Engine
     this.searchTerm = '';
@@ -45,6 +47,7 @@ class FragranceExplorerCard extends HTMLElement {
   connectedCallback() {
     // Intercept physical browser and mobile hardware back navigation
     this.currentDepth = 1;
+    // Push an initial anchor state to prevent instant dashboard exits
     window.history.pushState({ fragAppDepth: this.currentDepth }, '');
     window.addEventListener('popstate', this._handlePopState);
     
@@ -68,48 +71,44 @@ class FragranceExplorerCard extends HTMLElement {
     return 3;
   }
 
-  normalizeToArray(val) {
-    if (Array.isArray(val)) return val;
-    if (typeof val === 'string') {
-      if (val.trim() === '') return [];
-      if (val.includes(',')) return val.split(',').map(s => s.trim());
-      return [val.trim()];
-    }
-    return [];
-  }
-
   initData() {
+    // Defensive Normalizer guarantees both single strings and arrays resolve into iteratable arrays
+    const normalizeToArray = (val) => {
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'string') {
+        if (val.trim() === '') return [];
+        if (val.includes(',')) return val.split(',').map(s => s.trim());
+        return [val.trim()];
+      }
+      return [];
+    };
+
     const normalizedFragrances = (Array.isArray(individualFragrances) ? individualFragrances : []).map(item => ({
       ...item,
       type: 'Fragrance',
-      seasons: this.normalizeToArray(item.seasons || item.season),
-      time_of_day: this.normalizeToArray(item.time_of_day),
-      occasion: this.normalizeToArray(item.occasion),
-      dominant_notes: this.normalizeToArray(item.dominant_notes),
-      fragrances: [],
+      seasons: normalizeToArray(item.seasons || item.season),
+      time_of_day: normalizeToArray(item.time_of_day),
+      occasion: normalizeToArray(item.occasion),
+      dominant_notes: normalizeToArray(item.dominant_notes),
       rating: parseFloat(item.rating) || 0,
       projection: parseFloat(item.projection) || 0,
       longevity: parseFloat(item.longevity) || 0,
       compliment_factor: parseFloat(item.compliment_factor) || 0,
-      versatility: parseFloat(item.versatility) || 0,
-      complexity: parseFloat(item.complexity) || 0,
       best_temperature: item.best_temperature || 'N/A'
     }));
 
     const normalizedCombos = (Array.isArray(fragranceCombinations) ? fragranceCombinations : []).map(item => ({
       ...item,
       type: 'Blend',
-      seasons: this.normalizeToArray(item.seasons || item.season),
-      time_of_day: this.normalizeToArray(item.time_of_day),
-      occasion: this.normalizeToArray(item.occasion),
-      dominant_notes: this.normalizeToArray(item.dominant_notes),
-      fragrances: this.normalizeToArray(item.fragrances || item.components || item.layers || item.fragrance_names || item.related_fragrances),
+      fragrances: normalizeToArray(item.fragrances),
+      seasons: normalizeToArray(item.seasons || item.season),
+      time_of_day: normalizeToArray(item.time_of_day),
+      occasion: normalizeToArray(item.occasion),
+      dominant_notes: normalizeToArray(item.dominant_notes),
       rating: parseFloat(item.rating) || 0,
       projection: parseFloat(item.projection) || 0,
       longevity: parseFloat(item.longevity) || 0,
       compliment_factor: parseFloat(item.compliment_factor) || 0,
-      versatility: parseFloat(item.versatility) || 0,
-      complexity: parseFloat(item.complexity) || 0,
       best_temperature: item.best_temperature || 'N/A'
     }));
 
@@ -118,37 +117,31 @@ class FragranceExplorerCard extends HTMLElement {
     // Synthesize unique global notes for active cross-filtering panel
     this.allUniqueNotes = Array.from(
       new Set(this.masterIndex.flatMap(item => item.dominant_notes))
-    ).sort();
+    ).sort((a, b) => a.localeCompare(b));
   }
 
   _handlePopState(event) {
-    const state = event.state;
-    const targetDepth = state && state.fragAppDepth ? state.fragAppDepth : 0;
-    
-    if (targetDepth < this.currentDepth && this.navStack.length > 1) {
-      // User pressed hardware back button, navigating internal views
-      const diff = this.currentDepth - targetDepth;
-      for (let i = 0; i < diff && this.navStack.length > 1; i++) {
-        this.navStack.pop();
-      }
-      this.currentDepth = this.navStack.length;
+    if (this.navStack.length > 1) {
+      // User navigating internal application views
+      this.navStack.pop();
+      this.currentDepth--;
       this.render();
-    } else if (targetDepth === 0 || !state) {
-      // User hit the top-level anchor. Execute Defense Protocol.
-      if (!this.backPressedOnce) {
-        // PREVENT HA EXIT: Instantly push a new anchor state back onto the stack
+    } else {
+      // User hit the top-level anchor. Execute Ironclad Exit Defense.
+      const now = Date.now();
+      
+      if (now - this.lastBackPress > 2000) {
+        // PREVENT HA EXIT (1st Press): Push trap state back onto stack and alert user
         window.history.pushState({ fragAppDepth: 1 }, '');
         this.currentDepth = 1;
-        this.backPressedOnce = true;
-        this.showToast('Press Back again to exit Fragrance Explorer');
+        this.lastBackPress = now;
         
-        this.exitTimer = setTimeout(() => {
-          this.backPressedOnce = false;
-        }, 2000);
+        this.showToast('Press Back again to exit Home Assistant');
       } else {
-        // ALLOW HA EXIT: User double-tapped within 2 seconds
-        this.backPressedOnce = false;
-        if (this.exitTimer) clearTimeout(this.exitTimer);
+        // ALLOW HA EXIT (2nd Press within 2 seconds):
+        this.lastBackPress = 0; 
+        // Actively command history.back() to break out of the trap and signal HA to exit
+        window.history.back();
       }
     }
   }
@@ -183,17 +176,24 @@ class FragranceExplorerCard extends HTMLElement {
     const container = this.shadowRoot.getElementById('toast-container');
     if (!container) return;
     
+    // Purge queue to prevent overlap
+    container.innerHTML = '';
+    
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
     container.appendChild(toast);
     
-    // Animate view layout
-    setTimeout(() => { toast.classList.add('visible'); }, 50);
-    setTimeout(() => {
+    // Force a synchronous browser layout engine calculation to ensure transition plays
+    void toast.offsetWidth;
+    toast.classList.add('visible');
+    
+    if (this.exitTimer) clearTimeout(this.exitTimer);
+    
+    this.exitTimer = setTimeout(() => {
       toast.classList.remove('visible');
-      setTimeout(() => { toast.remove(); }, 300);
-    }, 2200);
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300);
+    }, 2000);
   }
 
   toggleFilter(category, value) {
@@ -207,8 +207,16 @@ class FragranceExplorerCard extends HTMLElement {
 
   clearAllFilters() {
     this.searchTerm = '';
-    Object.keys(this.activeFilters).forEach(key => this.activeFilters[key].clear());
     this.ratingFilter = { type: '', min: '' };
+    Object.keys(this.activeFilters).forEach(key => this.activeFilters[key].clear());
+    
+    // Reset DOM inputs if they exist in view
+    const ratingInput = this.shadowRoot.getElementById('rating-filter-input');
+    if (ratingInput) ratingInput.value = '';
+    
+    const noteSelect = this.shadowRoot.getElementById('note-filter-select');
+    if (noteSelect) noteSelect.value = '';
+
     this.render();
   }
 
@@ -240,7 +248,6 @@ class FragranceExplorerCard extends HTMLElement {
     const cleanToken = tokenName.trim().toLowerCase();
     
     return this.masterIndex.find(item => {
-      if (!item || !item.name) return false;
       const cleanTarget = item.name.trim().toLowerCase();
       if (cleanTarget === cleanToken) return true;
       if (cleanTarget.startsWith(cleanToken + ' (')) return true;
@@ -260,16 +267,19 @@ class FragranceExplorerCard extends HTMLElement {
         const matchesDesc = item.description && item.description.toLowerCase().includes(query);
         const matchesProfile = item.profile && item.profile.toLowerCase().includes(query);
         
-        // Dynamic lookup targeting constituent fragrances inside a master blend record
-        const matchesConstituents = item.type === 'Blend' && item.fragrances && item.fragrances.some(f => f.toLowerCase().includes(query));
-        
-        if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile && !matchesConstituents) return false;
+        if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile) return false;
       }
 
-      // 2. Type Filter Selection Matching
+      // 2. Exact Minimum Rating Engine
+      if (this.ratingFilter.min) {
+        const minRating = parseFloat(this.ratingFilter.min);
+        if (!isNaN(minRating) && item.rating < minRating) return false;
+      }
+
+      // 3. Type Filter Selection Matching
       if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
-      // 3. Matrix context checking operations (Supports uniform database schemas)
+      // 4. Matrix context checking operations
       if (this.activeFilters.season.size > 0) {
         const matchesSeason = item.seasons.some(s => this.activeFilters.season.has(s));
         if (!matchesSeason) return false;
@@ -285,16 +295,10 @@ class FragranceExplorerCard extends HTMLElement {
         if (!matchesOccasion) return false;
       }
 
-      // 4. Notes Array Filtering Matching
+      // 5. Explicit Notes Array Filter Match
       if (this.activeFilters.note.size > 0) {
         const matchesNotesArray = item.dominant_notes.some(n => this.activeFilters.note.has(n));
         if (!matchesNotesArray) return false;
-      }
-
-      // 5. Explicit Rating Bound Calculations
-      if (this.ratingFilter.min) {
-        const minRating = parseFloat(this.ratingFilter.min);
-        if (item.rating < minRating) return false;
       }
 
       return true;
@@ -392,8 +396,10 @@ class FragranceExplorerCard extends HTMLElement {
           border-radius: 8px;
           font-size: 14px;
           outline: none;
+          box-sizing: border-box;
         }
         .search-input:focus { border-color: var(--primary-accent); }
+        select.search-input option { background: #1c1c1e; color: #fff; }
         
         .filter-scroller-track {
           display: flex;
@@ -443,9 +449,11 @@ class FragranceExplorerCard extends HTMLElement {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
           gap: 12px;
-          max-height: 480px;
+          max-height: calc(100dvh - 300px);
+          min-height: 350px;
           overflow-y: auto;
           padding-right: 2px;
+          padding-bottom: 16px;
         }
         .catalog-card {
           background: rgba(255,255,255,0.03);
@@ -468,7 +476,6 @@ class FragranceExplorerCard extends HTMLElement {
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 6px;
-          gap: 4px;
         }
         .card-title {
           font-size: 13px;
@@ -488,9 +495,11 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
-          max-height: 520px;
+          max-height: calc(100dvh - 140px);
+          min-height: 350px;
           overflow-y: auto;
           padding-right: 4px;
+          padding-bottom: 24px;
         }
         
         .details-core-header-pane {
@@ -512,8 +521,9 @@ class FragranceExplorerCard extends HTMLElement {
           line-height: 1.2;
         }
         .details-sub-heading-meta {
-          font-size: 12px;
-          color: var(--secondary-text);
+          font-size: 13px;
+          color: #fff;
+          font-weight: 500;
           margin: 0;
         }
 
@@ -618,29 +628,32 @@ class FragranceExplorerCard extends HTMLElement {
           white-space: pre-wrap;
         }
         
-        /* Toast Alerts */
+        /* Fortified Toast Alerts */
         #toast-container {
           position: absolute;
-          bottom: 16px;
+          top: 65px; /* Safely placed directly below the app bar */
           left: 50%;
           transform: translateX(-50%);
-          z-index: 999;
+          z-index: 2147483647;
           display: flex;
           flex-direction: column;
           gap: 6px;
           pointer-events: none;
+          width: 90%;
+          align-items: center;
         }
         .toast {
-          background: #323232;
+          background: rgba(20, 20, 22, 0.98);
+          border: 1px solid rgba(255,255,255,0.15);
           color: #fff;
-          padding: 8px 14px;
-          border-radius: 20px;
-          font-size: 12px;
+          padding: 12px 20px;
+          border-radius: 30px;
+          font-size: 13px;
           font-weight: 600;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.6);
           opacity: 0;
-          transform: translateY(20px);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateY(-15px);
+          transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           white-space: nowrap;
         }
         .toast.visible {
@@ -694,12 +707,36 @@ class FragranceExplorerCard extends HTMLElement {
     const currentView = this.navStack[this.navStack.length - 1].view;
 
     if (currentView === 'browser') {
-      // Input filtration listeners
+      // General String Search
       const searchBox = this.shadowRoot.getElementById('search-box');
       if (searchBox) {
         searchBox.addEventListener('input', (e) => {
           this.searchTerm = e.target.value;
-          // Re-evaluate without re-rendering entire structure shell to keep keyboard context
+          this.rebuildGridDynamically();
+        });
+      }
+
+      // Exact Number Rating Input Listener
+      const ratingInput = this.shadowRoot.getElementById('rating-filter-input');
+      if (ratingInput) {
+        ratingInput.addEventListener('input', (e) => {
+          this.ratingFilter.min = e.target.value;
+          this.rebuildGridDynamically();
+        });
+      }
+
+      // Dropdown Note List Selection
+      const noteSelect = this.shadowRoot.getElementById('note-filter-select');
+      if (noteSelect) {
+        noteSelect.addEventListener('change', (e) => {
+          this.activeFilters.note.clear();
+          if (e.target.value) {
+            this.activeFilters.note.add(e.target.value);
+          }
+          // Update visual active state of the select drop down
+          noteSelect.style.color = this.activeFilters.note.size > 0 ? '#0076ff' : '#ffffff';
+          noteSelect.style.fontWeight = this.activeFilters.note.size > 0 ? '700' : 'normal';
+          
           this.rebuildGridDynamically();
         });
       }
@@ -793,7 +830,21 @@ class FragranceExplorerCard extends HTMLElement {
     
     return `
       <div class="search-row">
-        <input type="text" class="search-input" id="search-box" placeholder="Search collections, notes, descriptions..." value="${this.searchTerm}">
+        <input type="text" class="search-input" id="search-box" placeholder="Search collections, descriptions..." value="${this.searchTerm}">
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <div style="flex: 0.35;">
+          <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Min Rating</div>
+          <input type="number" id="rating-filter-input" class="search-input" style="width: 100%;" placeholder="e.g. 4.0" step="0.1" min="0" max="5" value="${this.ratingFilter.min}">
+        </div>
+        <div style="flex: 0.65;">
+          <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Fragrance Notes</div>
+          <select id="note-filter-select" class="search-input" style="width: 100%; appearance: auto; cursor: pointer; color: ${this.activeFilters.note.size > 0 ? '#0076ff' : '#ffffff'}; font-weight: ${this.activeFilters.note.size > 0 ? '700' : 'normal'};">
+            <option value="" style="color: #000;">-- View All Notes --</option>
+            ${this.allUniqueNotes.map(note => `<option value="${note}" style="color: #000;" ${this.activeFilters.note.has(note) ? 'selected' : ''}>${note}</option>`).join('')}
+          </select>
+        </div>
       </div>
       
       <div class="dynamic-counter-row">
@@ -855,15 +906,20 @@ class FragranceExplorerCard extends HTMLElement {
     if (!item) return `<div class="empty-state">Vault instance reference missing from storage files.</div>`;
 
     const isBlend = item.type === 'Blend';
+    
+    // Dynamic Subheading Assembly for Custom Blends
+    const dynamicSubHeading = isBlend 
+      ? (item.fragrances && item.fragrances.length > 0 
+          ? item.fragrances.join(' <span style="opacity:0.4; font-size: 0.9em; margin:0 4px;">➕</span> ') 
+          : 'Custom Synergy Blend')
+      : `<span style="color:var(--secondary-text); font-size:12px;">${item.fragrance_family} • ${item.clone_type} formulation</span>`;
 
     return `
       <div class="details-wrapper">
         <div class="details-core-header-pane">
           <div class="details-explicit-badge">${isBlend ? 'Blend Details' : 'Fragrance Details'}</div>
           <h4 class="details-main-heading">${item.name}</h4>
-          <p class="details-sub-heading-meta">
-            ${isBlend ? `${item.fragrance_count}-Layer Complex Master Synergy` : `${item.fragrance_family} • ${item.clone_type} formulation`}
-          </p>
+          <p class="details-sub-heading-meta">${dynamicSubHeading}</p>
         </div>
 
         <div class="meta-pill-box">
@@ -963,7 +1019,7 @@ class FragranceExplorerCard extends HTMLElement {
         <div>
           <h5 class="matrix-title" style="margin-left:2px; margin-bottom:6px;">Related</h5>
           <div class="matrix-badge-row">
-            ${this.normalizeToArray((isBlend ? item.alternatives : item.related_fragrances) || []).map(name => {
+            ${((isBlend ? item.alternatives : item.related_fragrances) || []).map(name => {
               const match = this._findItemBySmartToken(name);
               if (match) {
                 // Generates the perfectly matched robust button ensuring no string-path breakages
