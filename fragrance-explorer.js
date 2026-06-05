@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 6.0: Hardened Double-Tap Exit Defense, Universal Data Matrix Schemas, & Persistent Global Actions
+ * Version 6.1: Hardened Timestamp Exit Defense, Viewport-Responsive Scaling, & Persistent Actions
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -21,8 +21,9 @@ class FragranceExplorerCard extends HTMLElement {
     // Core Navigation Stack & Hardware Defense State
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
-    this.exitTimer = null;
-    this.backPressedOnce = false;
+    
+    // Hardened Timestamp Defense Variables
+    this.lastBackPress = 0; 
 
     // Search and Filtering State Engine
     this.searchTerm = '';
@@ -53,7 +54,6 @@ class FragranceExplorerCard extends HTMLElement {
 
   disconnectedCallback() {
     window.removeEventListener('popstate', this._handlePopState);
-    if (this.exitTimer) clearTimeout(this.exitTimer);
   }
 
   setConfig(config) {
@@ -129,21 +129,21 @@ class FragranceExplorerCard extends HTMLElement {
       this.currentDepth = this.navStack.length;
       this.render();
     } else if (targetDepth === 0 || !state) {
-      // User hit the top-level anchor. Execute Defense Protocol.
-      if (!this.backPressedOnce) {
+      // User hit the top-level anchor. Execute Hardened Timestamp Defense Protocol.
+      const now = Date.now();
+      
+      // Require the second back press to happen within exactly 2000ms
+      if (now - this.lastBackPress > 2000) {
         // PREVENT HA EXIT: Instantly push a new anchor state back onto the stack
         window.history.pushState({ fragAppDepth: 1 }, '');
         this.currentDepth = 1;
-        this.backPressedOnce = true;
-        this.showToast('Press Back again to exit Fragrance Explorer');
+        this.lastBackPress = now;
         
-        this.exitTimer = setTimeout(() => {
-          this.backPressedOnce = false;
-        }, 2000);
+        this.showToast('Press Back again to exit Home Assistant');
       } else {
-        // ALLOW HA EXIT: User double-tapped within 2 seconds
-        this.backPressedOnce = false;
-        if (this.exitTimer) clearTimeout(this.exitTimer);
+        // ALLOW HA EXIT: User double-tapped within the required 2-second timeframe
+        this.lastBackPress = 0; // Reset state
+        // By doing nothing here, we allow the native browser behavior to pop the state and exit
       }
     }
   }
@@ -434,9 +434,12 @@ class FragranceExplorerCard extends HTMLElement {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
           gap: 12px;
-          max-height: 480px;
+          /* Utilizing full dynamic viewport height while reserving space for filters */
+          max-height: calc(100dvh - 280px);
+          min-height: 350px;
           overflow-y: auto;
           padding-right: 2px;
+          padding-bottom: 16px;
         }
         .catalog-card {
           background: rgba(255,255,255,0.03);
@@ -478,9 +481,11 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
-          max-height: 520px;
+          /* Replaced static 520px with dynamic viewport scale to prevent clipping */
+          max-height: calc(100dvh - 140px);
           overflow-y: auto;
           padding-right: 4px;
+          padding-bottom: 24px;
         }
         
         .details-core-header-pane {
