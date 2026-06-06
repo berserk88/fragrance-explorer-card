@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 8.0: Rating Filter, Note Dropdown Matrix, and Fortified HA Exit Defense
+ * Version 8.1: Deep Component Search, Reverse-Query Featured Blends Matrix, & Fortified HA Exit
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -267,7 +267,13 @@ class FragranceExplorerCard extends HTMLElement {
         const matchesDesc = item.description && item.description.toLowerCase().includes(query);
         const matchesProfile = item.profile && item.profile.toLowerCase().includes(query);
         
-        if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile) return false;
+        // Deep search: Allows searching for blends by the names of the fragrances contained within them
+        let matchesBlendComponents = false;
+        if (item.type === 'Blend' && Array.isArray(item.fragrances)) {
+          matchesBlendComponents = item.fragrances.some(fragName => fragName.toLowerCase().includes(query));
+        }
+        
+        if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile && !matchesBlendComponents) return false;
       }
 
       // 2. Exact Minimum Rating Engine
@@ -495,6 +501,7 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
+          /* Matches the catalog full-screen bounds closely so UI scale stays unified */
           max-height: calc(100dvh - 140px);
           min-height: 350px;
           overflow-y: auto;
@@ -830,7 +837,7 @@ class FragranceExplorerCard extends HTMLElement {
     
     return `
       <div class="search-row">
-        <input type="text" class="search-input" id="search-box" placeholder="Search collections, descriptions..." value="${this.searchTerm}">
+        <input type="text" class="search-input" id="search-box" placeholder="Search collections, descriptions, or components..." value="${this.searchTerm}">
       </div>
 
       <div style="display: flex; gap: 8px; margin-bottom: 12px;">
@@ -913,6 +920,29 @@ class FragranceExplorerCard extends HTMLElement {
           ? item.fragrances.join(' <span style="opacity:0.4; font-size: 0.9em; margin:0 4px;">➕</span> ') 
           : 'Custom Synergy Blend')
       : `<span style="color:var(--secondary-text); font-size:12px;">${item.fragrance_family} • ${item.clone_type} formulation</span>`;
+
+    // Extract reverse-associations for Fragrances (Find all blends that contain this fragrance)
+    let featuredInBlendsHtml = '';
+    if (!isBlend) {
+      const containingBlends = this.masterIndex.filter(b => 
+        b.type === 'Blend' && 
+        Array.isArray(b.fragrances) && 
+        b.fragrances.some(fName => fName.toLowerCase() === item.name.toLowerCase())
+      );
+
+      if (containingBlends.length > 0) {
+        featuredInBlendsHtml = `
+          <div class="content-block-section" style="background: rgba(191, 90, 242, 0.04); border-left-color: #bf5af2;">
+            <h5 class="matrix-title" style="margin-left:2px; margin-bottom:6px;">Featured In Blends</h5>
+            <div class="matrix-badge-row">
+              ${containingBlends.map(blend => `
+                <span class="interactive-badge" data-jump-id="${blend.id}" data-jump-type="Blend" style="border-color: var(--primary-accent); font-weight:700;">${ICONS.Blend} ${blend.name}</span>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
 
     return `
       <div class="details-wrapper">
@@ -1015,6 +1045,8 @@ class FragranceExplorerCard extends HTMLElement {
             <p class="block-text-paragraph">${item.description || 'No database descriptive logs added.'}</p>
           </div>
         `}
+
+        ${featuredInBlendsHtml}
 
         <div>
           <h5 class="matrix-title" style="margin-left:2px; margin-bottom:6px;">Related</h5>
