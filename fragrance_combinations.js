@@ -3,9 +3,15 @@ export const fragranceCombinations = [
     "id": 1,
     "name": "High-Heat Shield",
     "rating": 4.4,
-    "season": "Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Jean Lowe Immortal",
       "Turathi Blue"
@@ -44,9 +50,19 @@ export const fragranceCombinations = [
     "id": 2,
     "name": "Ultimate Universal King",
     "rating": 4.6,
-    "season": "Spring / Autumn / Winter",
-    "time_of_day": "All",
-    "occasion": ["Office", "Evening"],
+    "season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Day",
+      "Night"
+    ],
+    "occasion": [
+      "Office",
+      "Evening"
+    ],
     "fragrances": [
       "Al Nashama Caprice",
       "Turathi Blue"
@@ -85,9 +101,17 @@ export const fragranceCombinations = [
     "id": 3,
     "name": "Ginger Elysium",
     "rating": 4.3,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual", "Office"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual",
+      "Office"
+    ],
     "fragrances": [
       "Jean Lowe Immortal",
       "Divin Asylum"
@@ -126,9 +150,16 @@ export const fragranceCombinations = [
     "id": 4,
     "name": "Alpine Ocean Breeze",
     "rating": 4.0,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Supremacy In Heaven",
       "CDNI Milestone"
@@ -167,9 +198,16 @@ export const fragranceCombinations = [
     "id": 5,
     "name": "Modernized Emerald Vetiver",
     "rating": 4.1,
-    "season": "Spring / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Jean Lowe Immortal"
@@ -208,9 +246,15 @@ export const fragranceCombinations = [
     "id": 6,
     "name": "Inky Citrus Bomb",
     "rating": 4.1,
-    "season": "Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Turathi Blue"
@@ -249,9 +293,16 @@ export const fragranceCombinations = [
     "id": 7,
     "name": "Coastal Countryside",
     "rating": 4.0,
-    "season": "Spring",
-    "time_of_day": "Day",
-    "occasion": ["Casual", "Office"],
+    "season": [
+      "Spring"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual",
+      "Office"
+    ],
     "fragrances": [
       "Ash'aa Oud Noir",
       "CDNI Milestone"
@@ -290,9 +341,15 @@ export const fragranceCombinations = [
     "id": 8,
     "name": "Professional Comfort",
     "rating": 4.3,
-    "season": "Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Liam Grey",
       "Divin Asylum"
@@ -331,9 +388,15 @@ export const fragranceCombinations = [
     "id": 9,
     "name": "Executive Fresh",
     "rating": 4.3,
-    "season": "Spring",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Divin Asylum"
@@ -372,9 +435,16 @@ export const fragranceCombinations = [
     "id": 10,
     "name": "Upscale Ginger Cream-Soda",
     "rating": 4.6,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Spectre Ghost",
       "Jean Lowe Immortal"
@@ -413,9 +483,16 @@ export const fragranceCombinations = [
     "id": 11,
     "name": "Emperor's Tea Accord",
     "rating": 4.3,
-    "season": "Spring / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Supremacy In Heaven",
       "Liam Grey"
@@ -454,9 +531,17 @@ export const fragranceCombinations = [
     "id": 12,
     "name": "Luxury Cashmere",
     "rating": 4.5,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Liam Grey"
@@ -495,9 +580,16 @@ export const fragranceCombinations = [
     "id": 13,
     "name": "Seductive Pineapple",
     "rating": 4.4,
-    "season": "Spring / Autumn",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Al Nashama Caprice"
@@ -536,9 +628,17 @@ export const fragranceCombinations = [
     "id": 14,
     "name": "Bad Boy in a Clean Suit",
     "rating": 4.6,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Evening", "Formal"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening",
+      "Formal"
+    ],
     "fragrances": [
       "Costume National I",
       "Al Nashama Caprice"
@@ -577,9 +677,16 @@ export const fragranceCombinations = [
     "id": 15,
     "name": "Freezing Powerhouse",
     "rating": 4.6,
-    "season": "Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "Hercules",
       "Spectre Ghost"
@@ -618,9 +725,17 @@ export const fragranceCombinations = [
     "id": 16,
     "name": "Spiced Chai & Tobacco",
     "rating": 4.4,
-    "season": "Autumn / Winter",
-    "time_of_day": "All",
-    "occasion": ["Casual"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Day",
+      "Night"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Hercules",
       "Liam Grey"
@@ -659,9 +774,16 @@ export const fragranceCombinations = [
     "id": 17,
     "name": "Smoked Pineapple Leather",
     "rating": 4.5,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Costume National I",
       "SNOI (Supremacy Not Only Intense)"
@@ -700,9 +822,16 @@ export const fragranceCombinations = [
     "id": 18,
     "name": "Seductive Vanilla Leather",
     "rating": 4.7,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Costume National I",
       "Spectre Ghost"
@@ -741,9 +870,16 @@ export const fragranceCombinations = [
     "id": 19,
     "name": "Spiced Vanilla Tobacco",
     "rating": 4.3,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Hercules",
       "Al Nashama Caprice"
@@ -782,9 +918,15 @@ export const fragranceCombinations = [
     "id": 20,
     "name": "Salty Marine Tobacco",
     "rating": 3.8,
-    "season": "Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Hercules",
       "CDNI Milestone"
@@ -823,9 +965,15 @@ export const fragranceCombinations = [
     "id": 21,
     "name": "Imperial Saffron Blue",
     "rating": 4.3,
-    "season": "Autumn",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Costume National I",
       "Turathi Blue"
@@ -864,9 +1012,15 @@ export const fragranceCombinations = [
     "id": 22,
     "name": "Midnight Metallic Ocean",
     "rating": 4.0,
-    "season": "Summer",
-    "time_of_day": "Night",
-    "occasion": ["Casual"],
+    "season": [
+      "Summer"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "CDNI Milestone"
@@ -905,9 +1059,15 @@ export const fragranceCombinations = [
     "id": 23,
     "name": "Smoky Mountain Vetiver",
     "rating": 4.0,
-    "season": "Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Supremacy In Heaven"
@@ -946,9 +1106,15 @@ export const fragranceCombinations = [
     "id": 24,
     "name": "Aromatic Ink & Leather",
     "rating": 4.2,
-    "season": "Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal"],
+    "season": [
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal"
+    ],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Costume National I"
@@ -987,9 +1153,16 @@ export const fragranceCombinations = [
     "id": 25,
     "name": "Citrus Saffron Spark",
     "rating": 4.2,
-    "season": "Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office", "Casual"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office",
+      "Casual"
+    ],
     "fragrances": [
       "Costume National I",
       "Jean Lowe Immortal"
@@ -1028,9 +1201,16 @@ export const fragranceCombinations = [
     "id": 26,
     "name": "Golden Pineapple Breeze",
     "rating": 4.4,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Divin Asylum"
@@ -1069,9 +1249,17 @@ export const fragranceCombinations = [
     "id": 27,
     "name": "Emperor's Sovereign",
     "rating": 4.6,
-    "season": "Spring / Autumn",
-    "time_of_day": "All",
-    "occasion": ["Formal"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day",
+      "Night"
+    ],
+    "occasion": [
+      "Formal"
+    ],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Supremacy Collector's Edition",
@@ -1111,9 +1299,17 @@ export const fragranceCombinations = [
     "id": 28,
     "name": "Gothic Vanilla Incense",
     "rating": 4.4,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Hercules",
@@ -1153,9 +1349,16 @@ export const fragranceCombinations = [
     "id": 29,
     "name": "Royal Cardamom Sea",
     "rating": 4.3,
-    "season": "Spring / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Turathi Blue",
       "Al Nashama Caprice",
@@ -1195,9 +1398,15 @@ export const fragranceCombinations = [
     "id": 30,
     "name": "Ultimate Zesty Aquatic",
     "rating": 4.5,
-    "season": "Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Turathi Blue",
       "CDNI Milestone",
@@ -1237,9 +1446,15 @@ export const fragranceCombinations = [
     "id": 31,
     "name": "Executive Creed Tribute",
     "rating": 4.4,
-    "season": "Spring",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Supremacy Collector's Edition",
@@ -1279,9 +1494,15 @@ export const fragranceCombinations = [
     "id": 32,
     "name": "Sovereign Niche Overlord",
     "rating": 4.7,
-    "season": "Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal"],
+    "season": [
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal"
+    ],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Costume National I",
@@ -1322,9 +1543,15 @@ export const fragranceCombinations = [
     "id": 33,
     "name": "High-Heat Overlord",
     "rating": 4.6,
-    "season": "Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Turathi Blue",
       "CDNI Milestone",
@@ -1365,9 +1592,16 @@ export const fragranceCombinations = [
     "id": 34,
     "name": "Smoked Fig & Tea",
     "rating": 4.5,
-    "season": "Autumn",
-    "time_of_day": "All",
-    "occasion": ["Office"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day",
+      "Night"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Liam Grey"
@@ -1406,9 +1640,16 @@ export const fragranceCombinations = [
     "id": 35,
     "name": "Sparkling Vanilla Woods",
     "rating": 4.5,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Spectre Ghost",
       "Turathi Blue"
@@ -1447,9 +1688,15 @@ export const fragranceCombinations = [
     "id": 36,
     "name": "Gentleman's Transition",
     "rating": 4.2,
-    "season": "Autumn",
-    "time_of_day": "Night",
-    "occasion": ["Evening"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Evening"
+    ],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Hercules"
@@ -1488,9 +1735,16 @@ export const fragranceCombinations = [
     "id": 37,
     "name": "Royal Tea & Citrus",
     "rating": 4.5,
-    "season": "Spring / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Supremacy In Heaven",
       "Turathi Blue",
@@ -1530,9 +1784,17 @@ export const fragranceCombinations = [
     "id": 38,
     "name": "The Elysian Ghost",
     "rating": 4.5,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "Spectre Ghost",
       "Divin Asylum",
@@ -1572,9 +1834,16 @@ export const fragranceCombinations = [
     "id": 39,
     "name": "Dark Moss Leather Tea",
     "rating": 4.6,
-    "season": "Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Costume National I",
@@ -1614,9 +1883,17 @@ export const fragranceCombinations = [
     "id": 40,
     "name": "Liam & Ghost Winter Accord",
     "rating": 4.5,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Casual", "Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Casual",
+      "Evening"
+    ],
     "fragrances": [
       "Liam Grey",
       "Spectre Ghost"
@@ -1655,9 +1932,17 @@ export const fragranceCombinations = [
     "id": 41,
     "name": "Coastal Executive",
     "rating": 4.3,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Office", "Casual"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office",
+      "Casual"
+    ],
     "fragrances": [
       "Jean Lowe Immortal",
       "CDNI Milestone"
@@ -1696,9 +1981,15 @@ export const fragranceCombinations = [
     "id": 42,
     "name": "Autumn Ink & Pineapple",
     "rating": 4.1,
-    "season": "Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Encre Noire l'Extreme"
@@ -1737,9 +2028,15 @@ export const fragranceCombinations = [
     "id": 43,
     "name": "Silver Mountain Blue Gym",
     "rating": 4.2,
-    "season": "Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual"],
+    "season": [
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual"
+    ],
     "fragrances": [
       "Supremacy In Heaven",
       "Turathi Blue"
@@ -1778,9 +2075,17 @@ export const fragranceCombinations = [
     "id": 44,
     "name": "Minted Marine Lavender",
     "rating": 4.2,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Office", "Casual"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office",
+      "Casual"
+    ],
     "fragrances": [
       "Al Nashama Caprice",
       "CDNI Milestone"
@@ -1819,9 +2124,17 @@ export const fragranceCombinations = [
     "id": 45,
     "name": "Pineapple Green Tea",
     "rating": 4.2,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Office", "Casual"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office",
+      "Casual"
+    ],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Supremacy In Heaven"
@@ -1860,9 +2173,17 @@ export const fragranceCombinations = [
     "id": 46,
     "name": "Leathered Fig Tea",
     "rating": 4.4,
-    "season": "Autumn / Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "Costume National I",
       "Liam Grey"
@@ -1901,9 +2222,17 @@ export const fragranceCombinations = [
     "id": 47,
     "name": "Spiced Citrus Leather Tea",
     "rating": 4.5,
-    "season": "Autumn",
-    "time_of_day": "All",
-    "occasion": ["Office", "Evening"],
+    "season": [
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day",
+      "Night"
+    ],
+    "occasion": [
+      "Office",
+      "Evening"
+    ],
     "fragrances": [
       "Costume National I",
       "Liam Grey",
@@ -1943,9 +2272,17 @@ export const fragranceCombinations = [
     "id": 48,
     "name": "Fresh Pineapple Blue",
     "rating": 4.5,
-    "season": "Spring / Summer",
-    "time_of_day": "Day",
-    "occasion": ["Casual", "Office"],
+    "season": [
+      "Spring",
+      "Summer"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual",
+      "Office"
+    ],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Turathi Blue"
@@ -1984,9 +2321,15 @@ export const fragranceCombinations = [
     "id": 49,
     "name": "Clean Green Blackcurrant",
     "rating": 4.1,
-    "season": "Spring",
-    "time_of_day": "Day",
-    "occasion": ["Office"],
+    "season": [
+      "Spring"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office"
+    ],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Supremacy In Heaven"
@@ -2025,9 +2368,16 @@ export const fragranceCombinations = [
     "id": 50,
     "name": "Winter Tobacco Leather",
     "rating": 4.4,
-    "season": "Winter",
-    "time_of_day": "Night",
-    "occasion": ["Formal", "Evening"],
+    "season": [
+      "Winter"
+    ],
+    "time_of_day": [
+      "Night"
+    ],
+    "occasion": [
+      "Formal",
+      "Evening"
+    ],
     "fragrances": [
       "Hercules",
       "Costume National I"
@@ -2066,9 +2416,18 @@ export const fragranceCombinations = [
     "id": 51,
     "name": "Caprice Elysium Spark",
     "rating": 4.4,
-    "season": "Spring / Summer / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office", "Casual"],
+    "season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office",
+      "Casual"
+    ],
     "fragrances": [
       "Al Nashama Caprice",
       "Divin Asylum"
@@ -2107,9 +2466,18 @@ export const fragranceCombinations = [
     "id": 52,
     "name": "Lavender Ink Vetiver",
     "rating": 4.1,
-    "season": "Autumn / Winter",
-    "time_of_day": "Day / Night",
-    "occasion": ["Office", "Formal"],
+    "season": [
+      "Autumn",
+      "Winter"
+    ],
+    "time_of_day": [
+      "Day",
+      "Night"
+    ],
+    "occasion": [
+      "Office",
+      "Formal"
+    ],
     "fragrances": [
       "Al Nashama Caprice",
       "Encre Noire l'Extreme"
@@ -2148,9 +2516,17 @@ export const fragranceCombinations = [
     "id": 53,
     "name": "Elysian Black Vetiver",
     "rating": 4.0,
-    "season": "Spring / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Casual", "Office"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Casual",
+      "Office"
+    ],
     "fragrances": [
       "Divin Asylum",
       "Encre Noire l'Extreme"
@@ -2189,9 +2565,17 @@ export const fragranceCombinations = [
     "id": 54,
     "name": "Least-Used Redemption Trio",
     "rating": 4.3,
-    "season": "Spring / Autumn",
-    "time_of_day": "Day",
-    "occasion": ["Office", "Casual"],
+    "season": [
+      "Spring",
+      "Autumn"
+    ],
+    "time_of_day": [
+      "Day"
+    ],
+    "occasion": [
+      "Office",
+      "Casual"
+    ],
     "fragrances": [
       "Divin Asylum",
       "Al Nashama Caprice",
