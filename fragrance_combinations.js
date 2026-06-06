@@ -6,20 +6,39 @@ export const fragranceCombinations = [
     "season": "Summer",
     "time_of_day": "Day",
     "occasion": "Casual / Gym",
-    "fragrances": ["Jean Lowe Immortal", "Turathi Blue"],
+    "fragrances": [
+      "Jean Lowe Immortal",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Sparkling ginger-citrus with amber-woody lift.",
-    "dominant_notes": ["Grapefruit", "Ginger", "Bergamot", "Amber", "Musk"],
-    "synergy": "Jean Lowe Immortal adds ginger, grapefruit and ambroxan brightness while Turathi Blue reinforces the citrus-amber-wood structure. The result is fresh, modern and heat-friendly without becoming sweet or heavy.",
-    "projection": 4.3,
-    "longevity": 4.3,
+    "profile": "Ginger, Grapefruit with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Ginger",
+      "Grapefruit",
+      "Bergamot",
+      "Rosemary",
+      "Sage"
+    ],
+    "synergy": "Jean Lowe Immortal + Turathi Blue combines ginger grapefruit ambroxan aromatic; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.2,
+    "longevity": 4.4,
     "compliment_factor": 4.5,
-    "complexity": 3.9,
-    "best_weather": "Sunny / High Heat",
-    "best_temperature": "26°C–36°C",
-    "tags": ["Turathi Blue", "Jean Lowe Immortal", "Citrus", "Ginger", "Amber"],
-    "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Turathi Blue", "Ultimate Zesty Aquatic"]
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Jean Lowe Immortal",
+      "Turathi Blue",
+      "Ginger",
+      "Grapefruit",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Jean Lowe Immortal"
+    ]
   },
   {
     "id": 2,
@@ -28,20 +47,39 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn / Winter",
     "time_of_day": "All",
     "occasion": "Office / Evening",
-    "fragrances": ["Al Nashama Caprice", "Turathi Blue"],
+    "fragrances": [
+      "Al Nashama Caprice",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Fresh cardamom-lavender over radiant citrus amber.",
-    "dominant_notes": ["Cardamom", "Lavender", "Amber", "Bergamot", "Ginger"],
-    "synergy": "Caprice's cardamom, ginger, lavender and mint polish Turathi Blue's citrus, amber and woods into a refined blue-spicy blend. It is versatile and compliment-friendly, but best kept to moderate sprays in warm weather.",
-    "projection": 4.4,
+    "profile": "Cardamom, Ginger with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Cardamom",
+      "Ginger",
+      "Bergamot",
+      "Lemon",
+      "Lavender"
+    ],
+    "synergy": "Al Nashama Caprice + Turathi Blue combines aromatic cardamom lavender spice; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.2,
     "longevity": 4.4,
     "compliment_factor": 4.7,
-    "complexity": 4.2,
-    "best_weather": "Mild to Cool / Clear",
-    "best_temperature": "10°C–24°C",
-    "tags": ["Al Nashama Caprice", "Turathi Blue", "Cardamom", "Lavender", "Amber"],
-    "steps": "Order 1 (Balanced):\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shoulders\n\nOrder 2 (Fresh Projection Focus):\n• Layer 1: Al Nashama Caprice (1 spray) - Skin / Neck\n• Layer 2: Turathi Blue (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Al Nashama Caprice", "Turathi Blue", "High-Heat Overlord"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Al Nashama Caprice",
+      "Turathi Blue",
+      "Cardamom",
+      "Ginger",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Supremacy Collector's Edition + Al Nashama Caprice"
+    ]
   },
   {
     "id": 3,
@@ -50,20 +88,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Casual / Office",
-    "fragrances": ["Jean Lowe Immortal", "Divin Asylum"],
+    "fragrances": [
+      "Jean Lowe Immortal",
+      "Divin Asylum"
+    ],
     "fragrance_count": 2,
-    "profile": "Effervescent ginger, grapefruit and multi-citrus woods.",
-    "dominant_notes": ["Ginger", "Grapefruit", "Lime", "Vetiver", "Ambroxan"],
-    "synergy": "Immortal's ginger-grapefruit-ambroxan structure supports Divin Asylum's sparkling grapefruit, lemon, lime and vetiver. It improves freshness and perceived persistence without pretending Divin Asylum becomes a beast performer.",
-    "projection": 4.0,
-    "longevity": 4.0,
-    "compliment_factor": 4.4,
-    "complexity": 4.1,
+    "profile": "Ginger, Grapefruit with sparkling citrus aromatic vetiver.",
+    "dominant_notes": [
+      "Ginger",
+      "Grapefruit",
+      "Bergamot",
+      "Rosemary",
+      "Sage"
+    ],
+    "synergy": "Jean Lowe Immortal + Divin Asylum combines ginger grapefruit ambroxan aromatic; sparkling citrus aromatic vetiver. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 3.9,
+    "longevity": 4.1,
+    "compliment_factor": 4.3,
+    "complexity": 4.8,
     "best_weather": "Warm / Sunny",
-    "best_temperature": "20°C–32°C",
-    "tags": ["Jean Lowe Immortal", "Divin Asylum", "Ginger", "Lime", "Elysium"],
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Jean Lowe Immortal",
+      "Divin Asylum",
+      "Ginger",
+      "Grapefruit",
+      "Bergamot"
+    ],
     "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
-    "alternatives": ["Divin Asylum", "Jean Lowe Immortal", "High-Heat Shield"]
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Ash'aa Oud Noir + Jean Lowe Immortal",
+      "Liam Grey + Divin Asylum"
+    ]
   },
   {
     "id": 4,
@@ -72,20 +129,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Casual / Gym",
-    "fragrances": ["Supremacy In Heaven", "CDNI Milestone"],
+    "fragrances": [
+      "Supremacy In Heaven",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 2,
-    "profile": "Green tea and blackcurrant over salty marine musk.",
-    "dominant_notes": ["Green Tea", "Blackcurrant", "Sea Notes", "Violet", "Musk"],
-    "synergy": "Milestone's sea notes, violet and musky base add salty coastal freshness to Supremacy In Heaven's green tea, citrus and blackcurrant. This is clean and casual rather than heavy or formal.",
-    "projection": 3.8,
-    "longevity": 3.9,
+    "profile": "Bergamot, Mandarin with salty marine fruit musk.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Green Tea",
+      "Blackcurrant",
+      "Musk"
+    ],
+    "synergy": "Supremacy In Heaven + CDNI Milestone combines clean green tea citrus musk; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 3.9,
+    "longevity": 4.2,
     "compliment_factor": 4.0,
-    "complexity": 3.7,
-    "best_weather": "Warm Sea Breeze",
-    "best_temperature": "22°C–34°C",
-    "tags": ["Supremacy In Heaven", "CDNI Milestone", "Marine", "Sea Notes", "Green Tea"],
-    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy In Heaven", "CDNI Milestone", "Midnight Metallic Ocean"]
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Supremacy In Heaven",
+      "CDNI Milestone",
+      "Bergamot",
+      "Mandarin",
+      "Green Tea"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Ash'aa Oud Noir + CDNI Milestone",
+      "Supremacy In Heaven + Liam Grey",
+      "Hercules + CDNI Milestone"
+    ]
   },
   {
     "id": 5,
@@ -94,20 +170,39 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Ash'aa Oud Noir", "Jean Lowe Immortal"],
+    "fragrances": [
+      "Ash'aa Oud Noir",
+      "Jean Lowe Immortal"
+    ],
     "fragrance_count": 2,
-    "profile": "Fresh green aromatic woods with a ginger-grapefruit lift.",
-    "dominant_notes": ["Bergamot", "Juniper Berry", "Violet", "Ginger", "Grapefruit"],
-    "synergy": "Immortal's ginger, grapefruit and aromatic amber freshness modernises Ash'aa Oud Noir's Green Irish Tweed-style bergamot, juniper, violet and sandalwood profile. The result is professional, clean and contemporary.",
+    "profile": "Bergamot, Juniper with ginger grapefruit ambroxan aromatic.",
+    "dominant_notes": [
+      "Bergamot",
+      "Juniper",
+      "Violet",
+      "Mint",
+      "Lavender"
+    ],
+    "synergy": "Ash'aa Oud Noir + Jean Lowe Immortal combines green aromatic woody fougere; ginger grapefruit ambroxan aromatic. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.0,
     "longevity": 4.2,
     "compliment_factor": 4.1,
-    "complexity": 4.2,
-    "best_weather": "Cool Spring / Autumn Morning",
-    "best_temperature": "14°C–24°C",
-    "tags": ["Ash'aa Oud Noir", "Jean Lowe Immortal", "Bergamot", "Juniper", "Ginger"],
-    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Encre Noire l'Extreme", "Executive Fresh"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Ash'aa Oud Noir",
+      "Jean Lowe Immortal",
+      "Bergamot",
+      "Juniper",
+      "Violet"
+    ],
+    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + CDNI Milestone"
+    ]
   },
   {
     "id": 6,
@@ -116,20 +211,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Casual",
-    "fragrances": ["Encre Noire l'Extreme", "Turathi Blue"],
+    "fragrances": [
+      "Encre Noire l'Extreme",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Dark vetiver-cypress sharpened by citrus amber.",
-    "dominant_notes": ["Vetiver", "Cypress", "Bergamot", "Amber", "Musk"],
-    "synergy": "Turathi Blue's citrus, amber and musky woods cut through Encre Noire l'Extreme's smoky cypress, vetiver and incense. One spray of Encre is enough; the fresh layer should carry the projection.",
-    "projection": 4.1,
-    "longevity": 4.4,
+    "profile": "Cypress, Elemi with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Cypress",
+      "Elemi",
+      "Bergamot",
+      "Vetiver",
+      "Incense"
+    ],
+    "synergy": "Encre Noire l'Extreme + Turathi Blue combines dark smoky vetiver cypress incense; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 4.2,
+    "longevity": 4.5,
     "compliment_factor": 3.9,
-    "complexity": 4.5,
-    "best_weather": "Overcast / Rainy",
-    "best_temperature": "10°C–20°C",
-    "tags": ["Encre Noire l'Extreme", "Turathi Blue", "Citrus", "Vetiver", "Cypress"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Encre Noire l'Extreme", "Turathi Blue", "Smoky Mountain Vetiver"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Encre Noire l'Extreme",
+      "Turathi Blue",
+      "Cypress",
+      "Elemi",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 7,
@@ -138,20 +252,39 @@ export const fragranceCombinations = [
     "season": "Spring",
     "time_of_day": "Day",
     "occasion": "Casual / Office",
-    "fragrances": ["Ash'aa Oud Noir", "CDNI Milestone"],
+    "fragrances": [
+      "Ash'aa Oud Noir",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 2,
-    "profile": "Fresh green woods with salty marine violet.",
-    "dominant_notes": ["Sea Notes", "Violet", "Juniper Berry", "Bergamot", "Sandalwood"],
-    "synergy": "Milestone adds sea notes, violet and musk to the clean green juniper, bergamot and sandalwood structure of Ash'aa Oud Noir. It is crisp, outdoorsy and best in breezy mild weather.",
-    "projection": 3.9,
-    "longevity": 4.0,
+    "profile": "Bergamot, Juniper with salty marine fruit musk.",
+    "dominant_notes": [
+      "Bergamot",
+      "Juniper",
+      "Violet",
+      "Mint",
+      "Lavender"
+    ],
+    "synergy": "Ash'aa Oud Noir + CDNI Milestone combines green aromatic woody fougere; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.0,
+    "longevity": 4.2,
     "compliment_factor": 4.0,
-    "complexity": 4.0,
-    "best_weather": "Breezy / Fresh",
-    "best_temperature": "16°C–26°C",
-    "tags": ["Ash'aa Oud Noir", "CDNI Milestone", "Marine", "Sea Notes", "Green Notes"],
-    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Jacket",
-    "alternatives": ["CDNI Milestone", "Midnight Metallic Ocean", "Executive Creed Tribute"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Clear",
+    "best_temperature": "14°C–26°C",
+    "tags": [
+      "Ash'aa Oud Noir",
+      "CDNI Milestone",
+      "Bergamot",
+      "Juniper",
+      "Violet"
+    ],
+    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Ash'aa Oud Noir + Jean Lowe Immortal",
+      "Ash'aa Oud Noir + Divin Asylum"
+    ]
   },
   {
     "id": 8,
@@ -160,20 +293,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Liam Grey", "Divin Asylum"],
+    "fragrances": [
+      "Liam Grey",
+      "Divin Asylum"
+    ],
     "fragrance_count": 2,
-    "profile": "Creamy fig and black tea with a citrus-aromatic lift.",
-    "dominant_notes": ["Fig", "Black Tea", "Cardamom", "Grapefruit", "Vetiver"],
-    "synergy": "Liam Grey's fig, black tea, cardamom and sandalwood give Divin Asylum's citrus-vetiver structure more body. The blend is sophisticated and office-friendly, but Divin should stay on clothes for best lift.",
-    "projection": 3.9,
-    "longevity": 4.3,
-    "compliment_factor": 4.4,
-    "complexity": 4.2,
-    "best_weather": "Cool / Crisp",
-    "best_temperature": "12°C–20°C",
-    "tags": ["Liam Grey", "Divin Asylum", "Fig", "Tea", "Citrus"],
-    "steps": "Order 1:\n• Layer 1: Liam Grey (2 sprays) - Skin / Neck\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Liam Grey", "Emperor's Tea Accord"]
+    "profile": "Cardamom, Black Tea with sparkling citrus aromatic vetiver.",
+    "dominant_notes": [
+      "Cardamom",
+      "Black Tea",
+      "Fig",
+      "Iris",
+      "Vetiver"
+    ],
+    "synergy": "Liam Grey + Divin Asylum combines creamy fig black tea woods; sparkling citrus aromatic vetiver. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 3.8,
+    "longevity": 4.1,
+    "compliment_factor": 4.3,
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Liam Grey",
+      "Divin Asylum",
+      "Cardamom",
+      "Black Tea",
+      "Fig"
+    ],
+    "steps": "Order 1:\n• Layer 1: Liam Grey (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Divin Asylum",
+      "Supremacy In Heaven + Liam Grey"
+    ]
   },
   {
     "id": 9,
@@ -182,20 +334,39 @@ export const fragranceCombinations = [
     "season": "Spring",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Ash'aa Oud Noir", "Divin Asylum"],
+    "fragrances": [
+      "Ash'aa Oud Noir",
+      "Divin Asylum"
+    ],
     "fragrance_count": 2,
-    "profile": "Tailored green woods with sparkling grapefruit-lime citrus.",
-    "dominant_notes": ["Lime", "Grapefruit", "Bergamot", "Juniper Berry", "Violet"],
-    "synergy": "Ash'aa Oud Noir supplies clean green structure while Divin Asylum adds grapefruit, lemon, lime and aromatic vetiver sparkle. This is polished and fresh, but performance remains moderate because Divin Asylum is not a powerhouse.",
-    "projection": 4.0,
-    "longevity": 4.1,
-    "compliment_factor": 4.2,
-    "complexity": 4.0,
-    "best_weather": "Mild / Sunny",
-    "best_temperature": "14°C–24°C",
-    "tags": ["Ash'aa Oud Noir", "Divin Asylum", "Lime", "Grapefruit", "Green"],
-    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Divin Asylum", "Modernized Emerald Vetiver", "Executive Creed Tribute"]
+    "profile": "Bergamot, Juniper with sparkling citrus aromatic vetiver.",
+    "dominant_notes": [
+      "Bergamot",
+      "Juniper",
+      "Violet",
+      "Mint",
+      "Lavender"
+    ],
+    "synergy": "Ash'aa Oud Noir + Divin Asylum combines green aromatic woody fougere; sparkling citrus aromatic vetiver. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 3.8,
+    "longevity": 3.9,
+    "compliment_factor": 4.3,
+    "complexity": 4.8,
+    "best_weather": "Mild / Clear",
+    "best_temperature": "14°C–26°C",
+    "tags": [
+      "Ash'aa Oud Noir",
+      "Divin Asylum",
+      "Bergamot",
+      "Juniper",
+      "Violet"
+    ],
+    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Jean Lowe Immortal",
+      "Ash'aa Oud Noir + CDNI Milestone"
+    ]
   },
   {
     "id": 10,
@@ -204,20 +375,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Spectre Ghost", "Jean Lowe Immortal"],
+    "fragrances": [
+      "Spectre Ghost",
+      "Jean Lowe Immortal"
+    ],
     "fragrance_count": 2,
-    "profile": "Spiced vanilla lifted by bright ginger and grapefruit.",
-    "dominant_notes": ["Vanilla", "Ginger", "Bergamot", "Grapefruit", "Ambroxan"],
-    "synergy": "Spectre Ghost's warm vanilla and spice gain lift from Immortal's ginger, grapefruit and ambroxan. It keeps the vanilla lively, but it remains a cool-weather evening blend.",
+    "profile": "Vanilla, Ginger with ginger grapefruit ambroxan aromatic.",
+    "dominant_notes": [
+      "Vanilla",
+      "Ginger",
+      "Bergamot",
+      "Cardamom",
+      "Pink Pepper"
+    ],
+    "synergy": "Spectre Ghost + Jean Lowe Immortal combines spiced vanilla amber; ginger grapefruit ambroxan aromatic. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.2,
-    "longevity": 4.5,
+    "longevity": 4.4,
     "compliment_factor": 4.7,
-    "complexity": 4.3,
-    "best_weather": "Cool / Chilly Evening",
-    "best_temperature": "8°C–18°C",
-    "tags": ["Spectre Ghost", "Jean Lowe Immortal", "Vanilla", "Gourmand", "Ginger"],
-    "steps": "Order 1:\n• Layer 1: Spectre Ghost (2 sprays) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Sweater",
-    "alternatives": ["Spectre Ghost", "Jean Lowe Immortal", "Seductive Vanilla Leather"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Spectre Ghost",
+      "Jean Lowe Immortal",
+      "Vanilla",
+      "Ginger",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Jean Lowe Immortal"
+    ]
   },
   {
     "id": 11,
@@ -226,20 +416,39 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Supremacy In Heaven", "Liam Grey"],
+    "fragrances": [
+      "Supremacy In Heaven",
+      "Liam Grey"
+    ],
     "fragrance_count": 2,
-    "profile": "Green tea and blackcurrant softened by fig-black tea creaminess.",
-    "dominant_notes": ["Green Tea", "Black Tea", "Fig", "Cardamom", "Blackcurrant"],
-    "synergy": "Liam Grey's fig, black tea and sandalwood smooth the sharper green tea and blackcurrant profile of Supremacy In Heaven. It becomes a refined tea accord for mild office days.",
-    "projection": 3.9,
-    "longevity": 4.3,
+    "profile": "Bergamot, Mandarin with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Green Tea",
+      "Blackcurrant",
+      "Musk"
+    ],
+    "synergy": "Supremacy In Heaven + Liam Grey combines clean green tea citrus musk; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 3.8,
+    "longevity": 4.2,
     "compliment_factor": 4.3,
-    "complexity": 4.4,
-    "best_weather": "Mild / Overcast",
-    "best_temperature": "12°C–22°C",
-    "tags": ["Supremacy In Heaven", "Liam Grey", "Green Tea", "Black Tea", "Fig"],
-    "steps": "Order 1 (Tea-Fresh Balance):\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Shirt\n\nOrder 2 (Richer Tea Focus):\n• Layer 1: Supremacy In Heaven (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy In Heaven", "Liam Grey", "Professional Comfort"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Supremacy In Heaven",
+      "Liam Grey",
+      "Bergamot",
+      "Mandarin",
+      "Green Tea"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Liam Grey + Divin Asylum",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 12,
@@ -248,20 +457,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["Encre Noire l'Extreme", "Liam Grey"],
+    "fragrances": [
+      "Encre Noire l'Extreme",
+      "Liam Grey"
+    ],
     "fragrance_count": 2,
-    "profile": "Dark vetiver softened by creamy fig, tea and sandalwood.",
-    "dominant_notes": ["Vetiver", "Cypress", "Fig", "Black Tea", "Incense"],
-    "synergy": "Liam Grey's fig, tea, iris and sandalwood soften Encre Noire l'Extreme's cypress, vetiver and incense. It stays dark and formal but becomes significantly more wearable.",
-    "projection": 4.0,
-    "longevity": 4.6,
-    "compliment_factor": 4.3,
-    "complexity": 4.6,
-    "best_weather": "Cold / Bitter",
-    "best_temperature": "2°C–14°C",
-    "tags": ["Encre Noire l'Extreme", "Liam Grey", "Cashmere", "Vetiver", "Tea"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Sweater",
-    "alternatives": ["Liam Grey", "Encre Noire l'Extreme", "Sovereign Niche Overlord"]
+    "profile": "Cypress, Elemi with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Cypress",
+      "Elemi",
+      "Bergamot",
+      "Vetiver",
+      "Incense"
+    ],
+    "synergy": "Encre Noire l'Extreme + Liam Grey combines dark smoky vetiver cypress incense; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 4.1,
+    "longevity": 4.5,
+    "compliment_factor": 4.2,
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Encre Noire l'Extreme",
+      "Liam Grey",
+      "Cypress",
+      "Elemi",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Liam Grey + Divin Asylum",
+      "Supremacy In Heaven + Liam Grey"
+    ]
   },
   {
     "id": 13,
@@ -270,20 +498,39 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Supremacy Collector's Edition", "Al Nashama Caprice"],
+    "fragrances": [
+      "Supremacy Collector's Edition",
+      "Al Nashama Caprice"
+    ],
     "fragrance_count": 2,
-    "profile": "Pineapple chypre wrapped in cardamom-lavender spice.",
-    "dominant_notes": ["Pineapple", "Cardamom", "Lavender", "Ginger", "Oakmoss"],
-    "synergy": "Caprice introduces warm cardamom, ginger, lavender and amber to the pineapple, birch, oakmoss and ambergris profile of Collector's Edition. It is romantic and versatile, especially in mild evenings.",
+    "profile": "Pineapple, Apple with aromatic cardamom lavender spice.",
+    "dominant_notes": [
+      "Pineapple",
+      "Apple",
+      "Bergamot",
+      "Birch",
+      "Oakmoss"
+    ],
+    "synergy": "Supremacy Collector's Edition + Al Nashama Caprice combines bright pineapple chypre; aromatic cardamom lavender spice. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.3,
-    "longevity": 4.3,
-    "compliment_factor": 4.6,
-    "complexity": 4.0,
-    "best_weather": "Cool Evening Breeze",
-    "best_temperature": "12°C–22°C",
-    "tags": ["Supremacy Collector's Edition", "Al Nashama Caprice", "Pineapple", "Cardamom", "Spicy"],
-    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Shirt",
-    "alternatives": ["SNOI (Supremacy Not Only Intense)", "Al Nashama Caprice", "Emperor's Sovereign"]
+    "longevity": 4.5,
+    "compliment_factor": 4.5,
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Supremacy Collector's Edition",
+      "Al Nashama Caprice",
+      "Pineapple",
+      "Apple",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Costume National I + Al Nashama Caprice",
+      "Hercules + Al Nashama Caprice"
+    ]
   },
   {
     "id": 14,
@@ -292,20 +539,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Evening / Formal",
-    "fragrances": ["Costume National I", "Al Nashama Caprice"],
+    "fragrances": [
+      "Costume National I",
+      "Al Nashama Caprice"
+    ],
     "fragrance_count": 2,
-    "profile": "Saffron-leather sharpened by cardamom-lavender freshness.",
-    "dominant_notes": ["Saffron", "Leather", "Cardamom", "Lavender", "Ambroxan"],
-    "synergy": "Costume National I's saffron, leather, ambroxan and cedarwood are lifted by Caprice's cardamom, ginger, lavender and mint. This keeps the leather modern and dressed-up rather than harsh.",
-    "projection": 4.4,
-    "longevity": 4.6,
-    "compliment_factor": 4.6,
-    "complexity": 4.4,
-    "best_weather": "Cold Night",
-    "best_temperature": "4°C–16°C",
-    "tags": ["Costume National I", "Al Nashama Caprice", "Leather", "Lavender", "Saffron"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Neck\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Jacket",
-    "alternatives": ["Costume National I", "Al Nashama Caprice", "Seductive Vanilla Leather"]
+    "profile": "Saffron, Bergamot with aromatic cardamom lavender spice.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + Al Nashama Caprice combines saffron amber leather woods; aromatic cardamom lavender spice. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.1,
+    "longevity": 4.4,
+    "compliment_factor": 4.7,
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Costume National I",
+      "Al Nashama Caprice",
+      "Saffron",
+      "Bergamot",
+      "Thyme"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Supremacy Collector's Edition + Al Nashama Caprice",
+      "Costume National I + SNOI (Supremacy Not Only Intense)"
+    ]
   },
   {
     "id": 15,
@@ -314,20 +580,39 @@ export const fragranceCombinations = [
     "season": "Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["Hercules", "Spectre Ghost"],
+    "fragrances": [
+      "Hercules",
+      "Spectre Ghost"
+    ],
     "fragrance_count": 2,
-    "profile": "Sweet spiced tobacco wrapped in warm vanilla.",
-    "dominant_notes": ["Tobacco", "Vanilla", "Cinnamon", "Incense", "Cardamom"],
-    "synergy": "Hercules provides tobacco, cinnamon, vanilla and woods while Spectre Ghost adds a brighter spicy vanilla crown. This is rich, sweet and cold-weather only.",
-    "projection": 4.4,
-    "longevity": 4.7,
-    "compliment_factor": 4.6,
-    "complexity": 4.4,
-    "best_weather": "Freezing / Frosty",
-    "best_temperature": "0°C–10°C",
-    "tags": ["Hercules", "Spectre Ghost", "Tobacco", "Vanilla", "Cinnamon"],
-    "steps": "Order 1:\n• Layer 1: Hercules (2 sprays) - Skin / Chest\n• Layer 2: Spectre Ghost (2 sprays) - Clothes / Heavy Coat",
-    "alternatives": ["Hercules", "Spectre Ghost", "Gothic Vanilla Incense"]
+    "profile": "Tobacco, Vanilla with spiced vanilla amber.",
+    "dominant_notes": [
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon",
+      "Pepper",
+      "Incense"
+    ],
+    "synergy": "Hercules + Spectre Ghost combines tobacco vanilla spice; spiced vanilla amber. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.1,
+    "longevity": 4.3,
+    "compliment_factor": 4.7,
+    "complexity": 4.8,
+    "best_weather": "Cold / Dry",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Hercules",
+      "Spectre Ghost",
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon"
+    ],
+    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Spectre Ghost (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Spectre Ghost + Jean Lowe Immortal",
+      "Hercules + Liam Grey",
+      "Costume National I + Spectre Ghost"
+    ]
   },
   {
     "id": 16,
@@ -336,20 +621,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "All",
     "occasion": "Casual",
-    "fragrances": ["Hercules", "Liam Grey"],
+    "fragrances": [
+      "Hercules",
+      "Liam Grey"
+    ],
     "fragrance_count": 2,
-    "profile": "Cozy tobacco, cinnamon, fig and black tea.",
-    "dominant_notes": ["Tobacco", "Vanilla", "Cinnamon", "Fig", "Black Tea"],
-    "synergy": "Hercules' tobacco, cinnamon and vanilla merge naturally with Liam Grey's cardamom, black tea, fig and sandalwood. The result is a chai-like autumn comfort scent with good longevity and moderate projection.",
+    "profile": "Tobacco, Vanilla with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon",
+      "Pepper",
+      "Incense"
+    ],
+    "synergy": "Hercules + Liam Grey combines tobacco vanilla spice; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.0,
-    "longevity": 4.6,
+    "longevity": 4.3,
     "compliment_factor": 4.4,
-    "complexity": 4.3,
-    "best_weather": "Crisp / Autumn Chill",
-    "best_temperature": "6°C–16°C",
-    "tags": ["Hercules", "Liam Grey", "Chai", "Tobacco", "Cinnamon"],
-    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Neck\n• Layer 2: Liam Grey (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Hercules", "Liam Grey", "Luxury Cashmere"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Hercules",
+      "Liam Grey",
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon"
+    ],
+    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Liam Grey + Divin Asylum",
+      "Supremacy In Heaven + Liam Grey",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 17,
@@ -358,20 +662,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Costume National I", "SNOI (Supremacy Not Only Intense)"],
+    "fragrances": [
+      "Costume National I",
+      "SNOI (Supremacy Not Only Intense)"
+    ],
     "fragrance_count": 2,
-    "profile": "Dark blackcurrant-oakmoss over saffron leather.",
-    "dominant_notes": ["Saffron", "Leather", "Blackcurrant", "Oakmoss", "Ambroxan"],
-    "synergy": "SNOI's blackcurrant, oakmoss, patchouli and saffron connect well with Costume National I's saffron, leather, ambroxan and cedar. Powerful performance means both should be kept controlled.",
-    "projection": 4.6,
-    "longevity": 4.8,
-    "compliment_factor": 4.4,
-    "complexity": 4.6,
-    "best_weather": "Cold / Clear Night",
-    "best_temperature": "2°C–14°C",
-    "tags": ["Costume National I", "SNOI", "Leather", "Blackcurrant", "Saffron"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: SNOI (Supremacy Not Only Intense) (2 sprays) - Clothes / Leather Jacket",
-    "alternatives": ["SNOI (Supremacy Not Only Intense)", "Costume National I", "Aromatic Ink & Leather"]
+    "profile": "Saffron, Bergamot with dense fruity mossy chypre.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + SNOI (Supremacy Not Only Intense) combines saffron amber leather woods; dense fruity mossy chypre. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.4,
+    "longevity": 4.7,
+    "compliment_factor": 4.5,
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Costume National I",
+      "SNOI (Supremacy Not Only Intense)",
+      "Saffron",
+      "Bergamot",
+      "Thyme"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: SNOI (Supremacy Not Only Intense) (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Costume National I + Al Nashama Caprice",
+      "Costume National I + Spectre Ghost",
+      "Costume National I + Turathi Blue"
+    ]
   },
   {
     "id": 18,
@@ -380,20 +703,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Costume National I", "Spectre Ghost"],
+    "fragrances": [
+      "Costume National I",
+      "Spectre Ghost"
+    ],
     "fragrance_count": 2,
-    "profile": "Saffron leather sweetened by spicy vanilla.",
-    "dominant_notes": ["Saffron", "Leather", "Vanilla", "Cardamom", "Ambroxan"],
-    "synergy": "Costume National I's saffron, leather, ambroxan and cedarwood are rounded by Spectre Ghost's vanilla, ginger and cardamom. It is seductive and polished, but too warm for hot weather.",
-    "projection": 4.4,
-    "longevity": 4.6,
+    "profile": "Saffron, Bergamot with spiced vanilla amber.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + Spectre Ghost combines saffron amber leather woods; spiced vanilla amber. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.2,
+    "longevity": 4.4,
     "compliment_factor": 4.8,
-    "complexity": 4.4,
-    "best_weather": "Cold / Severe Cold",
-    "best_temperature": "2°C–14°C",
-    "tags": ["Costume National I", "Spectre Ghost", "Leather", "Vanilla", "Saffron"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Neck\n• Layer 2: Spectre Ghost (2 sprays) - Coat",
-    "alternatives": ["Costume National I", "Spectre Ghost", "Bad Boy in a Clean Suit"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Costume National I",
+      "Spectre Ghost",
+      "Saffron",
+      "Bergamot",
+      "Thyme"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Spectre Ghost (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Spectre Ghost + Jean Lowe Immortal",
+      "Costume National I + Al Nashama Caprice",
+      "Hercules + Spectre Ghost"
+    ]
   },
   {
     "id": 19,
@@ -402,20 +744,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Hercules", "Al Nashama Caprice"],
+    "fragrances": [
+      "Hercules",
+      "Al Nashama Caprice"
+    ],
     "fragrance_count": 2,
-    "profile": "Clean cardamom-lavender over warm tobacco vanilla.",
-    "dominant_notes": ["Tobacco", "Vanilla", "Cardamom", "Lavender", "Cinnamon"],
-    "synergy": "Caprice's cardamom, ginger, lavender and mint add aromatic lift to Hercules' tobacco, vanilla and cinnamon. This makes Hercules more wearable while retaining its cool-weather character.",
-    "projection": 4.1,
-    "longevity": 4.4,
+    "profile": "Tobacco, Vanilla with aromatic cardamom lavender spice.",
+    "dominant_notes": [
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon",
+      "Pepper",
+      "Incense"
+    ],
+    "synergy": "Hercules + Al Nashama Caprice combines tobacco vanilla spice; aromatic cardamom lavender spice. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.0,
+    "longevity": 4.2,
     "compliment_factor": 4.4,
-    "complexity": 4.2,
-    "best_weather": "Cool / Windy",
-    "best_temperature": "6°C–18°C",
-    "tags": ["Hercules", "Al Nashama Caprice", "Tobacco", "Lavender", "Cardamom"],
-    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Hercules", "Al Nashama Caprice", "Spiced Chai & Tobacco"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Hercules",
+      "Al Nashama Caprice",
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon"
+    ],
+    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Supremacy Collector's Edition + Al Nashama Caprice",
+      "Costume National I + Al Nashama Caprice"
+    ]
   },
   {
     "id": 20,
@@ -424,20 +785,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Casual",
-    "fragrances": ["Hercules", "CDNI Milestone"],
+    "fragrances": [
+      "Hercules",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 2,
-    "profile": "Experimental sweet-salty marine tobacco.",
-    "dominant_notes": ["Tobacco", "Vanilla", "Sea Notes", "Violet", "Cinnamon"],
-    "synergy": "Milestone's salty marine-violet freshness cuts through Hercules' cinnamon, tobacco and vanilla. The contrast is interesting but experimental, so it is better for casual wear than office or formal settings.",
-    "projection": 3.9,
-    "longevity": 4.1,
-    "compliment_factor": 3.7,
-    "complexity": 4.5,
-    "best_weather": "Mild Autumn Day",
-    "best_temperature": "12°C–20°C",
-    "tags": ["Hercules", "CDNI Milestone", "Tobacco", "Sea Notes", "Cinnamon"],
-    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Neck\n• Layer 2: CDNI Milestone (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Hercules", "CDNI Milestone", "Spiced Chai & Tobacco"]
+    "profile": "Tobacco, Vanilla with salty marine fruit musk.",
+    "dominant_notes": [
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon",
+      "Pepper",
+      "Incense"
+    ],
+    "synergy": "Hercules + CDNI Milestone combines tobacco vanilla spice; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.0,
+    "longevity": 4.2,
+    "compliment_factor": 3.8,
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Hercules",
+      "CDNI Milestone",
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon"
+    ],
+    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Ash'aa Oud Noir + CDNI Milestone",
+      "Hercules + Spectre Ghost"
+    ]
   },
   {
     "id": 21,
@@ -446,20 +826,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Costume National I", "Turathi Blue"],
+    "fragrances": [
+      "Costume National I",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Saffron leather beneath radiant citrus amber.",
-    "dominant_notes": ["Saffron", "Leather", "Bergamot", "Amber", "Ambroxan"],
-    "synergy": "Costume National I gives saffron-leather depth while Turathi Blue adds citrus, amber, musk and woods. The shared modern woody-amber feel makes the blend coherent and strong.",
-    "projection": 4.3,
-    "longevity": 4.5,
+    "profile": "Saffron, Bergamot with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + Turathi Blue combines saffron amber leather woods; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.2,
+    "longevity": 4.4,
     "compliment_factor": 4.4,
-    "complexity": 4.3,
-    "best_weather": "Cool / Clear",
-    "best_temperature": "8°C–18°C",
-    "tags": ["Costume National I", "Turathi Blue", "Saffron", "Amber", "Leather"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Costume National I", "Turathi Blue", "Bad Boy in a Clean Suit"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Costume National I",
+      "Turathi Blue",
+      "Saffron",
+      "Bergamot",
+      "Thyme"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Encre Noire l'Extreme + Turathi Blue"
+    ]
   },
   {
     "id": 22,
@@ -468,20 +867,39 @@ export const fragranceCombinations = [
     "season": "Summer",
     "time_of_day": "Night",
     "occasion": "Casual",
-    "fragrances": ["SNOI (Supremacy Not Only Intense)", "CDNI Milestone"],
+    "fragrances": [
+      "SNOI (Supremacy Not Only Intense)",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 2,
-    "profile": "Dark blackcurrant-oakmoss cooled by salty marine musk.",
-    "dominant_notes": ["Blackcurrant", "Oakmoss", "Sea Notes", "Violet", "Musk"],
-    "synergy": "Milestone's salty marine musk lightens SNOI's dense blackcurrant, oakmoss and saffron. Use a low SNOI dose so the blend stays wearable on warm nights.",
-    "projection": 4.1,
-    "longevity": 4.3,
-    "compliment_factor": 4.1,
-    "complexity": 4.0,
-    "best_weather": "Warm Summer Night",
-    "best_temperature": "20°C–28°C",
-    "tags": ["SNOI", "CDNI Milestone", "Marine", "Blackcurrant", "Oakmoss"],
-    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Neck\n• Layer 2: CDNI Milestone (3 sprays) - Clothes / Shoulders",
-    "alternatives": ["SNOI (Supremacy Not Only Intense)", "CDNI Milestone", "Alpine Ocean Breeze"]
+    "profile": "Blackcurrant, Bergamot with salty marine fruit musk.",
+    "dominant_notes": [
+      "Blackcurrant",
+      "Bergamot",
+      "Apple",
+      "Oakmoss",
+      "Patchouli"
+    ],
+    "synergy": "SNOI (Supremacy Not Only Intense) + CDNI Milestone combines dense fruity mossy chypre; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.4,
+    "longevity": 4.7,
+    "compliment_factor": 4.0,
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "SNOI (Supremacy Not Only Intense)",
+      "CDNI Milestone",
+      "Blackcurrant",
+      "Bergamot",
+      "Apple"
+    ],
+    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Ash'aa Oud Noir + CDNI Milestone",
+      "Costume National I + SNOI (Supremacy Not Only Intense)"
+    ]
   },
   {
     "id": 23,
@@ -490,20 +908,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Encre Noire l'Extreme", "Supremacy In Heaven"],
+    "fragrances": [
+      "Encre Noire l'Extreme",
+      "Supremacy In Heaven"
+    ],
     "fragrance_count": 2,
-    "profile": "Dark vetiver-incense ventilated by green tea and blackcurrant.",
-    "dominant_notes": ["Vetiver", "Cypress", "Green Tea", "Blackcurrant", "Incense"],
-    "synergy": "Supremacy In Heaven adds green tea, citrus and blackcurrant freshness to Encre Noire l'Extreme's smoky vetiver, cypress and incense. It remains distinctive, so use conservatively in office environments.",
+    "profile": "Cypress, Elemi with clean green tea citrus musk.",
+    "dominant_notes": [
+      "Cypress",
+      "Elemi",
+      "Bergamot",
+      "Vetiver",
+      "Incense"
+    ],
+    "synergy": "Encre Noire l'Extreme + Supremacy In Heaven combines dark smoky vetiver cypress incense; clean green tea citrus musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
     "projection": 3.9,
     "longevity": 4.2,
     "compliment_factor": 3.7,
-    "complexity": 4.5,
-    "best_weather": "Damp / Foggy",
-    "best_temperature": "10°C–18°C",
-    "tags": ["Encre Noire l'Extreme", "Supremacy In Heaven", "Vetiver", "Ink", "Green Tea"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Neck\n• Layer 2: Supremacy In Heaven (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Encre Noire l'Extreme", "Supremacy In Heaven", "Inky Citrus Bomb"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Encre Noire l'Extreme",
+      "Supremacy In Heaven",
+      "Cypress",
+      "Elemi",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Supremacy In Heaven + Liam Grey"
+    ]
   },
   {
     "id": 24,
@@ -512,20 +949,39 @@ export const fragranceCombinations = [
     "season": "Winter",
     "time_of_day": "Night",
     "occasion": "Formal",
-    "fragrances": ["Encre Noire l'Extreme", "Costume National I"],
+    "fragrances": [
+      "Encre Noire l'Extreme",
+      "Costume National I"
+    ],
     "fragrance_count": 2,
-    "profile": "Dark vetiver-cypress with saffron leather and ambroxan.",
-    "dominant_notes": ["Cypress", "Incense", "Saffron", "Leather", "Vetiver"],
-    "synergy": "Encre Noire's earthy cypress, vetiver and incense meet Costume National I's saffron, leather, ambroxan and cedar. This is complex and atmospheric, but deliberately polarising rather than mass-appealing.",
-    "projection": 4.3,
-    "longevity": 4.7,
-    "compliment_factor": 3.8,
+    "profile": "Cypress, Elemi with saffron amber leather woods.",
+    "dominant_notes": [
+      "Cypress",
+      "Elemi",
+      "Bergamot",
+      "Vetiver",
+      "Incense"
+    ],
+    "synergy": "Encre Noire l'Extreme + Costume National I combines dark smoky vetiver cypress incense; saffron amber leather woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.1,
+    "longevity": 4.4,
+    "compliment_factor": 3.9,
     "complexity": 4.8,
-    "best_weather": "Freezing Night",
-    "best_temperature": "0°C–10°C",
-    "tags": ["Encre Noire l'Extreme", "Costume National I", "Cypress", "Incense", "Leather"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Clothes / Jacket",
-    "alternatives": ["Costume National I", "Encre Noire l'Extreme", "Sovereign Niche Overlord"]
+    "best_weather": "Cold / Dry",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Encre Noire l'Extreme",
+      "Costume National I",
+      "Cypress",
+      "Elemi",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Encre Noire l'Extreme + Liam Grey",
+      "Costume National I + Al Nashama Caprice"
+    ]
   },
   {
     "id": 25,
@@ -534,20 +990,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Office / Casual",
-    "fragrances": ["Costume National I", "Jean Lowe Immortal"],
+    "fragrances": [
+      "Costume National I",
+      "Jean Lowe Immortal"
+    ],
     "fragrance_count": 2,
-    "profile": "Saffron leather brightened by ginger-grapefruit aromatics.",
-    "dominant_notes": ["Saffron", "Leather", "Ginger", "Grapefruit", "Ambroxan"],
-    "synergy": "Immortal's ginger, grapefruit and rosemary freshness adds energy to Costume National I's saffron, leather and ambroxan. The combination works best in cool daytime weather with conservative sprays.",
+    "profile": "Saffron, Bergamot with ginger grapefruit ambroxan aromatic.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + Jean Lowe Immortal combines saffron amber leather woods; ginger grapefruit ambroxan aromatic. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
     "projection": 4.1,
     "longevity": 4.4,
-    "compliment_factor": 4.1,
-    "complexity": 4.2,
-    "best_weather": "Crisp Morning",
-    "best_temperature": "10°C–20°C",
-    "tags": ["Costume National I", "Jean Lowe Immortal", "Leather", "Ginger", "Saffron"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Neck\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Costume National I", "Jean Lowe Immortal", "Imperial Saffron Blue"]
+    "compliment_factor": 4.2,
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Costume National I",
+      "Jean Lowe Immortal",
+      "Saffron",
+      "Bergamot",
+      "Thyme"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Jean Lowe Immortal"
+    ]
   },
   {
     "id": 26,
@@ -556,20 +1031,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Casual",
-    "fragrances": ["Supremacy Collector's Edition", "Divin Asylum"],
+    "fragrances": [
+      "Supremacy Collector's Edition",
+      "Divin Asylum"
+    ],
     "fragrance_count": 2,
-    "profile": "Pineapple chypre with sparkling grapefruit, lemon and lime.",
-    "dominant_notes": ["Pineapple", "Apple", "Grapefruit", "Lime", "Oakmoss"],
-    "synergy": "Divin Asylum's citrus-vetiver sparkle boosts Collector's Edition's pineapple, apple, birch and oakmoss. The combination is bright and mass-appealing, but best in warm rather than extreme heat.",
-    "projection": 4.2,
+    "profile": "Pineapple, Apple with sparkling citrus aromatic vetiver.",
+    "dominant_notes": [
+      "Pineapple",
+      "Apple",
+      "Bergamot",
+      "Birch",
+      "Oakmoss"
+    ],
+    "synergy": "Supremacy Collector's Edition + Divin Asylum combines bright pineapple chypre; sparkling citrus aromatic vetiver. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 4.0,
     "longevity": 4.2,
-    "compliment_factor": 4.5,
-    "complexity": 3.9,
-    "best_weather": "Sunny / Warm",
-    "best_temperature": "20°C–32°C",
-    "tags": ["Supremacy Collector's Edition", "Divin Asylum", "Pineapple", "Tropical", "Citrus"],
-    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy Collector's Edition", "Divin Asylum", "Emperor's Sovereign"]
+    "compliment_factor": 4.4,
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Supremacy Collector's Edition",
+      "Divin Asylum",
+      "Pineapple",
+      "Apple",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Divin Asylum",
+      "Liam Grey + Divin Asylum",
+      "Ash'aa Oud Noir + Divin Asylum"
+    ]
   },
   {
     "id": 27,
@@ -578,20 +1072,40 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn",
     "time_of_day": "All",
     "occasion": "Formal",
-    "fragrances": ["SNOI (Supremacy Not Only Intense)", "Supremacy Collector's Edition", "Divin Asylum"],
+    "fragrances": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Supremacy Collector's Edition",
+      "Divin Asylum"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Blackcurrant, pineapple, citrus and oakmoss chypre.",
-    "dominant_notes": ["Blackcurrant", "Pineapple", "Grapefruit", "Oakmoss", "Vetiver"],
-    "synergy": "SNOI anchors the blend with blackcurrant, oakmoss and saffron; Collector's Edition adds pineapple, birch and ambergris; Divin Asylum supplies sparkling citrus and vetiver. Keep SNOI low so the citrus top remains clear.",
-    "projection": 4.5,
+    "profile": "[3-LAYER] Blackcurrant, Bergamot with sparkling citrus aromatic vetiver.",
+    "dominant_notes": [
+      "Blackcurrant",
+      "Bergamot",
+      "Apple",
+      "Oakmoss",
+      "Patchouli"
+    ],
+    "synergy": "SNOI (Supremacy Not Only Intense) + Supremacy Collector's Edition + Divin Asylum combines dense fruity mossy chypre; bright pineapple chypre; sparkling citrus aromatic vetiver. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 4.4,
     "longevity": 4.6,
-    "compliment_factor": 4.7,
-    "complexity": 4.6,
-    "best_weather": "Clear / Pleasant",
-    "best_temperature": "14°C–26°C",
-    "tags": ["SNOI", "Supremacy Collector's Edition", "Divin Asylum", "Blackcurrant", "Chypre"],
-    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 3: Divin Asylum (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["SNOI (Supremacy Not Only Intense)", "Supremacy Collector's Edition", "Golden Pineapple Breeze"]
+    "compliment_factor": 4.6,
+    "complexity": 5.0,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Supremacy Collector's Edition",
+      "Divin Asylum",
+      "Blackcurrant",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 3: Divin Asylum (3 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Jean Lowe Immortal + Divin Asylum",
+      "Liam Grey + Divin Asylum",
+      "Ash'aa Oud Noir + Divin Asylum"
+    ]
   },
   {
     "id": 28,
@@ -600,20 +1114,40 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["Encre Noire l'Extreme", "Hercules", "Spectre Ghost"],
+    "fragrances": [
+      "Encre Noire l'Extreme",
+      "Hercules",
+      "Spectre Ghost"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Dark vetiver, tobacco, incense and warm vanilla.",
-    "dominant_notes": ["Vetiver", "Tobacco", "Vanilla", "Incense", "Cypress"],
-    "synergy": "Encre Noire adds smoky vetiver and cypress beneath Hercules' tobacco and cinnamon, while Spectre Ghost adds spiced vanilla warmth. It is dramatic, dense and strictly cold-weather appropriate.",
-    "projection": 4.3,
-    "longevity": 4.7,
-    "compliment_factor": 4.1,
-    "complexity": 4.8,
-    "best_weather": "Cold / Dark Overcast",
-    "best_temperature": "0°C–12°C",
-    "tags": ["Encre Noire l'Extreme", "Hercules", "Spectre Ghost", "Vanilla", "Incense"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Hercules (1 spray) - Skin / Neck\n• Layer 3: Spectre Ghost (2 sprays) - Clothes / Coat",
-    "alternatives": ["Hercules", "Spectre Ghost", "Sovereign Niche Overlord"]
+    "profile": "[3-LAYER] Cypress, Elemi with spiced vanilla amber.",
+    "dominant_notes": [
+      "Cypress",
+      "Elemi",
+      "Bergamot",
+      "Vetiver",
+      "Incense"
+    ],
+    "synergy": "Encre Noire l'Extreme + Hercules + Spectre Ghost combines dark smoky vetiver cypress incense; tobacco vanilla spice; spiced vanilla amber. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 4.2,
+    "longevity": 4.5,
+    "compliment_factor": 4.2,
+    "complexity": 5.0,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Encre Noire l'Extreme",
+      "Hercules",
+      "Spectre Ghost",
+      "Cypress",
+      "Elemi"
+    ],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Hercules (1 spray) - Skin / Neck\n• Layer 3: Spectre Ghost (1 spray) - Clothes / Jacket",
+    "alternatives": [
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Spectre Ghost + Jean Lowe Immortal",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 29,
@@ -622,20 +1156,40 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone"],
+    "fragrances": [
+      "Turathi Blue",
+      "Al Nashama Caprice",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Citrus amber, marine salt and cardamom-lavender spice.",
-    "dominant_notes": ["Bergamot", "Amber", "Cardamom", "Lavender", "Sea Notes"],
-    "synergy": "Turathi Blue provides citrus-amber woods, Caprice adds cardamom-lavender polish, and Milestone adds salty marine freshness. Best in mild weather because Caprice can feel too warm in high heat.",
+    "profile": "[3-LAYER] Bergamot, Mandarin with salty marine fruit musk.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Amber",
+      "Musk",
+      "Woody Notes"
+    ],
+    "synergy": "Turathi Blue + Al Nashama Caprice + CDNI Milestone combines radiant citrus amber woods; aromatic cardamom lavender spice; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.3,
-    "longevity": 4.3,
+    "longevity": 4.5,
     "compliment_factor": 4.4,
-    "complexity": 4.3,
-    "best_weather": "Mild / Clear",
-    "best_temperature": "14°C–24°C",
-    "tags": ["Turathi Blue", "Al Nashama Caprice", "CDNI Milestone", "Aquatic", "Cardamom"],
-    "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Skin / Neck\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Collar",
-    "alternatives": ["Turathi Blue", "Al Nashama Caprice", "High-Heat Overlord"]
+    "complexity": 5.0,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Turathi Blue",
+      "Al Nashama Caprice",
+      "CDNI Milestone",
+      "Bergamot",
+      "Mandarin"
+    ],
+    "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Skin / Neck\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Supremacy In Heaven + CDNI Milestone"
+    ]
   },
   {
     "id": 30,
@@ -644,20 +1198,40 @@ export const fragranceCombinations = [
     "season": "Summer",
     "time_of_day": "Day",
     "occasion": "Casual / Gym",
-    "fragrances": ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal"],
+    "fragrances": [
+      "Turathi Blue",
+      "CDNI Milestone",
+      "Jean Lowe Immortal"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Citrus, ginger, marine musk and amber woods.",
-    "dominant_notes": ["Bergamot", "Grapefruit", "Sea Notes", "Violet", "Ginger"],
-    "synergy": "Turathi Blue contributes citrus-amber projection, Milestone adds marine salt and musk, and Immortal adds ginger, grapefruit and ambroxan. It is the strongest pure fresh stack in the list.",
-    "projection": 4.5,
-    "longevity": 4.4,
-    "compliment_factor": 4.5,
-    "complexity": 4.0,
-    "best_weather": "Extreme Heat",
-    "best_temperature": "26°C–38°C",
-    "tags": ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal", "Aquatic", "Citrus"],
-    "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Neck\n• Layer 3: Turathi Blue (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Turathi Blue", "CDNI Milestone", "High-Heat Overlord"]
+    "profile": "[3-LAYER] Bergamot, Mandarin with ginger grapefruit ambroxan aromatic.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Amber",
+      "Musk",
+      "Woody Notes"
+    ],
+    "synergy": "Turathi Blue + CDNI Milestone + Jean Lowe Immortal combines radiant citrus amber woods; salty marine fruit musk; ginger grapefruit ambroxan aromatic. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.3,
+    "longevity": 4.5,
+    "compliment_factor": 4.6,
+    "complexity": 5.0,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Turathi Blue",
+      "CDNI Milestone",
+      "Jean Lowe Immortal",
+      "Bergamot",
+      "Mandarin"
+    ],
+    "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum"
+    ]
   },
   {
     "id": 31,
@@ -666,20 +1240,40 @@ export const fragranceCombinations = [
     "season": "Spring",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Ash'aa Oud Noir", "Supremacy Collector's Edition", "CDNI Milestone"],
+    "fragrances": [
+      "Ash'aa Oud Noir",
+      "Supremacy Collector's Edition",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Green juniper, pineapple, violet and marine salt.",
-    "dominant_notes": ["Bergamot", "Violet", "Pineapple", "Sea Notes", "Juniper Berry"],
-    "synergy": "Ash'aa Oud Noir gives green aromatic structure, Collector's Edition adds pineapple-birch fruit, and Milestone adds marine-violet freshness. It is a polished daytime blend with broad appeal.",
-    "projection": 4.2,
-    "longevity": 4.2,
+    "profile": "[3-LAYER] Bergamot, Juniper with salty marine fruit musk.",
+    "dominant_notes": [
+      "Bergamot",
+      "Juniper",
+      "Violet",
+      "Mint",
+      "Lavender"
+    ],
+    "synergy": "Ash'aa Oud Noir + Supremacy Collector's Edition + CDNI Milestone combines green aromatic woody fougere; bright pineapple chypre; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.3,
+    "longevity": 4.5,
     "compliment_factor": 4.4,
-    "complexity": 4.2,
-    "best_weather": "Bright / Sunny",
-    "best_temperature": "16°C–26°C",
-    "tags": ["Ash'aa Oud Noir", "Supremacy Collector's Edition", "CDNI Milestone", "Violet", "Pineapple"],
-    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: Supremacy Collector's Edition (1 spray) - Skin / Chest\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Supremacy Collector's Edition", "CDNI Milestone", "Executive Fresh"]
+    "complexity": 5.0,
+    "best_weather": "Mild / Clear",
+    "best_temperature": "14°C–26°C",
+    "tags": [
+      "Ash'aa Oud Noir",
+      "Supremacy Collector's Edition",
+      "CDNI Milestone",
+      "Bergamot",
+      "Juniper"
+    ],
+    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Ash'aa Oud Noir + Jean Lowe Immortal",
+      "Ash'aa Oud Noir + CDNI Milestone"
+    ]
   },
   {
     "id": 32,
@@ -688,20 +1282,41 @@ export const fragranceCombinations = [
     "season": "Winter",
     "time_of_day": "Night",
     "occasion": "Formal",
-    "fragrances": ["Encre Noire l'Extreme", "Costume National I", "Liam Grey", "Spectre Ghost"],
+    "fragrances": [
+      "Encre Noire l'Extreme",
+      "Costume National I",
+      "Liam Grey",
+      "Spectre Ghost"
+    ],
     "fragrance_count": 4,
-    "profile": "[4-LAYER] Vetiver, saffron leather, fig tea and vanilla.",
-    "dominant_notes": ["Vetiver", "Leather", "Black Tea", "Vanilla", "Saffron"],
-    "synergy": "Encre Noire anchors with vetiver and cypress, Costume National I adds saffron leather, Liam Grey bridges with fig tea and sandalwood, and Spectre Ghost finishes with spiced vanilla. This is complex, strong and formal-winter only.",
-    "projection": 4.5,
-    "longevity": 4.8,
-    "compliment_factor": 4.4,
+    "profile": "[4-LAYER] Cypress, Elemi with spiced vanilla amber.",
+    "dominant_notes": [
+      "Cypress",
+      "Elemi",
+      "Bergamot",
+      "Vetiver",
+      "Incense"
+    ],
+    "synergy": "Encre Noire l'Extreme + Costume National I + Liam Grey + Spectre Ghost combines dark smoky vetiver cypress incense; saffron amber leather woods; creamy fig black tea woods; spiced vanilla amber. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.4,
+    "longevity": 4.7,
+    "compliment_factor": 4.5,
     "complexity": 5.0,
-    "best_weather": "Extreme Cold / Frosty",
-    "best_temperature": "0°C–8°C",
-    "tags": ["Encre Noire l'Extreme", "Costume National I", "Liam Grey", "Spectre Ghost", "Leather"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Lower Back\n• Layer 2: Costume National I (1 spray) - Skin / Chest\n• Layer 3: Liam Grey (2 sprays) - Skin / Neck\n• Layer 4: Spectre Ghost (1 spray) - Clothes / Coat",
-    "alternatives": ["Encre Noire l'Extreme", "Costume National I", "Gothic Vanilla Incense"]
+    "best_weather": "Cold / Dry",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Encre Noire l'Extreme",
+      "Costume National I",
+      "Liam Grey",
+      "Spectre Ghost",
+      "Cypress"
+    ],
+    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Skin / Neck\n• Layer 3: Liam Grey (2 sprays) - Skin / Lower Chest\n• Layer 4: Spectre Ghost (1 spray) - Clothes / Shoulders",
+    "alternatives": [
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Liam Grey + Divin Asylum",
+      "Spectre Ghost + Jean Lowe Immortal"
+    ]
   },
   {
     "id": 33,
@@ -710,20 +1325,41 @@ export const fragranceCombinations = [
     "season": "Summer",
     "time_of_day": "Day",
     "occasion": "Casual",
-    "fragrances": ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal", "Supremacy Collector's Edition"],
+    "fragrances": [
+      "Turathi Blue",
+      "CDNI Milestone",
+      "Jean Lowe Immortal",
+      "Supremacy Collector's Edition"
+    ],
     "fragrance_count": 4,
-    "profile": "[4-LAYER] Summer citrus, marine musk, ginger and pineapple.",
-    "dominant_notes": ["Bergamot", "Grapefruit", "Pineapple", "Sea Notes", "Ginger"],
-    "synergy": "Immortal supplies ginger-grapefruit freshness, Milestone adds marine musk, Collector's Edition adds pineapple fruit, and Turathi Blue supplies citrus-amber projection. Keep sprays moderate because this is a high-density warm-weather stack.",
-    "projection": 4.6,
-    "longevity": 4.6,
-    "compliment_factor": 4.6,
-    "complexity": 4.4,
-    "best_weather": "Scorching Heat",
-    "best_temperature": "26°C–36°C",
-    "tags": ["Turathi Blue", "CDNI Milestone", "Jean Lowe Immortal", "Supremacy Collector's Edition", "Citrus"],
-    "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (1 spray) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Neck\n• Layer 3: Supremacy Collector's Edition (1 spray) - Skin / Wrist\n• Layer 4: Turathi Blue (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Turathi Blue", "Jean Lowe Immortal", "Ultimate Zesty Aquatic"]
+    "profile": "[4-LAYER] Bergamot, Mandarin with bright pineapple chypre.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Amber",
+      "Musk",
+      "Woody Notes"
+    ],
+    "synergy": "Turathi Blue + CDNI Milestone + Jean Lowe Immortal + Supremacy Collector's Edition combines radiant citrus amber woods; salty marine fruit musk; ginger grapefruit ambroxan aromatic; bright pineapple chypre. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.5,
+    "longevity": 4.7,
+    "compliment_factor": 4.7,
+    "complexity": 5.0,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Turathi Blue",
+      "CDNI Milestone",
+      "Jean Lowe Immortal",
+      "Supremacy Collector's Edition",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Skin / Lower Chest\n• Layer 4: Supremacy Collector's Edition (2 sprays) - Clothes / Shoulders",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum"
+    ]
   },
   {
     "id": 34,
@@ -732,20 +1368,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "All",
     "occasion": "Office",
-    "fragrances": ["SNOI (Supremacy Not Only Intense)", "Liam Grey"],
+    "fragrances": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Liam Grey"
+    ],
     "fragrance_count": 2,
-    "profile": "Creamy fig tea with dark blackcurrant and oakmoss.",
-    "dominant_notes": ["Blackcurrant", "Fig", "Black Tea", "Oakmoss", "Saffron"],
-    "synergy": "Liam Grey's fig, tea and sandalwood smooth SNOI's intense blackcurrant, oakmoss, patchouli and saffron. Use one SNOI spray for office because it can dominate.",
-    "projection": 4.2,
-    "longevity": 4.6,
+    "profile": "Blackcurrant, Bergamot with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Blackcurrant",
+      "Bergamot",
+      "Apple",
+      "Oakmoss",
+      "Patchouli"
+    ],
+    "synergy": "SNOI (Supremacy Not Only Intense) + Liam Grey combines dense fruity mossy chypre; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.4,
+    "longevity": 4.7,
     "compliment_factor": 4.5,
-    "complexity": 4.5,
-    "best_weather": "Mild / Overcast",
-    "best_temperature": "12°C–22°C",
-    "tags": ["SNOI", "Liam Grey", "Fig", "Blackcurrant", "Smoky"],
-    "steps": "Order 1 (Balanced):\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Neck",
-    "alternatives": ["Liam Grey", "Supremacy Collector's Edition"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Liam Grey",
+      "Blackcurrant",
+      "Bergamot",
+      "Apple"
+    ],
+    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Liam Grey + Divin Asylum",
+      "Supremacy In Heaven + Liam Grey",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 35,
@@ -754,20 +1409,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Spectre Ghost", "Turathi Blue"],
+    "fragrances": [
+      "Spectre Ghost",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Warm vanilla made brighter by citrus amber woods.",
-    "dominant_notes": ["Vanilla", "Bergamot", "Amber", "Cardamom", "Ginger"],
-    "synergy": "Spectre Ghost's vanilla, ginger and cardamom gain sparkle from Turathi Blue's citrus, amber, musk and woods. Best in cool weather; in heat the vanilla can become too dense.",
+    "profile": "Vanilla, Ginger with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Vanilla",
+      "Ginger",
+      "Bergamot",
+      "Cardamom",
+      "Pink Pepper"
+    ],
+    "synergy": "Spectre Ghost + Turathi Blue combines spiced vanilla amber; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.3,
-    "longevity": 4.6,
-    "compliment_factor": 4.7,
-    "complexity": 4.2,
-    "best_weather": "Cool / Crisp",
-    "best_temperature": "8°C–20°C",
-    "tags": ["Turathi Blue", "Spectre Ghost", "Vanilla", "Bergamot", "Amber"],
-    "steps": "Order 1:\n• Layer 1: Spectre Ghost (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Spectre Ghost", "Upscale Ginger Cream-Soda"]
+    "longevity": 4.5,
+    "compliment_factor": 4.6,
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Spectre Ghost",
+      "Turathi Blue",
+      "Vanilla",
+      "Ginger",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Encre Noire l'Extreme + Turathi Blue"
+    ]
   },
   {
     "id": 36,
@@ -776,20 +1450,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Night",
     "occasion": "Evening",
-    "fragrances": ["Ash'aa Oud Noir", "Hercules"],
+    "fragrances": [
+      "Ash'aa Oud Noir",
+      "Hercules"
+    ],
     "fragrance_count": 2,
-    "profile": "Fresh green juniper opening into warm tobacco vanilla.",
-    "dominant_notes": ["Tobacco", "Juniper Berry", "Cinnamon", "Violet", "Vanilla"],
-    "synergy": "Ash'aa Oud Noir provides a fresh green aromatic opening before Hercules' tobacco, cinnamon and vanilla take over. It is a contrast blend that works best in cool autumn air.",
-    "projection": 4.0,
-    "longevity": 4.4,
+    "profile": "Bergamot, Juniper with tobacco vanilla spice.",
+    "dominant_notes": [
+      "Bergamot",
+      "Juniper",
+      "Violet",
+      "Mint",
+      "Lavender"
+    ],
+    "synergy": "Ash'aa Oud Noir + Hercules combines green aromatic woody fougere; tobacco vanilla spice. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 3.9,
+    "longevity": 4.2,
     "compliment_factor": 4.2,
-    "complexity": 4.6,
-    "best_weather": "Cool / Crisp",
-    "best_temperature": "8°C–18°C",
-    "tags": ["Ash'aa Oud Noir", "Hercules", "Tobacco", "Green", "Contrast"],
-    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: Hercules (1 spray) - Clothes / Chest",
-    "alternatives": ["Hercules", "Spiced Chai & Tobacco"]
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Ash'aa Oud Noir",
+      "Hercules",
+      "Bergamot",
+      "Juniper",
+      "Violet"
+    ],
+    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Hercules (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Ash'aa Oud Noir + Jean Lowe Immortal",
+      "Ash'aa Oud Noir + CDNI Milestone",
+      "Ash'aa Oud Noir + Divin Asylum"
+    ]
   },
   {
     "id": 37,
@@ -798,20 +1491,40 @@ export const fragranceCombinations = [
     "season": "Spring / Autumn",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Supremacy In Heaven", "Turathi Blue", "Liam Grey"],
+    "fragrances": [
+      "Supremacy In Heaven",
+      "Turathi Blue",
+      "Liam Grey"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Green tea, fig, citrus amber and black tea.",
-    "dominant_notes": ["Green Tea", "Bergamot", "Fig", "Black Tea", "Amber"],
-    "synergy": "Liam Grey anchors with fig tea and sandalwood, Supremacy In Heaven adds green tea and blackcurrant, and Turathi Blue adds citrus-amber projection. It is one of the most balanced office combinations.",
-    "projection": 4.3,
-    "longevity": 4.5,
+    "profile": "[3-LAYER] Bergamot, Mandarin with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Green Tea",
+      "Blackcurrant",
+      "Musk"
+    ],
+    "synergy": "Supremacy In Heaven + Turathi Blue + Liam Grey combines clean green tea citrus musk; radiant citrus amber woods; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.1,
+    "longevity": 4.4,
     "compliment_factor": 4.6,
-    "complexity": 4.6,
-    "best_weather": "Mild / Sunny",
-    "best_temperature": "14°C–24°C",
-    "tags": ["Supremacy In Heaven", "Turathi Blue", "Liam Grey", "Tea", "Fig"],
-    "steps": "Order 1:\n• Layer 1: Liam Grey (2 sprays) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Skin / Neck\n• Layer 3: Turathi Blue (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Emperor's Tea Accord", "Turathi Blue"]
+    "complexity": 5.0,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Supremacy In Heaven",
+      "Turathi Blue",
+      "Liam Grey",
+      "Bergamot",
+      "Mandarin"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Skin / Neck\n• Layer 3: Liam Grey (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Supremacy In Heaven + CDNI Milestone"
+    ]
   },
   {
     "id": 38,
@@ -820,20 +1533,40 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["Spectre Ghost", "Divin Asylum", "Jean Lowe Immortal"],
+    "fragrances": [
+      "Spectre Ghost",
+      "Divin Asylum",
+      "Jean Lowe Immortal"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Spiced vanilla lifted by ginger and citrus aromatics.",
-    "dominant_notes": ["Vanilla", "Ginger", "Lime", "Grapefruit", "Ambroxan"],
-    "synergy": "Immortal bridges Spectre Ghost's ginger-vanilla warmth and Divin Asylum's grapefruit, lime, vetiver and ambergris freshness. It is brighter than a normal vanilla evening scent, but still best in cool weather.",
-    "projection": 4.3,
-    "longevity": 4.5,
+    "profile": "[3-LAYER] Vanilla, Ginger with ginger grapefruit ambroxan aromatic.",
+    "dominant_notes": [
+      "Vanilla",
+      "Ginger",
+      "Bergamot",
+      "Cardamom",
+      "Pink Pepper"
+    ],
+    "synergy": "Spectre Ghost + Divin Asylum + Jean Lowe Immortal combines spiced vanilla amber; sparkling citrus aromatic vetiver; ginger grapefruit ambroxan aromatic. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 4.1,
+    "longevity": 4.3,
     "compliment_factor": 4.6,
-    "complexity": 4.6,
-    "best_weather": "Cool / Clear",
-    "best_temperature": "8°C–20°C",
-    "tags": ["Divin Asylum", "Spectre Ghost", "Jean Lowe Immortal", "Ginger", "Vanilla"],
-    "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Skin / Neck\n• Layer 3: Divin Asylum (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Spectre Ghost", "Upscale Ginger Cream-Soda"]
+    "complexity": 5.0,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Spectre Ghost",
+      "Divin Asylum",
+      "Jean Lowe Immortal",
+      "Vanilla",
+      "Ginger"
+    ],
+    "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Jean Lowe Immortal"
+    ]
   },
   {
     "id": 39,
@@ -842,20 +1575,40 @@ export const fragranceCombinations = [
     "season": "Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["SNOI (Supremacy Not Only Intense)", "Costume National I", "Liam Grey"],
+    "fragrances": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Costume National I",
+      "Liam Grey"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Blackcurrant-oakmoss, saffron leather and creamy fig tea.",
-    "dominant_notes": ["Blackcurrant", "Saffron", "Leather", "Black Tea", "Oakmoss"],
-    "synergy": "This replaces the duplicate SNOI and Costume National I pairing with a distinct three-layer build. Liam Grey adds fig, black tea and sandalwood to soften the powerful blackcurrant-oakmoss and saffron-leather core.",
-    "projection": 4.5,
-    "longevity": 4.8,
-    "compliment_factor": 4.5,
-    "complexity": 4.8,
-    "best_weather": "Cold / Clear",
-    "best_temperature": "0°C–12°C",
-    "tags": ["SNOI", "Costume National I", "Liam Grey", "Saffron", "Tea"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Skin / Neck\n• Layer 3: SNOI (Supremacy Not Only Intense) (1 spray) - Clothes / Jacket",
-    "alternatives": ["Smoked Pineapple Leather", "Luxury Cashmere", "Sovereign Niche Overlord"]
+    "profile": "[3-LAYER] Blackcurrant, Bergamot with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Blackcurrant",
+      "Bergamot",
+      "Apple",
+      "Oakmoss",
+      "Patchouli"
+    ],
+    "synergy": "SNOI (Supremacy Not Only Intense) + Costume National I + Liam Grey combines dense fruity mossy chypre; saffron amber leather woods; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.4,
+    "longevity": 4.7,
+    "compliment_factor": 4.6,
+    "complexity": 5.0,
+    "best_weather": "Cold / Dry",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Costume National I",
+      "Liam Grey",
+      "Blackcurrant",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Skin / Neck\n• Layer 3: Liam Grey (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Liam Grey + Divin Asylum",
+      "Supremacy In Heaven + Liam Grey",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 40,
@@ -864,20 +1617,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Casual / Evening",
-    "fragrances": ["Liam Grey", "Spectre Ghost"],
+    "fragrances": [
+      "Liam Grey",
+      "Spectre Ghost"
+    ],
     "fragrance_count": 2,
-    "profile": "Milky fig tea cushioning spiced vanilla.",
-    "dominant_notes": ["Vanilla", "Fig", "Black Tea", "Cardamom", "Sandalwood"],
-    "synergy": "Liam Grey's fig, black tea, iris and sandalwood provide a refined base for Spectre Ghost's spicy vanilla. It is cosy, smooth and crowd-pleasing in cold weather.",
-    "projection": 4.0,
-    "longevity": 4.6,
+    "profile": "Cardamom, Black Tea with spiced vanilla amber.",
+    "dominant_notes": [
+      "Cardamom",
+      "Black Tea",
+      "Fig",
+      "Iris",
+      "Vetiver"
+    ],
+    "synergy": "Liam Grey + Spectre Ghost combines creamy fig black tea woods; spiced vanilla amber. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.1,
+    "longevity": 4.5,
     "compliment_factor": 4.6,
-    "complexity": 4.4,
-    "best_weather": "Cold / Still",
-    "best_temperature": "2°C–16°C",
-    "tags": ["Liam Grey", "Spectre Ghost", "Vanilla", "Fig", "Cardamom"],
-    "steps": "Order 1:\n• Layer 1: Spectre Ghost (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Sweater",
-    "alternatives": ["Spiced Chai & Tobacco", "Freezing Powerhouse", "Upscale Ginger Cream-Soda"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Liam Grey",
+      "Spectre Ghost",
+      "Cardamom",
+      "Black Tea",
+      "Fig"
+    ],
+    "steps": "Order 1:\n• Layer 1: Liam Grey (2 sprays) - Skin / Chest\n• Layer 2: Spectre Ghost (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Liam Grey + Divin Asylum",
+      "Spectre Ghost + Jean Lowe Immortal",
+      "Supremacy In Heaven + Liam Grey"
+    ]
   },
   {
     "id": 41,
@@ -886,20 +1658,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Office / Casual",
-    "fragrances": ["Jean Lowe Immortal", "CDNI Milestone"],
+    "fragrances": [
+      "Jean Lowe Immortal",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 2,
-    "profile": "Ginger-grapefruit aromatics grounded by marine salt and violet.",
-    "dominant_notes": ["Ginger", "Grapefruit", "Sea Notes", "Violet", "Ambroxan"],
-    "synergy": "Jean Lowe Immortal's ginger, grapefruit, rosemary and ambroxan pair naturally with Milestone's salty marine-violet and musky base. It is clean, flexible and suitable for warm professional settings.",
+    "profile": "Ginger, Grapefruit with salty marine fruit musk.",
+    "dominant_notes": [
+      "Ginger",
+      "Grapefruit",
+      "Bergamot",
+      "Rosemary",
+      "Sage"
+    ],
+    "synergy": "Jean Lowe Immortal + CDNI Milestone combines ginger grapefruit ambroxan aromatic; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.1,
-    "longevity": 4.3,
+    "longevity": 4.4,
     "compliment_factor": 4.3,
-    "complexity": 3.9,
-    "best_weather": "Warm / Sea Breeze",
-    "best_temperature": "20°C–32°C",
-    "tags": ["Jean Lowe Immortal", "CDNI Milestone", "Marine", "Ginger", "Ambroxan"],
-    "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Alpine Ocean Breeze", "Ultimate Zesty Aquatic", "High-Heat Shield"]
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Jean Lowe Immortal",
+      "CDNI Milestone",
+      "Ginger",
+      "Grapefruit",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Supremacy In Heaven + CDNI Milestone"
+    ]
   },
   {
     "id": 42,
@@ -908,20 +1699,39 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "Day",
     "occasion": "Casual",
-    "fragrances": ["SNOI (Supremacy Not Only Intense)", "Encre Noire l'Extreme"],
+    "fragrances": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Encre Noire l'Extreme"
+    ],
     "fragrance_count": 2,
-    "profile": "Blackcurrant-oakmoss over dark vetiver and incense.",
-    "dominant_notes": ["Blackcurrant", "Oakmoss", "Vetiver", "Cypress", "Saffron"],
-    "synergy": "SNOI's blackcurrant, oakmoss and saffron soften and sweeten Encre Noire l'Extreme's cypress, vetiver and incense. It is artistic and powerful, so avoid over-application.",
-    "projection": 4.1,
-    "longevity": 4.5,
-    "compliment_factor": 3.9,
-    "complexity": 4.7,
-    "best_weather": "Overcast / Damp",
-    "best_temperature": "10°C–18°C",
-    "tags": ["SNOI", "Encre Noire l'Extreme", "Blackcurrant", "Vetiver", "Dark"],
-    "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: SNOI (Supremacy Not Only Intense) (1 spray) - Clothes / Jacket",
-    "alternatives": ["Inky Citrus Bomb", "Smoky Mountain Vetiver", "Aromatic Ink & Leather"]
+    "profile": "Blackcurrant, Bergamot with dark smoky vetiver cypress incense.",
+    "dominant_notes": [
+      "Blackcurrant",
+      "Bergamot",
+      "Apple",
+      "Oakmoss",
+      "Patchouli"
+    ],
+    "synergy": "SNOI (Supremacy Not Only Intense) + Encre Noire l'Extreme combines dense fruity mossy chypre; dark smoky vetiver cypress incense. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 4.4,
+    "longevity": 4.7,
+    "compliment_factor": 3.8,
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "SNOI (Supremacy Not Only Intense)",
+      "Encre Noire l'Extreme",
+      "Blackcurrant",
+      "Bergamot",
+      "Apple"
+    ],
+    "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Encre Noire l'Extreme (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Encre Noire l'Extreme + Liam Grey",
+      "Costume National I + SNOI (Supremacy Not Only Intense)"
+    ]
   },
   {
     "id": 43,
@@ -930,20 +1740,39 @@ export const fragranceCombinations = [
     "season": "Summer",
     "time_of_day": "Day",
     "occasion": "Gym / Casual",
-    "fragrances": ["Supremacy In Heaven", "Turathi Blue"],
+    "fragrances": [
+      "Supremacy In Heaven",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Clean green tea and blackcurrant over citrus amber musk.",
-    "dominant_notes": ["Green Tea", "Blackcurrant", "Bergamot", "Amber", "Musk"],
-    "synergy": "Supremacy In Heaven brings a clean green tea and blackcurrant freshness while Turathi Blue adds citrus, amber, musk and woods. This is fresh and functional, ideal when you want more performance than Supremacy In Heaven alone.",
+    "profile": "Bergamot, Mandarin with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Bergamot",
+      "Mandarin",
+      "Green Tea",
+      "Blackcurrant",
+      "Musk"
+    ],
+    "synergy": "Supremacy In Heaven + Turathi Blue combines clean green tea citrus musk; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.0,
-    "longevity": 4.1,
-    "compliment_factor": 4.2,
-    "complexity": 3.7,
-    "best_weather": "Hot / Humid",
-    "best_temperature": "24°C–36°C",
-    "tags": ["Supremacy In Heaven", "Turathi Blue", "Green Tea", "Citrus", "Gym"],
-    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shirt",
-    "alternatives": ["High-Heat Shield", "Alpine Ocean Breeze", "Ultimate Zesty Aquatic"]
+    "longevity": 4.2,
+    "compliment_factor": 4.3,
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Supremacy In Heaven",
+      "Turathi Blue",
+      "Bergamot",
+      "Mandarin",
+      "Green Tea"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Supremacy In Heaven + CDNI Milestone"
+    ]
   },
   {
     "id": 44,
@@ -952,20 +1781,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Office / Casual",
-    "fragrances": ["Al Nashama Caprice", "CDNI Milestone"],
+    "fragrances": [
+      "Al Nashama Caprice",
+      "CDNI Milestone"
+    ],
     "fragrance_count": 2,
-    "profile": "Cardamom-lavender and mint over salty marine violet.",
-    "dominant_notes": ["Cardamom", "Lavender", "Mint", "Sea Notes", "Violet"],
-    "synergy": "Caprice's cardamom, ginger, lavender and mint give structure to Milestone's sea notes, violet, musk and ambroxan. The result is fresh, aromatic and less sweet than most evening blends.",
-    "projection": 4.0,
-    "longevity": 4.2,
+    "profile": "Cardamom, Ginger with salty marine fruit musk.",
+    "dominant_notes": [
+      "Cardamom",
+      "Ginger",
+      "Bergamot",
+      "Lemon",
+      "Lavender"
+    ],
+    "synergy": "Al Nashama Caprice + CDNI Milestone combines aromatic cardamom lavender spice; salty marine fruit musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.1,
+    "longevity": 4.4,
     "compliment_factor": 4.3,
-    "complexity": 4.1,
-    "best_weather": "Mild / Breezy",
-    "best_temperature": "16°C–28°C",
-    "tags": ["Al Nashama Caprice", "CDNI Milestone", "Lavender", "Marine", "Mint"],
-    "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (1 spray) - Skin / Chest\n• Layer 2: CDNI Milestone (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Royal Cardamom Sea", "Coastal Countryside", "Executive Creed Tribute"]
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Al Nashama Caprice",
+      "CDNI Milestone",
+      "Cardamom",
+      "Ginger",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Supremacy In Heaven + CDNI Milestone",
+      "Ash'aa Oud Noir + CDNI Milestone"
+    ]
   },
   {
     "id": 45,
@@ -974,20 +1822,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Office / Casual",
-    "fragrances": ["Supremacy Collector's Edition", "Supremacy In Heaven"],
+    "fragrances": [
+      "Supremacy Collector's Edition",
+      "Supremacy In Heaven"
+    ],
     "fragrance_count": 2,
-    "profile": "Pineapple chypre softened by green tea and clean musk.",
-    "dominant_notes": ["Pineapple", "Apple", "Green Tea", "Blackcurrant", "Oakmoss"],
-    "synergy": "Collector's Edition brings pineapple, apple, birch and oakmoss while Supremacy In Heaven adds green tea, mandarin, blackcurrant and musk. It is cleaner and more daytime-friendly than Collector's Edition alone.",
-    "projection": 4.1,
+    "profile": "Pineapple, Apple with clean green tea citrus musk.",
+    "dominant_notes": [
+      "Pineapple",
+      "Apple",
+      "Bergamot",
+      "Birch",
+      "Oakmoss"
+    ],
+    "synergy": "Supremacy Collector's Edition + Supremacy In Heaven combines bright pineapple chypre; clean green tea citrus musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
+    "projection": 4.0,
     "longevity": 4.2,
-    "compliment_factor": 4.3,
-    "complexity": 4.0,
-    "best_weather": "Bright / Mild",
-    "best_temperature": "18°C–30°C",
-    "tags": ["Supremacy Collector's Edition", "Supremacy In Heaven", "Pineapple", "Green Tea", "Blackcurrant"],
-    "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Golden Pineapple Breeze", "Executive Creed Tribute", "Emperor's Sovereign"]
+    "compliment_factor": 4.2,
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Supremacy Collector's Edition",
+      "Supremacy In Heaven",
+      "Pineapple",
+      "Apple",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Supremacy In Heaven + Liam Grey",
+      "Supremacy Collector's Edition + Al Nashama Caprice"
+    ]
   },
   {
     "id": 46,
@@ -996,20 +1863,39 @@ export const fragranceCombinations = [
     "season": "Autumn / Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["Costume National I", "Liam Grey"],
+    "fragrances": [
+      "Costume National I",
+      "Liam Grey"
+    ],
     "fragrance_count": 2,
-    "profile": "Saffron leather smoothed by fig, black tea and sandalwood.",
-    "dominant_notes": ["Saffron", "Leather", "Fig", "Black Tea", "Sandalwood"],
-    "synergy": "Liam Grey's fig, black tea, iris and sandalwood soften Costume National I's saffron, leather, ambroxan and cedar. It is smoother and more formal than Costume National I alone.",
+    "profile": "Saffron, Bergamot with creamy fig black tea woods.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + Liam Grey combines saffron amber leather woods; creamy fig black tea woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
     "projection": 4.1,
-    "longevity": 4.5,
+    "longevity": 4.4,
     "compliment_factor": 4.4,
-    "complexity": 4.5,
-    "best_weather": "Cold / Dry",
-    "best_temperature": "4°C–18°C",
-    "tags": ["Costume National I", "Liam Grey", "Leather", "Fig", "Tea"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (3 sprays) - Clothes / Shirt",
-    "alternatives": ["Dark Moss Leather Tea", "Bad Boy in a Clean Suit", "Sovereign Niche Overlord"]
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Costume National I",
+      "Liam Grey",
+      "Saffron",
+      "Bergamot",
+      "Thyme"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Liam Grey + Divin Asylum",
+      "Supremacy In Heaven + Liam Grey",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
   },
   {
     "id": 47,
@@ -1018,20 +1904,40 @@ export const fragranceCombinations = [
     "season": "Autumn",
     "time_of_day": "All",
     "occasion": "Office / Evening",
-    "fragrances": ["Costume National I", "Liam Grey", "Jean Lowe Immortal"],
+    "fragrances": [
+      "Costume National I",
+      "Liam Grey",
+      "Jean Lowe Immortal"
+    ],
     "fragrance_count": 3,
-    "profile": "[3-LAYER] Ginger citrus over saffron leather and fig tea.",
-    "dominant_notes": ["Ginger", "Saffron", "Leather", "Black Tea", "Fig"],
-    "synergy": "Jean Lowe Immortal adds ginger-grapefruit freshness, Costume National I adds saffron leather, and Liam Grey gives fig-tea softness. It is a balanced autumn all-day blend when applied lightly.",
+    "profile": "[3-LAYER] Saffron, Bergamot with ginger grapefruit ambroxan aromatic.",
+    "dominant_notes": [
+      "Saffron",
+      "Bergamot",
+      "Thyme",
+      "Lavender",
+      "Geranium"
+    ],
+    "synergy": "Costume National I + Liam Grey + Jean Lowe Immortal combines saffron amber leather woods; creamy fig black tea woods; ginger grapefruit ambroxan aromatic. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
     "projection": 4.2,
     "longevity": 4.5,
     "compliment_factor": 4.5,
-    "complexity": 4.7,
-    "best_weather": "Crisp / Clear",
-    "best_temperature": "8°C–20°C",
-    "tags": ["Costume National I", "Liam Grey", "Jean Lowe Immortal", "Leather", "Ginger"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Citrus Saffron Spark", "Leathered Fig Tea", "Royal Tea & Citrus"]
+    "complexity": 5.0,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "8°C–22°C",
+    "tags": [
+      "Costume National I",
+      "Liam Grey",
+      "Jean Lowe Immortal",
+      "Saffron",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Jacket",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Ash'aa Oud Noir + Jean Lowe Immortal"
+    ]
   },
   {
     "id": 48,
@@ -1040,20 +1946,39 @@ export const fragranceCombinations = [
     "season": "Spring / Summer",
     "time_of_day": "Day",
     "occasion": "Casual / Office",
-    "fragrances": ["Supremacy Collector's Edition", "Turathi Blue"],
+    "fragrances": [
+      "Supremacy Collector's Edition",
+      "Turathi Blue"
+    ],
     "fragrance_count": 2,
-    "profile": "Pineapple-birch chypre over citrus amber woods.",
-    "dominant_notes": ["Pineapple", "Bergamot", "Apple", "Amber", "Oakmoss"],
-    "synergy": "Collector's Edition adds pineapple, apple, birch and oakmoss while Turathi Blue adds citrus, amber, musk and patchouli. The blend is clean, bright and high-compliment without being as dense as SNOI-based stacks.",
+    "profile": "Pineapple, Apple with radiant citrus amber woods.",
+    "dominant_notes": [
+      "Pineapple",
+      "Apple",
+      "Bergamot",
+      "Birch",
+      "Oakmoss"
+    ],
+    "synergy": "Supremacy Collector's Edition + Turathi Blue combines bright pineapple chypre; radiant citrus amber woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 4.4,
-    "longevity": 4.4,
+    "longevity": 4.5,
     "compliment_factor": 4.6,
-    "complexity": 4.0,
-    "best_weather": "Warm / Clear",
-    "best_temperature": "18°C–30°C",
-    "tags": ["Supremacy Collector's Edition", "Turathi Blue", "Pineapple", "Amber", "Bergamot"],
-    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Shoulders",
-    "alternatives": ["Golden Pineapple Breeze", "High-Heat Overlord", "Ultimate Universal King"]
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Supremacy Collector's Edition",
+      "Turathi Blue",
+      "Pineapple",
+      "Apple",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Turathi Blue",
+      "Al Nashama Caprice + Turathi Blue",
+      "Encre Noire l'Extreme + Turathi Blue"
+    ]
   },
   {
     "id": 49,
@@ -1062,20 +1987,39 @@ export const fragranceCombinations = [
     "season": "Spring",
     "time_of_day": "Day",
     "occasion": "Office",
-    "fragrances": ["Ash'aa Oud Noir", "Supremacy In Heaven"],
+    "fragrances": [
+      "Ash'aa Oud Noir",
+      "Supremacy In Heaven"
+    ],
     "fragrance_count": 2,
-    "profile": "Green aromatic woods with tea, blackcurrant and soft musk.",
-    "dominant_notes": ["Juniper Berry", "Bergamot", "Violet", "Green Tea", "Blackcurrant"],
-    "synergy": "Ash'aa Oud Noir's bergamot, juniper, violet and sandalwood sharpen Supremacy In Heaven's green tea, citrus, blackcurrant and musk. The result is fresh, green and subtle enough for professional wear.",
+    "profile": "Bergamot, Juniper with clean green tea citrus musk.",
+    "dominant_notes": [
+      "Bergamot",
+      "Juniper",
+      "Violet",
+      "Mint",
+      "Lavender"
+    ],
+    "synergy": "Ash'aa Oud Noir + Supremacy In Heaven combines green aromatic woody fougere; clean green tea citrus musk. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project.",
     "projection": 3.8,
     "longevity": 4.0,
-    "compliment_factor": 4.0,
-    "complexity": 4.1,
-    "best_weather": "Fresh / Mild",
-    "best_temperature": "14°C–24°C",
-    "tags": ["Ash'aa Oud Noir", "Supremacy In Heaven", "Green Tea", "Juniper", "Office"],
-    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Neck\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Shirt",
-    "alternatives": ["Modernized Emerald Vetiver", "Alpine Ocean Breeze", "Executive Fresh"]
+    "compliment_factor": 4.1,
+    "complexity": 4.8,
+    "best_weather": "Mild / Clear",
+    "best_temperature": "14°C–26°C",
+    "tags": [
+      "Ash'aa Oud Noir",
+      "Supremacy In Heaven",
+      "Bergamot",
+      "Juniper",
+      "Violet"
+    ],
+    "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Supremacy In Heaven + CDNI Milestone",
+      "Ash'aa Oud Noir + Jean Lowe Immortal",
+      "Ash'aa Oud Noir + CDNI Milestone"
+    ]
   },
   {
     "id": 50,
@@ -1084,107 +2028,203 @@ export const fragranceCombinations = [
     "season": "Winter",
     "time_of_day": "Night",
     "occasion": "Formal / Evening",
-    "fragrances": ["Hercules", "Costume National I"],
+    "fragrances": [
+      "Hercules",
+      "Costume National I"
+    ],
     "fragrance_count": 2,
-    "profile": "Tobacco vanilla and saffron leather with dry woods.",
-    "dominant_notes": ["Tobacco", "Vanilla", "Saffron", "Leather", "Cinnamon"],
-    "synergy": "Hercules brings tobacco, cinnamon and vanilla while Costume National I adds saffron, leather, ambroxan and cedar. The combination is warm, assertive and best suited to cold formal evenings.",
-    "projection": 4.2,
-    "longevity": 4.5,
-    "compliment_factor": 4.3,
-    "complexity": 4.6,
-    "best_weather": "Cold / Dry Night",
-    "best_temperature": "0°C–14°C",
-    "tags": ["Hercules", "Costume National I", "Tobacco", "Leather", "Saffron"],
-    "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Hercules (2 sprays) - Clothes / Coat",
-    "alternatives": ["Seductive Vanilla Leather", "Aromatic Ink & Leather", "Gothic Vanilla Incense"]
+    "profile": "Tobacco, Vanilla with saffron amber leather woods.",
+    "dominant_notes": [
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon",
+      "Pepper",
+      "Incense"
+    ],
+    "synergy": "Hercules + Costume National I combines tobacco vanilla spice; saffron amber leather woods. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Costume National I is treated as saffron leather with ambroxan and cedar, not as Costume National Homme.",
+    "projection": 4.0,
+    "longevity": 4.2,
+    "compliment_factor": 4.4,
+    "complexity": 4.8,
+    "best_weather": "Cold / Dry",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Hercules",
+      "Costume National I",
+      "Tobacco",
+      "Vanilla",
+      "Cinnamon"
+    ],
+    "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Costume National I + Al Nashama Caprice",
+      "Hercules + Spectre Ghost",
+      "Hercules + Liam Grey"
+    ]
   },
   {
-      "id": 51,
-      "name": "Caprice Elysium Spark",
-      "rating": 4.4,
-      "season": "Spring / Summer / Autumn",
-      "time_of_day": "Day",
-      "occasion": "Office / Casual",
-      "fragrances": ["Al Nashama Caprice", "Divin Asylum"],
-      "fragrance_count": 2,
-      "profile": "Cardamom-lavender aromatics over sparkling citrus vetiver.",
-      "dominant_notes": ["Cardamom", "Ginger", "Lavender", "Grapefruit", "Vetiver"],
-      "synergy": "Al Nashama Caprice gives Divin Asylum more body through cardamom, ginger, lavender, mint, amber and woods, while Divin Asylum adds grapefruit, citrus, vetiver and ambroxan-like freshness. This is the best direct pairing for making both least-used bottles more wearable in warm-to-mild weather.",
-      "projection": 4.1,
-      "longevity": 4.1,
-      "compliment_factor": 4.5,
-      "complexity": 4.2,
-      "best_weather": "Mild / Sunny",
-      "best_temperature": "16°C–30°C",
-      "tags": ["Al Nashama Caprice", "Divin Asylum", "Cardamom", "Grapefruit", "Vetiver"],
-      "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (1 spray) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Shirt\n\nOrder 2 (More aromatic):\n• Layer 1: Divin Asylum (2 sprays) - Skin / Neck\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
-      "alternatives": ["Ginger Elysium", "Executive Fresh", "Royal Cardamom Sea"]
-    },
-    {
-      "id": 52,
-      "name": "Lavender Ink Vetiver",
-      "rating": 4.1,
-      "season": "Autumn / Winter",
-      "time_of_day": "Day / Night",
-      "occasion": "Office / Formal",
-      "fragrances": ["Al Nashama Caprice", "Encre Noire l'Extreme"],
-      "fragrance_count": 2,
-      "profile": "Dark smoky vetiver lifted by aromatic cardamom, mint and lavender.",
-      "dominant_notes": ["Vetiver", "Cypress", "Incense", "Cardamom", "Lavender"],
-      "synergy": "Al Nashama Caprice makes Encre Noire l'Extreme easier to wear by adding cardamom, ginger, lavender, mint and amber over Encre's cypress, vetiver, incense and resinous woods. Keep Encre to one spray so the blend stays polished rather than austere.",
-      "projection": 4.0,
-      "longevity": 4.4,
-      "compliment_factor": 4.0,
-      "complexity": 4.6,
-      "best_weather": "Cool / Overcast",
-      "best_temperature": "6°C–18°C",
-      "tags": ["Al Nashama Caprice", "Encre Noire l'Extreme", "Lavender", "Vetiver", "Incense"],
-      "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Shirt",
-      "alternatives": ["Inky Citrus Bomb", "Luxury Cashmere", "Smoky Mountain Vetiver"]
-    },
-    {
-      "id": 53,
-      "name": "Elysian Black Vetiver",
-      "rating": 4.0,
-      "season": "Spring / Autumn",
-      "time_of_day": "Day",
-      "occasion": "Casual / Office",
-      "fragrances": ["Divin Asylum", "Encre Noire l'Extreme"],
-      "fragrance_count": 2,
-      "profile": "Sparkling citrus-vetiver over dark cypress, incense and woods.",
-      "dominant_notes": ["Grapefruit", "Lime", "Vetiver", "Cypress", "Incense"],
-      "synergy": "Divin Asylum brightens Encre Noire l'Extreme with grapefruit, citrus and airy vetiver, while Encre gives Divin a darker, longer-lasting woody backbone. This is a niche-leaning fresh-dark blend that works best in mild weather and conservative office use.",
-      "projection": 3.9,
-      "longevity": 4.2,
-      "compliment_factor": 3.8,
-      "complexity": 4.6,
-      "best_weather": "Mild / Damp",
-      "best_temperature": "12°C–22°C",
-      "tags": ["Divin Asylum", "Encre Noire l'Extreme", "Grapefruit", "Vetiver", "Cypress"],
-      "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
-      "alternatives": ["Executive Fresh", "Smoky Mountain Vetiver", "Inky Citrus Bomb"]
-    },
-    {
-      "id": 54,
-      "name": "Least-Used Redemption Trio",
-      "rating": 4.3,
-      "season": "Spring / Autumn",
-      "time_of_day": "Day",
-      "occasion": "Office / Smart Casual",
-      "fragrances": ["Divin Asylum", "Al Nashama Caprice", "Encre Noire l'Extreme"],
-      "fragrance_count": 3,
-      "profile": "[3-LAYER] Citrus sparkle, aromatic lavender-cardamom and dark vetiver incense.",
-      "dominant_notes": ["Grapefruit", "Cardamom", "Lavender", "Vetiver", "Incense"],
-      "synergy": "This combines all three least-used fragrances in a controlled way: Encre Noire l'Extreme supplies dark vetiver and incense, Al Nashama Caprice adds aromatic cardamom-lavender polish, and Divin Asylum gives the blend citrus lift. It is the most complete way to use all three together without making the result too heavy or too thin.",
-      "projection": 4.1,
-      "longevity": 4.4,
-      "compliment_factor": 4.2,
-      "complexity": 4.8,
-      "best_weather": "Cool / Mild / Overcast",
-      "best_temperature": "10°C–22°C",
-      "tags": ["Divin Asylum", "Al Nashama Caprice", "Encre Noire l'Extreme", "Vetiver", "Cardamom"],
-      "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (1 spray) - Skin / Neck\n• Layer 3: Divin Asylum (3 sprays) - Clothes / Shirt\n\nOrder 2 (Brighter office version):\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Lower Chest\n• Layer 2: Al Nashama Caprice (1 spray) - Clothes / Collar\n• Layer 3: Divin Asylum (4 sprays) - Clothes / Shirt and shoulders",
-      "alternatives": ["Caprice Elysium Spark", "Lavender Ink Vetiver", "Elysian Black Vetiver"]
-    }
-  ];
+    "id": 51,
+    "name": "Caprice Elysium Spark",
+    "rating": 4.4,
+    "season": "Spring / Summer / Autumn",
+    "time_of_day": "Day",
+    "occasion": "Office / Casual",
+    "fragrances": [
+      "Al Nashama Caprice",
+      "Divin Asylum"
+    ],
+    "fragrance_count": 2,
+    "profile": "Cardamom, Ginger with sparkling citrus aromatic vetiver.",
+    "dominant_notes": [
+      "Cardamom",
+      "Ginger",
+      "Bergamot",
+      "Lemon",
+      "Lavender"
+    ],
+    "synergy": "Al Nashama Caprice + Divin Asylum combines aromatic cardamom lavender spice; sparkling citrus aromatic vetiver. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver.",
+    "projection": 3.9,
+    "longevity": 4.1,
+    "compliment_factor": 4.5,
+    "complexity": 4.8,
+    "best_weather": "Warm / Sunny",
+    "best_temperature": "18°C–34°C",
+    "tags": [
+      "Al Nashama Caprice",
+      "Divin Asylum",
+      "Cardamom",
+      "Ginger",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Liam Grey + Divin Asylum"
+    ]
+  },
+  {
+    "id": 52,
+    "name": "Lavender Ink Vetiver",
+    "rating": 4.1,
+    "season": "Autumn / Winter",
+    "time_of_day": "Day / Night",
+    "occasion": "Office / Formal",
+    "fragrances": [
+      "Al Nashama Caprice",
+      "Encre Noire l'Extreme"
+    ],
+    "fragrance_count": 2,
+    "profile": "Cardamom, Ginger with dark smoky vetiver cypress incense.",
+    "dominant_notes": [
+      "Cardamom",
+      "Ginger",
+      "Bergamot",
+      "Lemon",
+      "Lavender"
+    ],
+    "synergy": "Al Nashama Caprice + Encre Noire l'Extreme combines aromatic cardamom lavender spice; dark smoky vetiver cypress incense. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 4.1,
+    "longevity": 4.4,
+    "compliment_factor": 3.9,
+    "complexity": 4.8,
+    "best_weather": "Cool to Cold",
+    "best_temperature": "0°C–18°C",
+    "tags": [
+      "Al Nashama Caprice",
+      "Encre Noire l'Extreme",
+      "Cardamom",
+      "Ginger",
+      "Bergamot"
+    ],
+    "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Encre Noire l'Extreme (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Encre Noire l'Extreme + Liam Grey"
+    ]
+  },
+  {
+    "id": 53,
+    "name": "Elysian Black Vetiver",
+    "rating": 4.0,
+    "season": "Spring / Autumn",
+    "time_of_day": "Day",
+    "occasion": "Casual / Office",
+    "fragrances": [
+      "Divin Asylum",
+      "Encre Noire l'Extreme"
+    ],
+    "fragrance_count": 2,
+    "profile": "Grapefruit, Lemon with dark smoky vetiver cypress incense.",
+    "dominant_notes": [
+      "Grapefruit",
+      "Lemon",
+      "Lime",
+      "Bergamot",
+      "Thyme"
+    ],
+    "synergy": "Divin Asylum + Encre Noire l'Extreme combines sparkling citrus aromatic vetiver; dark smoky vetiver cypress incense. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 3.9,
+    "longevity": 4.1,
+    "compliment_factor": 3.7,
+    "complexity": 4.8,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Divin Asylum",
+      "Encre Noire l'Extreme",
+      "Grapefruit",
+      "Lemon",
+      "Lime"
+    ],
+    "steps": "Order 1:\n• Layer 1: Divin Asylum (3 sprays) - Skin / Chest\n• Layer 2: Encre Noire l'Extreme (1 spray) - Clothes / Collar",
+    "alternatives": [
+      "Jean Lowe Immortal + Divin Asylum",
+      "Encre Noire l'Extreme + Turathi Blue",
+      "Liam Grey + Divin Asylum"
+    ]
+  },
+  {
+    "id": 54,
+    "name": "Least-Used Redemption Trio",
+    "rating": 4.3,
+    "season": "Spring / Autumn",
+    "time_of_day": "Day",
+    "occasion": "Office / Smart Casual",
+    "fragrances": [
+      "Divin Asylum",
+      "Al Nashama Caprice",
+      "Encre Noire l'Extreme"
+    ],
+    "fragrance_count": 3,
+    "profile": "[3-LAYER] Grapefruit, Lemon with dark smoky vetiver cypress incense.",
+    "dominant_notes": [
+      "Grapefruit",
+      "Lemon",
+      "Lime",
+      "Bergamot",
+      "Thyme"
+    ],
+    "synergy": "Divin Asylum + Al Nashama Caprice + Encre Noire l'Extreme combines sparkling citrus aromatic vetiver; aromatic cardamom lavender spice; dark smoky vetiver cypress incense. The ratio keeps heavier woods, tobacco, leather or incense controlled while allowing fresher citrus, tea, marine or aromatic facets to project. Divin Asylum is used mainly as a bright citrus-vetiver lift rather than as the main performance driver. Encre Noire l'Extreme is deliberately dosed low because its cypress, vetiver and incense can dominate.",
+    "projection": 4.1,
+    "longevity": 4.3,
+    "compliment_factor": 4.1,
+    "complexity": 5.0,
+    "best_weather": "Mild / Cool",
+    "best_temperature": "10°C–24°C",
+    "tags": [
+      "Divin Asylum",
+      "Al Nashama Caprice",
+      "Encre Noire l'Extreme",
+      "Grapefruit",
+      "Lemon"
+    ],
+    "steps": "Order 1:\n• Layer 1: Divin Asylum (3 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Skin / Neck\n• Layer 3: Encre Noire l'Extreme (1 spray) - Clothes / Jacket\n\nOrder 2 (Brighter office version):\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Lower Chest\n• Layer 2: Al Nashama Caprice (1 spray) - Clothes / Collar\n• Layer 3: Divin Asylum (4 sprays) - Clothes / Shirt and shoulders",
+    "alternatives": [
+      "Al Nashama Caprice + Turathi Blue",
+      "Jean Lowe Immortal + Divin Asylum",
+      "Encre Noire l'Extreme + Turathi Blue"
+    ]
+  }
+];
