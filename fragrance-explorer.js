@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 8.1: Deep Component Search, Reverse-Query Featured Blends Matrix, & Fortified HA Exit
+ * Version 8.2: Target Temp Filter, Home Reset Fix, Deep Component Search, & Fortified HA Exit
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -21,6 +21,7 @@ class FragranceExplorerCard extends HTMLElement {
     // Core Navigation Stack & Hardware Defense State
     this.navStack = [{ view: 'browser', value: null }];
     this.currentDepth = 1;
+    this.isProgrammaticNav = false;
     
     // Hardened Timestamp Defense Variables
     this.lastBackPress = 0;
@@ -28,6 +29,7 @@ class FragranceExplorerCard extends HTMLElement {
 
     // Search and Filtering State Engine
     this.searchTerm = '';
+    this.tempFilter = '';
     this.ratingFilter = { type: '', min: '' };
     this.activeFilters = {
       type: new Set(),
@@ -121,13 +123,22 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   _handlePopState(event) {
+    // 1. Silent Handling of Programmatic UI Resets (e.g. hitting Home Button)
+    if (this.isProgrammaticNav) {
+      this.isProgrammaticNav = false;
+      this.currentDepth = 1;
+      window.history.replaceState({ fragAppDepth: 1 }, '');
+      this.render();
+      return;
+    }
+
+    // 2. Handling Hardware Back when deep in the Application
     if (this.navStack.length > 1) {
-      // User navigating internal application views
       this.navStack.pop();
       this.currentDepth--;
       this.render();
     } else {
-      // User hit the top-level anchor. Execute Ironclad Exit Defense.
+      // 3. User hit the top-level anchor. Execute Ironclad Exit Defense.
       const now = Date.now();
       
       if (now - this.lastBackPress > 2000) {
@@ -155,18 +166,18 @@ class FragranceExplorerCard extends HTMLElement {
 
   handleBackAction() {
     if (this.navStack.length > 1) {
-      window.history.back(); // Triggers _handlePopState automatically
+      window.history.back(); // Triggers _handlePopState naturally
     }
   }
 
   resetToHomeView() {
     const depthDiff = this.currentDepth - 1;
     this.navStack = [{ view: 'browser', value: null }];
-    this.currentDepth = 1;
     this.clearAllFilters();
     
     if (depthDiff > 0) {
-      window.history.go(-depthDiff); // Asynchronously triggers popstate to clean up browser history
+      this.isProgrammaticNav = true; // Flags to _handlePopState to skip exit warning
+      window.history.go(-depthDiff); // Asynchronously triggers popstate
     } else {
       this.render();
     }
@@ -207,6 +218,7 @@ class FragranceExplorerCard extends HTMLElement {
 
   clearAllFilters() {
     this.searchTerm = '';
+    this.tempFilter = '';
     this.ratingFilter = { type: '', min: '' };
     Object.keys(this.activeFilters).forEach(key => this.activeFilters[key].clear());
     
@@ -214,6 +226,9 @@ class FragranceExplorerCard extends HTMLElement {
     const ratingInput = this.shadowRoot.getElementById('rating-filter-input');
     if (ratingInput) ratingInput.value = '';
     
+    const tempInput = this.shadowRoot.getElementById('temp-filter-input');
+    if (tempInput) tempInput.value = '';
+
     const noteSelect = this.shadowRoot.getElementById('note-filter-select');
     if (noteSelect) noteSelect.value = '';
 
@@ -233,9 +248,9 @@ class FragranceExplorerCard extends HTMLElement {
     // Jump cleanly to filtered catalog explorer frame
     const depthDiff = this.currentDepth - 1;
     this.navStack = [{ view: 'browser', value: null }];
-    this.currentDepth = 1;
     
     if (depthDiff > 0) {
+      this.isProgrammaticNav = true; // Flags to skip warning popup during reset
       window.history.go(-depthDiff); 
     } else {
       this.render();
@@ -259,7 +274,7 @@ class FragranceExplorerCard extends HTMLElement {
 
   getFilteredItems() {
     return this.masterIndex.filter(item => {
-      // 1. Text Search Filter Matching
+      // 1. Text Search Filter Matching (Including blend sub-components)
       if (this.searchTerm) {
         const query = this.searchTerm.toLowerCase();
         const matchesName = item.name.toLowerCase().includes(query);
@@ -267,7 +282,6 @@ class FragranceExplorerCard extends HTMLElement {
         const matchesDesc = item.description && item.description.toLowerCase().includes(query);
         const matchesProfile = item.profile && item.profile.toLowerCase().includes(query);
         
-        // Deep search: Allows searching for blends by the names of the fragrances contained within them
         let matchesBlendComponents = false;
         if (item.type === 'Blend' && Array.isArray(item.fragrances)) {
           matchesBlendComponents = item.fragrances.some(fragName => fragName.toLowerCase().includes(query));
@@ -276,16 +290,23 @@ class FragranceExplorerCard extends HTMLElement {
         if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile && !matchesBlendComponents) return false;
       }
 
-      // 2. Exact Minimum Rating Engine
+      // 2. Temperature Substring Matcher
+      if (this.tempFilter) {
+        const tempQuery = this.tempFilter.toLowerCase();
+        const itemTemp = (item.best_temperature || '').toLowerCase();
+        if (!itemTemp.includes(tempQuery)) return false;
+      }
+
+      // 3. Exact Minimum Rating Engine
       if (this.ratingFilter.min) {
         const minRating = parseFloat(this.ratingFilter.min);
         if (!isNaN(minRating) && item.rating < minRating) return false;
       }
 
-      // 3. Type Filter Selection Matching
+      // 4. Type Filter Selection Matching
       if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
-      // 4. Matrix context checking operations
+      // 5. Matrix context checking operations
       if (this.activeFilters.season.size > 0) {
         const matchesSeason = item.seasons.some(s => this.activeFilters.season.has(s));
         if (!matchesSeason) return false;
@@ -301,7 +322,7 @@ class FragranceExplorerCard extends HTMLElement {
         if (!matchesOccasion) return false;
       }
 
-      // 5. Explicit Notes Array Filter Match
+      // 6. Explicit Notes Array Filter Match
       if (this.activeFilters.note.size > 0) {
         const matchesNotesArray = item.dominant_notes.some(n => this.activeFilters.note.has(n));
         if (!matchesNotesArray) return false;
@@ -732,6 +753,15 @@ class FragranceExplorerCard extends HTMLElement {
         });
       }
 
+      // Temp String Filter Target Listener
+      const tempInput = this.shadowRoot.getElementById('temp-filter-input');
+      if (tempInput) {
+        tempInput.addEventListener('input', (e) => {
+          this.tempFilter = e.target.value;
+          this.rebuildGridDynamically();
+        });
+      }
+
       // Dropdown Note List Selection
       const noteSelect = this.shadowRoot.getElementById('note-filter-select');
       if (noteSelect) {
@@ -841,13 +871,17 @@ class FragranceExplorerCard extends HTMLElement {
       </div>
 
       <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <div style="flex: 0.35;">
+        <div style="flex: 0.25;">
           <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Min Rating</div>
-          <input type="number" id="rating-filter-input" class="search-input" style="width: 100%;" placeholder="e.g. 4.0" step="0.1" min="0" max="5" value="${this.ratingFilter.min}">
+          <input type="number" id="rating-filter-input" class="search-input" style="width: 100%; padding: 8px;" placeholder="e.g. 4.0" step="0.1" min="0" max="5" value="${this.ratingFilter.min}">
         </div>
-        <div style="flex: 0.65;">
+        <div style="flex: 0.25;">
+          <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Target Temp</div>
+          <input type="text" id="temp-filter-input" class="search-input" style="width: 100%; padding: 8px;" placeholder="e.g. 20" value="${this.tempFilter}">
+        </div>
+        <div style="flex: 0.50;">
           <div style="font-size: 10px; color: #8e8e93; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Fragrance Notes</div>
-          <select id="note-filter-select" class="search-input" style="width: 100%; appearance: auto; cursor: pointer; color: ${this.activeFilters.note.size > 0 ? '#0076ff' : '#ffffff'}; font-weight: ${this.activeFilters.note.size > 0 ? '700' : 'normal'};">
+          <select id="note-filter-select" class="search-input" style="width: 100%; padding: 8px; appearance: auto; cursor: pointer; color: ${this.activeFilters.note.size > 0 ? '#0076ff' : '#ffffff'}; font-weight: ${this.activeFilters.note.size > 0 ? '700' : 'normal'};">
             <option value="" style="color: #000;">-- View All Notes --</option>
             ${this.allUniqueNotes.map(note => `<option value="${note}" style="color: #000;" ${this.activeFilters.note.has(note) ? 'selected' : ''}>${note}</option>`).join('')}
           </select>
