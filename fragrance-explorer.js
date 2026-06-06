@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 8.3: Interactive Subheading Blend Components, Target Temp Filter, Deep Search, & Fortified HA Exit
+ * Version 9.0: Bulletproof Matrix Filtering, Deep Component Search, & Fortified HA Exit
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -76,7 +76,7 @@ class FragranceExplorerCard extends HTMLElement {
   initData() {
     // Defensive Normalizer guarantees both single strings and arrays resolve into iteratable arrays
     const normalizeToArray = (val) => {
-      if (Array.isArray(val)) return val;
+      if (Array.isArray(val)) return val.map(s => String(s).trim());
       if (typeof val === 'string') {
         if (val.trim() === '') return [];
         if (val.includes(',')) return val.split(',').map(s => s.trim());
@@ -89,8 +89,8 @@ class FragranceExplorerCard extends HTMLElement {
       ...item,
       type: 'Fragrance',
       seasons: normalizeToArray(item.seasons || item.season),
-      time_of_day: normalizeToArray(item.time_of_day),
-      occasion: normalizeToArray(item.occasion),
+      time_of_day: normalizeToArray(item.time_of_day || item.timeOfDay),
+      occasion: normalizeToArray(item.occasion || item.occasions),
       dominant_notes: normalizeToArray(item.dominant_notes),
       rating: parseFloat(item.rating) || 0,
       projection: parseFloat(item.projection) || 0,
@@ -104,8 +104,8 @@ class FragranceExplorerCard extends HTMLElement {
       type: 'Blend',
       fragrances: normalizeToArray(item.fragrances),
       seasons: normalizeToArray(item.seasons || item.season),
-      time_of_day: normalizeToArray(item.time_of_day),
-      occasion: normalizeToArray(item.occasion),
+      time_of_day: normalizeToArray(item.time_of_day || item.timeOfDay),
+      occasion: normalizeToArray(item.occasion || item.occasions),
       dominant_notes: normalizeToArray(item.dominant_notes),
       rating: parseFloat(item.rating) || 0,
       projection: parseFloat(item.projection) || 0,
@@ -273,6 +273,17 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   getFilteredItems() {
+    // Robust Matrix Categorical Matcher (Case Insensitive & Wildcard Aware)
+    const matchesCategory = (itemArray, activeSet, wildcardOptions = []) => {
+      if (activeSet.size === 0) return true; // No filter selected, everything passes
+      const activeLower = Array.from(activeSet).map(x => x.toLowerCase());
+      
+      return itemArray.some(val => 
+        activeLower.includes(val.toLowerCase()) || 
+        wildcardOptions.some(w => w.toLowerCase() === val.toLowerCase())
+      );
+    };
+
     return this.masterIndex.filter(item => {
       // 1. Text Search Filter Matching (Including blend sub-components)
       if (this.searchTerm) {
@@ -306,27 +317,11 @@ class FragranceExplorerCard extends HTMLElement {
       // 4. Type Filter Selection Matching
       if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
-      // 5. Matrix context checking operations
-      if (this.activeFilters.season.size > 0) {
-        const matchesSeason = item.seasons.some(s => this.activeFilters.season.has(s));
-        if (!matchesSeason) return false;
-      }
-
-      if (this.activeFilters.time_of_day.size > 0) {
-        const matchesTime = item.time_of_day.some(t => this.activeFilters.time_of_day.has(t) || t === 'All');
-        if (!matchesTime) return false;
-      }
-
-      if (this.activeFilters.occasion.size > 0) {
-        const matchesOccasion = item.occasion.some(o => this.activeFilters.occasion.has(o) || o === 'All');
-        if (!matchesOccasion) return false;
-      }
-
-      // 6. Explicit Notes Array Filter Match
-      if (this.activeFilters.note.size > 0) {
-        const matchesNotesArray = item.dominant_notes.some(n => this.activeFilters.note.has(n));
-        if (!matchesNotesArray) return false;
-      }
+      // 5. Robust Matrix Array Checks (Safely handles case differences and wildcards)
+      if (!matchesCategory(item.seasons, this.activeFilters.season, ['all seasons', 'all', 'any'])) return false;
+      if (!matchesCategory(item.time_of_day, this.activeFilters.time_of_day, ['all times', 'all', 'any'])) return false;
+      if (!matchesCategory(item.occasion, this.activeFilters.occasion, ['all occasions', 'all', 'any'])) return false;
+      if (!matchesCategory(item.dominant_notes, this.activeFilters.note)) return false;
 
       return true;
     });
@@ -522,6 +517,7 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
+          /* Matches the catalog full-screen bounds closely so UI scale stays unified */
           max-height: calc(100dvh - 140px);
           min-height: 350px;
           overflow-y: auto;
