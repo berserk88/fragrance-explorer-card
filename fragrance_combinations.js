@@ -5,7 +5,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Summer",
     "time_of_day": "Day",
-    "occasion": "Casual / Gym",
+    "occasion": ["Casual"],
     "fragrances": [
       "Jean Lowe Immortal",
       "Turathi Blue"
@@ -46,7 +46,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Spring / Autumn / Winter",
     "time_of_day": "All",
-    "occasion": "Office / Evening",
+    "occasion": ["Office", "Evening"],
     "fragrances": [
       "Al Nashama Caprice",
       "Turathi Blue"
@@ -87,7 +87,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Casual / Office",
+    "occasion": ["Casual", "Office"],
     "fragrances": [
       "Jean Lowe Immortal",
       "Divin Asylum"
@@ -128,7 +128,7 @@ export const fragranceCombinations = [
     "rating": 4.0,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Casual / Gym",
+    "occasion": ["Casual"],
     "fragrances": [
       "Supremacy In Heaven",
       "CDNI Milestone"
@@ -169,7 +169,7 @@ export const fragranceCombinations = [
     "rating": 4.1,
     "season": "Spring / Autumn",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Jean Lowe Immortal"
@@ -210,7 +210,7 @@ export const fragranceCombinations = [
     "rating": 4.1,
     "season": "Autumn",
     "time_of_day": "Day",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Turathi Blue"
@@ -251,7 +251,7 @@ export const fragranceCombinations = [
     "rating": 4.0,
     "season": "Spring",
     "time_of_day": "Day",
-    "occasion": "Casual / Office",
+    "occasion": ["Casual", "Office"],
     "fragrances": [
       "Ash'aa Oud Noir",
       "CDNI Milestone"
@@ -292,7 +292,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Autumn",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Liam Grey",
       "Divin Asylum"
@@ -333,7 +333,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Spring",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Divin Asylum"
@@ -374,7 +374,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Spectre Ghost",
       "Jean Lowe Immortal"
@@ -415,7 +415,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Spring / Autumn",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Supremacy In Heaven",
       "Liam Grey"
@@ -456,7 +456,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Liam Grey"
@@ -497,7 +497,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Spring / Autumn",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Al Nashama Caprice"
@@ -538,7 +538,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Evening / Formal",
+    "occasion": ["Evening", "Formal"],
     "fragrances": [
       "Costume National I",
       "Al Nashama Caprice"
@@ -579,7 +579,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "Hercules",
       "Spectre Ghost"
@@ -620,7 +620,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Autumn / Winter",
     "time_of_day": "All",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "Hercules",
       "Liam Grey"
@@ -661,7 +661,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Costume National I",
       "SNOI (Supremacy Not Only Intense)"
@@ -702,7 +702,7 @@ export const fragranceCombinations = [
     "rating": 4.7,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Costume National I",
       "Spectre Ghost"
@@ -743,7 +743,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Hercules",
       "Al Nashama Caprice"
@@ -784,7 +784,7 @@ export const fragranceCombinations = [
     "rating": 3.8,
     "season": "Autumn",
     "time_of_day": "Day",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "Hercules",
       "CDNI Milestone"
@@ -825,7 +825,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Autumn",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Costume National I",
       "Turathi Blue"
@@ -866,7 +866,7 @@ export const fragranceCombinations = [
     "rating": 4.0,
     "season": "Summer",
     "time_of_day": "Night",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "CDNI Milestone"
@@ -907,7 +907,7 @@ export const fragranceCombinations = [
     "rating": 4.0,
     "season": "Autumn",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Supremacy In Heaven"
@@ -948,7 +948,7 @@ export const fragranceCombinations = [
     "rating": 4.2,
     "season": "Winter",
     "time_of_day": "Night",
-    "occasion": "Formal",
+    "occasion": ["Formal"],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Costume National I"
@@ -989,7 +989,7 @@ export const fragranceCombinations = [
     "rating": 4.2,
     "season": "Autumn",
     "time_of_day": "Day",
-    "occasion": "Office / Casual",
+    "occasion": ["Office", "Casual"],
     "fragrances": [
       "Costume National I",
       "Jean Lowe Immortal"
@@ -1030,7 +1030,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Divin Asylum"
@@ -1071,7 +1071,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Spring / Autumn",
     "time_of_day": "All",
-    "occasion": "Formal",
+    "occasion": ["Formal"],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Supremacy Collector's Edition",
@@ -1113,7 +1113,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Hercules",
@@ -1155,7 +1155,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Spring / Autumn",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Turathi Blue",
       "Al Nashama Caprice",
@@ -1197,7 +1197,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Summer",
     "time_of_day": "Day",
-    "occasion": "Casual / Gym",
+    "occasion": ["Casual"],
     "fragrances": [
       "Turathi Blue",
       "CDNI Milestone",
@@ -1239,7 +1239,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Spring",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Supremacy Collector's Edition",
@@ -1281,7 +1281,7 @@ export const fragranceCombinations = [
     "rating": 4.7,
     "season": "Winter",
     "time_of_day": "Night",
-    "occasion": "Formal",
+    "occasion": ["Formal"],
     "fragrances": [
       "Encre Noire l'Extreme",
       "Costume National I",
@@ -1324,7 +1324,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Summer",
     "time_of_day": "Day",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "Turathi Blue",
       "CDNI Milestone",
@@ -1367,7 +1367,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn",
     "time_of_day": "All",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Liam Grey"
@@ -1408,7 +1408,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Spectre Ghost",
       "Turathi Blue"
@@ -1449,7 +1449,7 @@ export const fragranceCombinations = [
     "rating": 4.2,
     "season": "Autumn",
     "time_of_day": "Night",
-    "occasion": "Evening",
+    "occasion": ["Evening"],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Hercules"
@@ -1490,7 +1490,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Spring / Autumn",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Supremacy In Heaven",
       "Turathi Blue",
@@ -1532,7 +1532,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "Spectre Ghost",
       "Divin Asylum",
@@ -1574,7 +1574,7 @@ export const fragranceCombinations = [
     "rating": 4.6,
     "season": "Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Costume National I",
@@ -1616,7 +1616,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Casual / Evening",
+    "occasion": ["Casual", "Evening"],
     "fragrances": [
       "Liam Grey",
       "Spectre Ghost"
@@ -1657,7 +1657,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Office / Casual",
+    "occasion": ["Office", "Casual"],
     "fragrances": [
       "Jean Lowe Immortal",
       "CDNI Milestone"
@@ -1698,7 +1698,7 @@ export const fragranceCombinations = [
     "rating": 4.1,
     "season": "Autumn",
     "time_of_day": "Day",
-    "occasion": "Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "SNOI (Supremacy Not Only Intense)",
       "Encre Noire l'Extreme"
@@ -1739,7 +1739,7 @@ export const fragranceCombinations = [
     "rating": 4.2,
     "season": "Summer",
     "time_of_day": "Day",
-    "occasion": "Gym / Casual",
+    "occasion": ["Casual"],
     "fragrances": [
       "Supremacy In Heaven",
       "Turathi Blue"
@@ -1780,7 +1780,7 @@ export const fragranceCombinations = [
     "rating": 4.2,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Office / Casual",
+    "occasion": ["Office", "Casual"],
     "fragrances": [
       "Al Nashama Caprice",
       "CDNI Milestone"
@@ -1821,7 +1821,7 @@ export const fragranceCombinations = [
     "rating": 4.2,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Office / Casual",
+    "occasion": ["Office", "Casual"],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Supremacy In Heaven"
@@ -1862,7 +1862,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Autumn / Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "Costume National I",
       "Liam Grey"
@@ -1903,7 +1903,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Autumn",
     "time_of_day": "All",
-    "occasion": "Office / Evening",
+    "occasion": ["Office", "Evening"],
     "fragrances": [
       "Costume National I",
       "Liam Grey",
@@ -1945,7 +1945,7 @@ export const fragranceCombinations = [
     "rating": 4.5,
     "season": "Spring / Summer",
     "time_of_day": "Day",
-    "occasion": "Casual / Office",
+    "occasion": ["Casual", "Office"],
     "fragrances": [
       "Supremacy Collector's Edition",
       "Turathi Blue"
@@ -1986,7 +1986,7 @@ export const fragranceCombinations = [
     "rating": 4.1,
     "season": "Spring",
     "time_of_day": "Day",
-    "occasion": "Office",
+    "occasion": ["Office"],
     "fragrances": [
       "Ash'aa Oud Noir",
       "Supremacy In Heaven"
@@ -2027,7 +2027,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Winter",
     "time_of_day": "Night",
-    "occasion": "Formal / Evening",
+    "occasion": ["Formal", "Evening"],
     "fragrances": [
       "Hercules",
       "Costume National I"
@@ -2068,7 +2068,7 @@ export const fragranceCombinations = [
     "rating": 4.4,
     "season": "Spring / Summer / Autumn",
     "time_of_day": "Day",
-    "occasion": "Office / Casual",
+    "occasion": ["Office", "Casual"],
     "fragrances": [
       "Al Nashama Caprice",
       "Divin Asylum"
@@ -2109,7 +2109,7 @@ export const fragranceCombinations = [
     "rating": 4.1,
     "season": "Autumn / Winter",
     "time_of_day": "Day / Night",
-    "occasion": "Office / Formal",
+    "occasion": ["Office", "Formal"],
     "fragrances": [
       "Al Nashama Caprice",
       "Encre Noire l'Extreme"
@@ -2150,7 +2150,7 @@ export const fragranceCombinations = [
     "rating": 4.0,
     "season": "Spring / Autumn",
     "time_of_day": "Day",
-    "occasion": "Casual / Office",
+    "occasion": ["Casual", "Office"],
     "fragrances": [
       "Divin Asylum",
       "Encre Noire l'Extreme"
@@ -2191,7 +2191,7 @@ export const fragranceCombinations = [
     "rating": 4.3,
     "season": "Spring / Autumn",
     "time_of_day": "Day",
-    "occasion": "Office / Smart Casual",
+    "occasion": ["Office", "Casual"],
     "fragrances": [
       "Divin Asylum",
       "Al Nashama Caprice",
