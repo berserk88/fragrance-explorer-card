@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 8.2: Target Temp Filter, Home Reset Fix, Deep Component Search, & Fortified HA Exit
+ * Version 8.3: Interactive Subheading Blend Components, Target Temp Filter, Deep Search, & Fortified HA Exit
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -522,7 +522,6 @@ class FragranceExplorerCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 14px;
-          /* Matches the catalog full-screen bounds closely so UI scale stays unified */
           max-height: calc(100dvh - 140px);
           min-height: 350px;
           overflow-y: auto;
@@ -948,12 +947,25 @@ class FragranceExplorerCard extends HTMLElement {
 
     const isBlend = item.type === 'Blend';
     
-    // Dynamic Subheading Assembly for Custom Blends
-    const dynamicSubHeading = isBlend 
-      ? (item.fragrances && item.fragrances.length > 0 
-          ? item.fragrances.join(' <span style="opacity:0.4; font-size: 0.9em; margin:0 4px;">➕</span> ') 
-          : 'Custom Synergy Blend')
-      : `<span style="color:var(--secondary-text); font-size:12px;">${item.fragrance_family} • ${item.clone_type} formulation</span>`;
+    // Dynamic Subheading Assembly for Custom Blends -> Generates Interactive Button Links
+    let dynamicSubHeading = '';
+    if (isBlend) {
+      if (item.fragrances && item.fragrances.length > 0) {
+        const badgeHtml = item.fragrances.map(fName => {
+          const match = this._findItemBySmartToken(fName);
+          if (match) {
+            return `<span class="interactive-badge" data-jump-id="${match.id}" data-jump-type="${match.type}" style="border-color: var(--primary-accent); padding: 2px 6px; font-size: 10px;">${ICONS.Fragrance} ${match.name}</span>`;
+          }
+          return `<span class="interactive-badge" style="opacity:0.5; cursor:not-allowed; padding: 2px 6px; font-size: 10px;">${fName}</span>`;
+        }).join('<span style="opacity:0.5; font-size: 10px; margin: 0 2px;">➕</span>');
+        
+        dynamicSubHeading = `<div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 6px;">${badgeHtml}</div>`;
+      } else {
+        dynamicSubHeading = 'Custom Synergy Blend';
+      }
+    } else {
+      dynamicSubHeading = `<span style="color:var(--secondary-text); font-size:12px;">${item.fragrance_family} • ${item.clone_type} formulation</span>`;
+    }
 
     // Extract reverse-associations for Fragrances (Find all blends that contain this fragrance)
     let featuredInBlendsHtml = '';
@@ -983,7 +995,7 @@ class FragranceExplorerCard extends HTMLElement {
         <div class="details-core-header-pane">
           <div class="details-explicit-badge">${isBlend ? 'Blend Details' : 'Fragrance Details'}</div>
           <h4 class="details-main-heading">${item.name}</h4>
-          <p class="details-sub-heading-meta">${dynamicSubHeading}</p>
+          <div class="details-sub-heading-meta">${dynamicSubHeading}</div>
         </div>
 
         <div class="meta-pill-box">
