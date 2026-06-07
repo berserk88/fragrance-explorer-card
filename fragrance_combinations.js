@@ -41,9 +41,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Jean Lowe Immortal"
+      "Ultimate Universal King",
+      "Ginger Elysium",
+      "Modernized Emerald Vetiver"
     ]
   },
   {
@@ -92,9 +92,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Supremacy Collector's Edition + Al Nashama Caprice"
+      "High-Heat Shield",
+      "Inky Citrus Bomb",
+      "Seductive Pineapple"
     ]
   },
   {
@@ -141,9 +141,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Ash'aa Oud Noir + Jean Lowe Immortal",
-      "Liam Grey + Divin Asylum"
+      "High-Heat Shield",
+      "Modernized Emerald Vetiver",
+      "Professional Comfort"
     ]
   },
   {
@@ -189,9 +189,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Ash'aa Oud Noir + CDNI Milestone",
-      "Supremacy In Heaven + Liam Grey",
-      "Hercules + CDNI Milestone"
+      "Coastal Countryside",
+      "Emperor's Tea Accord",
+      "Salty Marine Tobacco"
     ]
   },
   {
@@ -237,9 +237,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + CDNI Milestone"
+      "High-Heat Shield",
+      "Ginger Elysium",
+      "Coastal Countryside"
     ]
   },
   {
@@ -284,9 +284,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Encre Noire l'Extreme + Liam Grey"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -332,9 +332,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Ash'aa Oud Noir + Jean Lowe Immortal",
-      "Ash'aa Oud Noir + Divin Asylum"
+      "Alpine Ocean Breeze",
+      "Modernized Emerald Vetiver",
+      "Executive Fresh"
     ]
   },
   {
@@ -379,9 +379,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Liam Grey (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Divin Asylum",
-      "Supremacy In Heaven + Liam Grey"
+      "Ginger Elysium",
+      "Executive Fresh",
+      "Emperor's Tea Accord"
     ]
   },
   {
@@ -426,9 +426,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Jean Lowe Immortal",
-      "Ash'aa Oud Noir + CDNI Milestone"
+      "Ginger Elysium",
+      "Modernized Emerald Vetiver",
+      "Coastal Countryside"
     ]
   },
   {
@@ -474,9 +474,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Jean Lowe Immortal"
+      "High-Heat Shield",
+      "Ginger Elysium",
+      "Modernized Emerald Vetiver"
     ]
   },
   {
@@ -522,9 +522,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Liam Grey + Divin Asylum",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Alpine Ocean Breeze",
+      "Professional Comfort",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -571,9 +571,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Liam Grey + Divin Asylum",
-      "Supremacy In Heaven + Liam Grey"
+      "Inky Citrus Bomb",
+      "Professional Comfort",
+      "Emperor's Tea Accord"
     ]
   },
   {
@@ -619,9 +619,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Costume National I + Al Nashama Caprice",
-      "Hercules + Al Nashama Caprice"
+      "Ultimate Universal King",
+      "Bad Boy in a Clean Suit",
+      "Spiced Vanilla Tobacco"
     ]
   },
   {
@@ -668,9 +668,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Supremacy Collector's Edition + Al Nashama Caprice",
-      "Costume National I + SNOI (Supremacy Not Only Intense)"
+      "Ultimate Universal King",
+      "Seductive Pineapple",
+      "Smoked Pineapple Leather"
     ]
   },
   {
@@ -716,9 +716,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Spectre Ghost (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Spectre Ghost + Jean Lowe Immortal",
-      "Hercules + Liam Grey",
-      "Costume National I + Spectre Ghost"
+      "Upscale Ginger Cream-Soda",
+      "Spiced Chai & Tobacco",
+      "Seductive Vanilla Leather"
     ]
   },
   {
@@ -765,9 +765,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Liam Grey + Divin Asylum",
-      "Supremacy In Heaven + Liam Grey",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Professional Comfort",
+      "Emperor's Tea Accord",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -813,9 +813,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: SNOI (Supremacy Not Only Intense) (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Costume National I + Al Nashama Caprice",
-      "Costume National I + Spectre Ghost",
-      "Costume National I + Turathi Blue"
+      "Bad Boy in a Clean Suit",
+      "Seductive Vanilla Leather",
+      "Imperial Saffron Blue"
     ]
   },
   {
@@ -861,9 +861,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Spectre Ghost (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Spectre Ghost + Jean Lowe Immortal",
-      "Costume National I + Al Nashama Caprice",
-      "Hercules + Spectre Ghost"
+      "Upscale Ginger Cream-Soda",
+      "Bad Boy in a Clean Suit",
+      "Freezing Powerhouse"
     ]
   },
   {
@@ -909,9 +909,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Supremacy Collector's Edition + Al Nashama Caprice",
-      "Costume National I + Al Nashama Caprice"
+      "Ultimate Universal King",
+      "Seductive Pineapple",
+      "Bad Boy in a Clean Suit"
     ]
   },
   {
@@ -956,9 +956,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Ash'aa Oud Noir + CDNI Milestone",
-      "Hercules + Spectre Ghost"
+      "Alpine Ocean Breeze",
+      "Coastal Countryside",
+      "Freezing Powerhouse"
     ]
   },
   {
@@ -1003,9 +1003,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Encre Noire l'Extreme + Turathi Blue"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Inky Citrus Bomb"
     ]
   },
   {
@@ -1050,9 +1050,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Ash'aa Oud Noir + CDNI Milestone",
-      "Costume National I + SNOI (Supremacy Not Only Intense)"
+      "Alpine Ocean Breeze",
+      "Coastal Countryside",
+      "Smoked Pineapple Leather"
     ]
   },
   {
@@ -1097,9 +1097,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Supremacy In Heaven + Liam Grey"
+      "Alpine Ocean Breeze",
+      "Inky Citrus Bomb",
+      "Emperor's Tea Accord"
     ]
   },
   {
@@ -1144,9 +1144,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Encre Noire l'Extreme + Liam Grey",
-      "Costume National I + Al Nashama Caprice"
+      "Inky Citrus Bomb",
+      "Luxury Cashmere",
+      "Bad Boy in a Clean Suit"
     ]
   },
   {
@@ -1192,9 +1192,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Jean Lowe Immortal (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Jean Lowe Immortal"
+      "High-Heat Shield",
+      "Ginger Elysium",
+      "Modernized Emerald Vetiver"
     ]
   },
   {
@@ -1240,9 +1240,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Divin Asylum",
-      "Liam Grey + Divin Asylum",
-      "Ash'aa Oud Noir + Divin Asylum"
+      "Ginger Elysium",
+      "Professional Comfort",
+      "Executive Fresh"
     ]
   },
   {
@@ -1290,9 +1290,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 3: Divin Asylum (3 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Jean Lowe Immortal + Divin Asylum",
-      "Liam Grey + Divin Asylum",
-      "Ash'aa Oud Noir + Divin Asylum"
+      "Ginger Elysium",
+      "Professional Comfort",
+      "Executive Fresh"
     ]
   },
   {
@@ -1340,9 +1340,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Hercules (1 spray) - Skin / Neck\n• Layer 3: Spectre Ghost (1 spray) - Clothes / Jacket",
     "alternatives": [
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Spectre Ghost + Jean Lowe Immortal",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Inky Citrus Bomb",
+      "Upscale Ginger Cream-Soda",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -1389,9 +1389,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Skin / Neck\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Supremacy In Heaven + CDNI Milestone"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Alpine Ocean Breeze"
     ]
   },
   {
@@ -1437,9 +1437,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Ginger Elysium"
     ]
   },
   {
@@ -1485,9 +1485,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Supremacy Collector's Edition (2 sprays) - Skin / Neck\n• Layer 3: CDNI Milestone (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Ash'aa Oud Noir + Jean Lowe Immortal",
-      "Ash'aa Oud Noir + CDNI Milestone"
+      "Alpine Ocean Breeze",
+      "Modernized Emerald Vetiver",
+      "Coastal Countryside"
     ]
   },
   {
@@ -1534,9 +1534,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Skin / Neck\n• Layer 3: Liam Grey (2 sprays) - Skin / Lower Chest\n• Layer 4: Spectre Ghost (1 spray) - Clothes / Shoulders",
     "alternatives": [
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Liam Grey + Divin Asylum",
-      "Spectre Ghost + Jean Lowe Immortal"
+      "Inky Citrus Bomb",
+      "Professional Comfort",
+      "Upscale Ginger Cream-Soda"
     ]
   },
   {
@@ -1583,9 +1583,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Turathi Blue (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Skin / Lower Chest\n• Layer 4: Supremacy Collector's Edition (2 sprays) - Clothes / Shoulders",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Ginger Elysium"
     ]
   },
   {
@@ -1631,9 +1631,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Liam Grey + Divin Asylum",
-      "Supremacy In Heaven + Liam Grey",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Professional Comfort",
+      "Emperor's Tea Accord",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -1679,9 +1679,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Encre Noire l'Extreme + Turathi Blue"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Inky Citrus Bomb"
     ]
   },
   {
@@ -1726,9 +1726,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Hercules (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Ash'aa Oud Noir + Jean Lowe Immortal",
-      "Ash'aa Oud Noir + CDNI Milestone",
-      "Ash'aa Oud Noir + Divin Asylum"
+      "Modernized Emerald Vetiver",
+      "Coastal Countryside",
+      "Executive Fresh"
     ]
   },
   {
@@ -1775,9 +1775,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Skin / Neck\n• Layer 3: Liam Grey (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Supremacy In Heaven + CDNI Milestone"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Alpine Ocean Breeze"
     ]
   },
   {
@@ -1825,9 +1825,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Spectre Ghost (1 spray) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Jean Lowe Immortal"
+      "High-Heat Shield",
+      "Ginger Elysium",
+      "Modernized Emerald Vetiver"
     ]
   },
   {
@@ -1874,9 +1874,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Skin / Neck\n• Layer 3: Liam Grey (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Liam Grey + Divin Asylum",
-      "Supremacy In Heaven + Liam Grey",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Professional Comfort",
+      "Emperor's Tea Accord",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -1923,9 +1923,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Liam Grey (2 sprays) - Skin / Chest\n• Layer 2: Spectre Ghost (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Liam Grey + Divin Asylum",
-      "Spectre Ghost + Jean Lowe Immortal",
-      "Supremacy In Heaven + Liam Grey"
+      "Professional Comfort",
+      "Upscale Ginger Cream-Soda",
+      "Emperor's Tea Accord"
     ]
   },
   {
@@ -1972,9 +1972,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Jean Lowe Immortal (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Supremacy In Heaven + CDNI Milestone"
+      "High-Heat Shield",
+      "Ginger Elysium",
+      "Alpine Ocean Breeze"
     ]
   },
   {
@@ -2019,9 +2019,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: SNOI (Supremacy Not Only Intense) (1 spray) - Skin / Chest\n• Layer 2: Encre Noire l'Extreme (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Encre Noire l'Extreme + Liam Grey",
-      "Costume National I + SNOI (Supremacy Not Only Intense)"
+      "Inky Citrus Bomb",
+      "Luxury Cashmere",
+      "Smoked Pineapple Leather"
     ]
   },
   {
@@ -2066,9 +2066,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy In Heaven (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Supremacy In Heaven + CDNI Milestone"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Alpine Ocean Breeze"
     ]
   },
   {
@@ -2115,9 +2115,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: CDNI Milestone (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Supremacy In Heaven + CDNI Milestone",
-      "Ash'aa Oud Noir + CDNI Milestone"
+      "Ultimate Universal King",
+      "Alpine Ocean Breeze",
+      "Coastal Countryside"
     ]
   },
   {
@@ -2164,9 +2164,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Supremacy In Heaven + Liam Grey",
-      "Supremacy Collector's Edition + Al Nashama Caprice"
+      "Alpine Ocean Breeze",
+      "Emperor's Tea Accord",
+      "Seductive Pineapple"
     ]
   },
   {
@@ -2213,9 +2213,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Liam Grey + Divin Asylum",
-      "Supremacy In Heaven + Liam Grey",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Professional Comfort",
+      "Emperor's Tea Accord",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -2263,9 +2263,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Costume National I (1 spray) - Skin / Chest\n• Layer 2: Liam Grey (2 sprays) - Skin / Neck\n• Layer 3: Jean Lowe Immortal (2 sprays) - Clothes / Jacket",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Ash'aa Oud Noir + Jean Lowe Immortal"
+      "High-Heat Shield",
+      "Ginger Elysium",
+      "Modernized Emerald Vetiver"
     ]
   },
   {
@@ -2312,9 +2312,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Supremacy Collector's Edition (2 sprays) - Skin / Chest\n• Layer 2: Turathi Blue (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Turathi Blue",
-      "Al Nashama Caprice + Turathi Blue",
-      "Encre Noire l'Extreme + Turathi Blue"
+      "High-Heat Shield",
+      "Ultimate Universal King",
+      "Inky Citrus Bomb"
     ]
   },
   {
@@ -2359,9 +2359,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Ash'aa Oud Noir (2 sprays) - Skin / Chest\n• Layer 2: Supremacy In Heaven (2 sprays) - Clothes / Collar",
     "alternatives": [
-      "Supremacy In Heaven + CDNI Milestone",
-      "Ash'aa Oud Noir + Jean Lowe Immortal",
-      "Ash'aa Oud Noir + CDNI Milestone"
+      "Alpine Ocean Breeze",
+      "Modernized Emerald Vetiver",
+      "Coastal Countryside"
     ]
   },
   {
@@ -2407,9 +2407,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Hercules (1 spray) - Skin / Chest\n• Layer 2: Costume National I (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Costume National I + Al Nashama Caprice",
-      "Hercules + Spectre Ghost",
-      "Hercules + Liam Grey"
+      "Bad Boy in a Clean Suit",
+      "Freezing Powerhouse",
+      "Spiced Chai & Tobacco"
     ]
   },
   {
@@ -2457,9 +2457,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Divin Asylum (3 sprays) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Liam Grey + Divin Asylum"
+      "Ultimate Universal King",
+      "Ginger Elysium",
+      "Professional Comfort"
     ]
   },
   {
@@ -2507,9 +2507,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Al Nashama Caprice (2 sprays) - Skin / Chest\n• Layer 2: Encre Noire l'Extreme (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Encre Noire l'Extreme + Liam Grey"
+      "Ultimate Universal King",
+      "Inky Citrus Bomb",
+      "Luxury Cashmere"
     ]
   },
   {
@@ -2556,9 +2556,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Divin Asylum (3 sprays) - Skin / Chest\n• Layer 2: Encre Noire l'Extreme (1 spray) - Clothes / Collar",
     "alternatives": [
-      "Jean Lowe Immortal + Divin Asylum",
-      "Encre Noire l'Extreme + Turathi Blue",
-      "Liam Grey + Divin Asylum"
+      "Ginger Elysium",
+      "Inky Citrus Bomb",
+      "Professional Comfort"
     ]
   },
   {
@@ -2606,9 +2606,9 @@ export const fragranceCombinations = [
     ],
     "steps": "Order 1:\n• Layer 1: Divin Asylum (3 sprays) - Skin / Chest\n• Layer 2: Al Nashama Caprice (2 sprays) - Skin / Neck\n• Layer 3: Encre Noire l'Extreme (1 spray) - Clothes / Jacket\n\nOrder 2 (Brighter office version):\n• Layer 1: Encre Noire l'Extreme (1 spray) - Skin / Lower Chest\n• Layer 2: Al Nashama Caprice (1 spray) - Clothes / Collar\n• Layer 3: Divin Asylum (4 sprays) - Clothes / Shirt and shoulders",
     "alternatives": [
-      "Al Nashama Caprice + Turathi Blue",
-      "Jean Lowe Immortal + Divin Asylum",
-      "Encre Noire l'Extreme + Turathi Blue"
+      "Ultimate Universal King",
+      "Ginger Elysium",
+      "Inky Citrus Bomb"
     ]
   }
 ];
