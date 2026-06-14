@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 9.1: Universal Matrix Filtering, Deep Component Search, & Fortified HA Exit
+ * Version 9.2: Range-Aware Target Temperature Filtering & Fortified Ecosystem
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -276,6 +276,37 @@ class FragranceExplorerCard extends HTMLElement {
     });
   }
 
+  // Numeric Range Temperature Engine
+  _isTempInRange(queryTempStr, databaseTempStr) {
+    const queryTempNum = parseFloat(queryTempStr);
+    
+    // If the user typed a pure string (e.g. "heat"), fall back to simple substring match
+    if (isNaN(queryTempNum)) {
+      return (databaseTempStr || '').toLowerCase().includes(queryTempStr.toLowerCase());
+    }
+
+    if (!databaseTempStr || databaseTempStr === 'N/A') return false;
+
+    // Regex to extract all valid numbers from the database string (e.g., "12°C - 20°C" -> [12, 20])
+    const matches = databaseTempStr.match(/-?\d+(\.\d+)?/g);
+    
+    if (!matches) return false;
+
+    const numbers = matches.map(Number);
+    
+    if (numbers.length === 1) {
+      // Single specific temperature target
+      return numbers[0] === queryTempNum;
+    } else if (numbers.length >= 2) {
+      // Assumes the lowest number is the min and the highest is the max of the range
+      const minTemp = Math.min(...numbers);
+      const maxTemp = Math.max(...numbers);
+      return queryTempNum >= minTemp && queryTempNum <= maxTemp;
+    }
+
+    return false;
+  }
+
   getFilteredItems() {
     // Robust Matrix Categorical Matcher (Case Insensitive & Wildcard Aware)
     const matchesCategory = (itemArray, activeSet, wildcardOptions = []) => {
@@ -306,11 +337,9 @@ class FragranceExplorerCard extends HTMLElement {
         if (!matchesName && !matchesNotes && !matchesDesc && !matchesProfile && !matchesBlendComponents) return false;
       }
 
-      // 2. Temperature Substring Matcher
+      // 2. Numeric Range Temperature Matcher
       if (this.tempFilter) {
-        const tempQuery = this.tempFilter.toLowerCase();
-        const itemTemp = (item.best_temperature || '').toLowerCase();
-        if (!itemTemp.includes(tempQuery)) return false;
+        if (!this._isTempInRange(this.tempFilter, item.best_temperature)) return false;
       }
 
       // 3. Exact Minimum Rating Engine
@@ -755,7 +784,7 @@ class FragranceExplorerCard extends HTMLElement {
         });
       }
 
-      // Temp String Filter Target Listener
+      // Range-Aware Target Temperature Listener
       const tempInput = this.shadowRoot.getElementById('temp-filter-input');
       if (tempInput) {
         tempInput.addEventListener('input', (e) => {
