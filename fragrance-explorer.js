@@ -1,6 +1,6 @@
 /**
  * Fragrance Explorer Custom Lovelace Card
- * Version 9.0: Bulletproof Matrix Filtering, Deep Component Search, & Fortified HA Exit
+ * Version 9.1: Universal Matrix Filtering, Deep Component Search, & Fortified HA Exit
  */
 
 import { fragranceCombinations } from '/local/community/fragrance-explorer-card/fragrance_combinations.js?v=6.0';
@@ -74,7 +74,7 @@ class FragranceExplorerCard extends HTMLElement {
   }
 
   initData() {
-    // Defensive Normalizer guarantees both single strings and arrays resolve into iteratable arrays
+    // Defensive Normalizer guarantees both single strings and arrays resolve into iteratable arrays uniformly
     const normalizeToArray = (val) => {
       if (Array.isArray(val)) return val.map(s => String(s).trim());
       if (typeof val === 'string') {
@@ -222,7 +222,7 @@ class FragranceExplorerCard extends HTMLElement {
     this.ratingFilter = { type: '', min: '' };
     Object.keys(this.activeFilters).forEach(key => this.activeFilters[key].clear());
     
-    // Reset DOM inputs if they exist in view
+    // Cleanly Reset DOM inputs visual states if they exist in view
     const ratingInput = this.shadowRoot.getElementById('rating-filter-input');
     if (ratingInput) ratingInput.value = '';
     
@@ -230,7 +230,11 @@ class FragranceExplorerCard extends HTMLElement {
     if (tempInput) tempInput.value = '';
 
     const noteSelect = this.shadowRoot.getElementById('note-filter-select');
-    if (noteSelect) noteSelect.value = '';
+    if (noteSelect) {
+      noteSelect.value = '';
+      noteSelect.style.color = '#ffffff';
+      noteSelect.style.fontWeight = 'normal';
+    }
 
     this.render();
   }
@@ -275,9 +279,10 @@ class FragranceExplorerCard extends HTMLElement {
   getFilteredItems() {
     // Robust Matrix Categorical Matcher (Case Insensitive & Wildcard Aware)
     const matchesCategory = (itemArray, activeSet, wildcardOptions = []) => {
-      if (activeSet.size === 0) return true; // No filter selected, everything passes
+      if (activeSet.size === 0) return true; // No filter selected, everything passes automatically
       const activeLower = Array.from(activeSet).map(x => x.toLowerCase());
       
+      // A matrix passes if any of its internal values align with the active selections OR if the item possesses a designated wildcard
       return itemArray.some(val => 
         activeLower.includes(val.toLowerCase()) || 
         wildcardOptions.some(w => w.toLowerCase() === val.toLowerCase())
@@ -285,7 +290,7 @@ class FragranceExplorerCard extends HTMLElement {
     };
 
     return this.masterIndex.filter(item => {
-      // 1. Text Search Filter Matching (Including blend sub-components)
+      // 1. Text Search Filter Matching (Including deep blend sub-components mapping)
       if (this.searchTerm) {
         const query = this.searchTerm.toLowerCase();
         const matchesName = item.name.toLowerCase().includes(query);
@@ -317,10 +322,12 @@ class FragranceExplorerCard extends HTMLElement {
       // 4. Type Filter Selection Matching
       if (this.activeFilters.type.size > 0 && !this.activeFilters.type.has(item.type)) return false;
 
-      // 5. Robust Matrix Array Checks (Safely handles case differences and wildcards)
+      // 5. Robust Matrix Array Checks applied cleanly to BOTH fragrances and blends
       if (!matchesCategory(item.seasons, this.activeFilters.season, ['all seasons', 'all', 'any'])) return false;
       if (!matchesCategory(item.time_of_day, this.activeFilters.time_of_day, ['all times', 'all', 'any'])) return false;
       if (!matchesCategory(item.occasion, this.activeFilters.occasion, ['all occasions', 'all', 'any'])) return false;
+      
+      // 6. Explicit Notes Array Filter Match
       if (!matchesCategory(item.dominant_notes, this.activeFilters.note)) return false;
 
       return true;
